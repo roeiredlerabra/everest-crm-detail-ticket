@@ -9,51 +9,101 @@
     <h1>URL Parameter Example</h1>
     <p id="output">Parameter value will appear here.</p>
 
-    <script>// Function to get URL parameter by name
-// Function to get URL parameter by name
-function getParameterByName(name, url = window.location.href) {
-    name = name.replace(/[\[\]]/g, '\\$&');
-    const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
-    const results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
+    <div id="apiResponse">
+        <!-- API response content will appear here -->
+    </div>
 
-// Function to make a POST request to the API
-function postToApi(paramValue) {
-    const apiUrl = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with your API endpoint
-    const data = { id: paramValue };
+    <script>
+        // Function to get URL parameter by name
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
+            const results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
 
-    fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        document.getElementById('output').innerText = `API Response: ${JSON.stringify(data)}`;
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-        document.getElementById('output').innerText = 'Error making API request.';
-    });
-}
+        // Function to make a POST request to the API
+        function postToApi(paramValue) {
+            const apiUrl = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with your API endpoint
+            const data = { id: paramValue };
 
-// Run this function when the page loads
-window.onload = function() {
-    const paramValue = getParameterByName('id'); // Replace 'id' with your parameter name
-    if (paramValue) {
-        document.getElementById('output').innerText = `Parameter value: ${paramValue}`;
-        postToApi(paramValue);
-    } else {
-        document.getElementById('output').innerText = 'No parameter found.';
-    }
-};
-</script>
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                document.getElementById('output').innerText = `API Response: See below`;
+                displayApiResponse(data); // Call function to display API response
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                document.getElementById('output').innerText = 'Error making API request.';
+            });
+        }
+
+        // Function to display API response in HTML
+        function displayApiResponse(responseData) {
+            const container = document.getElementById('apiResponse');
+            container.innerHTML = ''; // Clear previous content
+
+            // Create elements to display the data
+            const responderElement = document.createElement('p');
+            responderElement.textContent = `Responder: ${responseData.responder}`;
+            container.appendChild(responderElement);
+
+            const submitDateElement = document.createElement('p');
+            submitDateElement.textContent = `Submit Date: ${responseData.submitDate}`;
+            container.appendChild(submitDateElement);
+
+            // Display other fields dynamically
+            Object.keys(responseData).forEach(key => {
+                if (key !== 'responder' && key !== 'submitDate') {
+                    const value = responseData[key];
+                    const element = document.createElement('p');
+                    element.textContent = `${key}: ${value}`;
+                    container.appendChild(element);
+                }
+            });
+
+            // Display the array of files if available
+            try {
+                const filesArray = JSON.parse(responseData.ra65d2d93942e44cea6f27e6924dc4387);
+                if (Array.isArray(filesArray)) {
+                    const filesHeader = document.createElement('p');
+                    filesHeader.textContent = 'Attached Files:';
+                    container.appendChild(filesHeader);
+
+                    filesArray.forEach(file => {
+                        const fileElement = document.createElement('a');
+                        fileElement.href = file.link;
+                        fileElement.textContent = file.name;
+                        fileElement.setAttribute('target', '_blank'); // Open link in new tab
+                        container.appendChild(fileElement);
+                        container.appendChild(document.createElement('br'));
+                    });
+                }
+            } catch (error) {
+                console.error('Error parsing files array:', error);
+            }
+        }
+
+        // Run this function when the page loads
+        window.onload = function() {
+            const paramValue = getParameterByName('id'); // Replace 'id' with your parameter name
+            if (paramValue) {
+                document.getElementById('output').innerText = `Parameter value: ${paramValue}`;
+                postToApi(paramValue);
+            } else {
+                document.getElementById('output').innerText = 'No parameter found.';
+            }
+        };
+    </script>
 </body>
 </html>
-
