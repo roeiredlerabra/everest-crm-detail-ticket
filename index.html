@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Parameter Example</title>
+</head>
+<body>
+    <h1>URL Parameter Example</h1>
+    <p id="output">Parameter value will appear here.</p>
+
+    <script>// Function to get URL parameter by name
+function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
+    const results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+// Run this function when the page loads
+window.onload = function() {
+    const paramValue = getParameterByName('param'); // Replace 'param' with your parameter name
+    if (paramValue) {
+        document.getElementById('output').innerText = `Parameter value: ${paramValue}`;
+    } else {
+        document.getElementById('output').innerText = 'No parameter found.';
+    }
+};
+</script>
+</body>
+</html>
+
