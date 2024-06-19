@@ -22,7 +22,7 @@ function getParameterByName(name, url = window.location.href) {
 
 // Function to make a POST request to the API
 function postToApi(paramValue) {
-    const apiUrl = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01'; // Replace with your API endpoint
+    const apiUrl = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with your API endpoint
     const data = { id: paramValue };
 
     fetch(apiUrl, {
