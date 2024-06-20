@@ -125,25 +125,18 @@ function displayApiResponse(responseData) {
 }
 
 function displayListItemInTable(listItem, tableBody) {
-    // Function to recursively display nested objects and arrays
-    function displayNestedValue(value, parentKey) {
-        if (Array.isArray(value)) {
-            value.forEach((item, index) => {
-                const nestedKey = `${parentKey}[${index}]`;
-                displayNestedValue(item, nestedKey);
-            });
-        } else if (typeof value === 'object' && value !== null) {
-            Object.entries(value).forEach(([key, nestedValue]) => {
-                const nestedKey = parentKey ? `${parentKey}.${key}` : key;
-                displayNestedValue(nestedValue, nestedKey);
-            });
-        } else {
+    const desiredFields = ['ItemInternalId', 'ID', 'Title', 'Description', 'Status#Id', 'DateReported', 'Created', 'Modified', '{Link}'];
+
+    for (const key in listItem) {
+        const value = listItem[key];
+
+        if (desiredFields.includes(key)) {
             // Create a new table row
             const row = document.createElement('tr');
 
             // Create cells for the field name and value
             const fieldCell = document.createElement('td');
-            fieldCell.textContent = parentKey;
+            fieldCell.textContent = key;
             const valueCell = document.createElement('td');
             valueCell.textContent = value;
 
@@ -153,8 +146,32 @@ function displayListItemInTable(listItem, tableBody) {
 
             // Append the row to the table body
             tableBody.appendChild(row);
+        } else if (key === 'Assignedto0' || key === 'Issueloggedby' || key === 'Author' || key === 'Editor') {
+            // Handle nested objects
+            const nestedObject = value;
+            for (const nestedKey in nestedObject) {
+                const nestedValue = nestedObject[nestedKey];
+                if (typeof nestedValue !== 'object') {
+                    // Create a new table row
+                    const row = document.createElement('tr');
+
+                    // Create cells for the field name and value
+                    const fieldCell = document.createElement('td');
+                    fieldCell.textContent = `${key}.${nestedKey}`;
+                    const valueCell = document.createElement('td');
+                    valueCell.textContent = nestedValue;
+
+                    // Append the cells to the row
+                    row.appendChild(fieldCell);
+                    row.appendChild(valueCell);
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                }
+            }
         }
     }
+}
 
     // Iterate over the properties of the list item
     for (const key in listItem) {
