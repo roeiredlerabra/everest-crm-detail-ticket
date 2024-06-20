@@ -61,7 +61,7 @@
     <script src="https://cdn.rtlcss.com/bootstrap/v4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-     // Example array containing mappings
+// Example array containing mappings
 const elementMappings = [
     {
         "locale": "he",
@@ -172,18 +172,6 @@ function displayListItemInTable(listItem, tableBody) {
         }
     }
 }
-
-    // Iterate over the properties of the list item
-    for (const key in listItem) {
-        const value = listItem[key];
-
-        // Skip properties that start with "@" or are objects
-        if (key.startsWith('@') || typeof value === 'object') continue;
-
-        // Display the value in the table
-        displayNestedValue(value, key);
-    }
-
 
 // Function to replace values in a string based on response object keys
 function replaceValuesInString(string, responseObject) {
