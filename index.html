@@ -10,12 +10,29 @@
     <style>
         body {
             padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
         }
         h1 {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            color: #343a40;
+            text-align: center;
         }
         #output {
             margin-bottom: 20px;
+            text-align: center;
+        }
+        #apiResponse {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        #apiResponseTable th {
+            background-color: #343a40;
+            color: #fff;
         }
         /* Add more custom styles as needed */
     </style>
@@ -24,7 +41,6 @@
     <div class="container">
         <h1>דוגמא לפרמטר בכתובת האתר</h1>
         <p id="output">ערך הפרמטר יופיע כאן.</p>
-
         <div id="apiResponse">
             <!-- API response table -->
             <table id="apiResponseTable" class="table table-striped">
