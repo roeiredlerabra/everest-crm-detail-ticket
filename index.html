@@ -5,33 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Data Table</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://source.unsplash.com/random/1600x900') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 60%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         th {
-            background-color: #f2f2f2;
+            background-color: rgba(0, 123, 255, 0.8);
+            color: #fff;
+            font-weight: bold;
+            text-align: left;
+        }
+        td {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.7);
         }
     </style>
 </head>
 <body>
+    <div class="glass-card">
     <h1>API Data Table</h1>
     <table id="data-table">
         <tr>
             <th>ID</th>
+            <td id="id"></td>
+        </tr>
+        <tr>
             <th>Title</th>
+            <td id="title"></td>
+        </tr>
+        <tr>
             <th>Description</th>
+            <td id="description"></td>
+        </tr>
+        <tr>
             <th>Status</th>
+            <td id="status"></td>
+        </tr>
+        <tr>
             <th>Created</th>
+            <td id="created"></td>
+        </tr>
+        <tr>
             <th>Modified</th>
+            <td id="modified"></td>
+        </tr>
+        <tr>
             <th>Assign To</th>
+            <td id="assign-to"></td>
         </tr>
     </table>
-
+   </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Function to get query parameter by name
@@ -59,15 +115,13 @@
                 .then(response => response.json())
                 .then(data => {
                     // Populate the table with the response data
-                    const table = document.getElementById('data-table');
-                    const row = table.insertRow();
-                    row.insertCell(0).textContent = data.ID;
-                    row.insertCell(1).textContent = data.Title;
-                    row.insertCell(2).textContent = data.Description;
-                    row.insertCell(3).textContent = data.Status.Value;
-                    row.insertCell(4).textContent = new Date(data.Created).toLocaleString();
-                    row.insertCell(5).textContent = new Date(data.Modified).toLocaleString();
-                    row.insertCell(6).textContent = data["Assign To"];
+                    document.getElementById('id').textContent = data.ID;
+                    document.getElementById('title').textContent = data.Title;
+                    document.getElementById('description').textContent = data.Description;
+                    document.getElementById('status').textContent = data.Status.Value;
+                    document.getElementById('created').textContent = new Date(data.Created).toLocaleString();
+                    document.getElementById('modified').textContent = new Date(data.Modified).toLocaleString();
+                    document.getElementById('assign-to').textContent = data["Assign To"];
                 })
                 .catch(error => console.error('Error:', error));
             } else {
