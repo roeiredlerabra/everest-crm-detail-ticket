@@ -74,6 +74,10 @@
             <th>Status</th>
             <td id="status"></td>
         </tr>
+                <tr>
+            <th>Priority</th>
+            <td id="Priority"></td>
+        </tr>
         <tr>
             <th>Created</th>
             <td id="created"></td>
@@ -119,6 +123,7 @@
                     document.getElementById('title').textContent = data.Title;
                     document.getElementById('description').textContent = data.Description;
                     document.getElementById('status').textContent = data.Status.Value;
+                    document.getElementById('Priority').textContent = data.Priority;
                     document.getElementById('created').textContent = new Date(data.Created).toLocaleString();
                     document.getElementById('modified').textContent = new Date(data.Modified).toLocaleString();
                     document.getElementById('assign-to').textContent = data["Assign To"];
