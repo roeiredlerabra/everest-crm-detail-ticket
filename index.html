@@ -143,103 +143,112 @@
             }
         ];
 
-        // Function to get URL parameter by name
-        function getParameterByName(name, url = window.location.href) {
-            name = name.replace(/[\[\]]/g, '\\$&');
-            const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
-            const results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        
+// Function to get URL parameter by name
+function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
+    const results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+// Function to make a POST request to the API
+function postToApi(paramValue) {
+    const apiUrl = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with your API endpoint
+    const data = { id: paramValue };
+
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        document.getElementById('output').innerText = `API Response: See below`;
+        displayApiResponse(data); // Call function to display API response
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        document.getElementById('output').innerText = 'Error making API request.';
+    });
+}
+
+// Function to display API response in HTML
+function displayApiResponse(responseData) {
+    const container = document.getElementById('apiResponse');
+    container.innerHTML = ''; // Clear previous content
+
+    // Create elements to display the data
+    const responderElement = document.createElement('p');
+    responderElement.textContent = `Responder: ${getResponseValue('responder', responseData)}`;
+    container.appendChild(responderElement);
+
+    const submitDateElement = document.createElement('p');
+    submitDateElement.textContent = `Submit Date: ${getResponseValue('submitDate', responseData)}`;
+    container.appendChild(submitDateElement);
+
+    // Iterate over each response object and display relevant elements
+    responseData.forEach(responseObj => {
+        const questionId = responseObj.questionId;
+        const elementKey = responseObj.elementKey;
+        const elementValue = responseObj.elementValue;
+
+        // Find the corresponding mapping from elementMappings array
+        const mapping = elementMappings.find(mapping => mapping.questionId === questionId && mapping.elementKey === elementKey);
+
+        if (mapping) {
+            const displayText = replaceValuesInString(mapping.elementValue, responseObj);
+            const element = document.createElement('p');
+            element.innerHTML = `${mapping.elementKey}: ${displayText}`;
+            container.appendChild(element);
+        } else {
+            // Handle if no mapping is found
+            const element = document.createElement('p');
+            element.textContent = `${elementKey}: ${elementValue}`;
+            container.appendChild(element);
         }
+    });
+}
 
-        // Function to make a POST request to the API
-        function postToApi(paramValue) {
-            const apiUrl = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with your API endpoint
-            const data = { id: paramValue };
+// Function to replace values in a string based on response object keys
+function replaceValuesInString(string, responseObject) {
+    // Replace each key in the string with its corresponding value from responseObject
+    Object.keys(responseObject).forEach(key => {
+        const regex = new RegExp(`{{${key}}}`, 'g');
+        string = string.replace(regex, responseObject[key]);
+    });
+    return string;
+}
 
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                document.getElementById('output').innerText = `API Response: See below`;
-                displayApiResponse(data); // Call function to display API response
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                document.getElementById('output').innerText = 'Error making API request.';
-            });
+// Function to get specific response value based on key
+function getResponseValue(key, responseData) {
+    // Iterate over the responseData array
+    for (let i = 0; i < responseData.length; i++) {
+        const obj = responseData[i];
+        // Check if the object has the provided key
+        if (obj.hasOwnProperty(key)) {
+            return obj[key];
         }
+    }
+    // If the key is not found, return an empty string
+    return '';
+}
 
-        // Function to display API response in HTML
-        function displayApiResponse(responseData) {
-            const container = document.getElementById('apiResponse');
-            container.innerHTML = ''; // Clear previous content
-
-            // Create elements to display the data
-            const responderElement = document.createElement('p');
-            responderElement.textContent = `Responder: ${getResponseValue('responder', responseData)}`;
-            container.appendChild(responderElement);
-
-            const submitDateElement = document.createElement('p');
-            submitDateElement.textContent = `Submit Date: ${getResponseValue('submitDate', responseData)}`;
-            container.appendChild(submitDateElement);
-
-            // Iterate over each response object and display relevant elements
-            responseData.forEach(responseObj => {
-                const questionId = responseObj.questionId;
-                const elementKey = responseObj.elementKey;
-                const elementValue = responseObj.elementValue;
-
-                // Find the corresponding mapping from elementMappings array
-                const mapping = elementMappings.find(mapping => mapping.questionId === questionId && mapping.elementKey === elementKey);
-
-                if (mapping) {
-                    const displayText = replaceValuesInString(mapping.elementValue, responseObj);
-                    const element = document.createElement('p');
-                    element.innerHTML = `${mapping.elementKey}: ${displayText}`;
-                    container.appendChild(element);
-                } else {
-                    // Handle if no mapping is found
-                    const element = document.createElement('p');
-                    element.textContent = `${elementKey}: ${elementValue}`;
-                    container.appendChild(element);
-                }
-            });
-        }
-
-        // Function to replace values in a string based on response object keys
-        function replaceValuesInString(string, responseObject) {
-            // Replace each key in the string with its corresponding value from responseObject
-            Object.keys(responseObject).forEach(key => {
-                const regex = new RegExp(`{{${key}}}`, 'g');
-                string = string.replace(regex, responseObject[key]);
-            });
-            return string;
-        }
-
-        // Function to get specific response value based on key
-        function getResponseValue(key, responseData) {
-            const responseObj = responseData.find(obj => obj.hasOwnProperty(key));
-            return responseObj ? responseObj[key] : '';
-        }
-
-        // Run this function when the page loads
-        window.onload = function() {
-            const paramValue = getParameterByName('id'); // Replace 'id' with your parameter name
-            if (paramValue) {
-                document.getElementById('output').innerText = `Parameter value: ${paramValue}`;
-                postToApi(paramValue);
-            } else {
-                document.getElementById('output').innerText = 'No parameter found.';
-            }
-        };
+// Run this function when the page loads
+window.onload = function() {
+    const paramValue = getParameterByName('id'); // Replace 'id' with your parameter name
+    if (paramValue) {
+        document.getElementById('output').innerText = `Parameter value: ${paramValue}`;
+        postToApi(paramValue);
+    } else {
+        document.getElementById('output').innerText = 'No parameter found.';
+    }
+};
     </script>
 </body>
 </html>
