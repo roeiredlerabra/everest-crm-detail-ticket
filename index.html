@@ -109,6 +109,37 @@ function displayApiResponse(responseData) {
 }
 
 function displayListItemInTable(listItem, tableBody) {
+    // Function to recursively display nested objects and arrays
+    function displayNestedValue(value, parentKey) {
+        if (Array.isArray(value)) {
+            value.forEach((item, index) => {
+                const nestedKey = `${parentKey}[${index}]`;
+                displayNestedValue(item, nestedKey);
+            });
+        } else if (typeof value === 'object' && value !== null) {
+            Object.entries(value).forEach(([key, nestedValue]) => {
+                const nestedKey = parentKey ? `${parentKey}.${key}` : key;
+                displayNestedValue(nestedValue, nestedKey);
+            });
+        } else {
+            // Create a new table row
+            const row = document.createElement('tr');
+
+            // Create cells for the field name and value
+            const fieldCell = document.createElement('td');
+            fieldCell.textContent = parentKey;
+            const valueCell = document.createElement('td');
+            valueCell.textContent = value;
+
+            // Append the cells to the row
+            row.appendChild(fieldCell);
+            row.appendChild(valueCell);
+
+            // Append the row to the table body
+            tableBody.appendChild(row);
+        }
+    }
+
     // Iterate over the properties of the list item
     for (const key in listItem) {
         const value = listItem[key];
@@ -116,21 +147,8 @@ function displayListItemInTable(listItem, tableBody) {
         // Skip properties that start with "@" or are objects
         if (key.startsWith('@') || typeof value === 'object') continue;
 
-        // Create a new table row
-        const row = document.createElement('tr');
-
-        // Create cells for the field name and value
-        const fieldCell = document.createElement('td');
-        fieldCell.textContent = key;
-        const valueCell = document.createElement('td');
-        valueCell.textContent = value;
-
-        // Append the cells to the row
-        row.appendChild(fieldCell);
-        row.appendChild(valueCell);
-
-        // Append the row to the table body
-        tableBody.appendChild(row);
+        // Display the value in the table
+        displayNestedValue(value, key);
     }
 }
 
