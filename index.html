@@ -1,212 +1,79 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Parameter Example</title>
-    <!-- Bootstrap RTL CSS -->
-    <link href="https://cdn.rtlcss.com/bootstrap/v4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
+    <title>API Data Table</title>
     <style>
-        body {
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
-        h1 {
-            margin-bottom: 30px;
-            color: #343a40;
-            text-align: center;
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
         }
-        #output {
-            margin-bottom: 20px;
-            text-align: center;
+        th {
+            background-color: #f2f2f2;
         }
-        #apiResponse {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        #apiResponseTable th {
-            background-color: #343a40;
-            color: #fff;
-        }
-        /* Add more custom styles as needed */
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>דוגמא לפרמטר בכתובת האתר</h1>
-        <p id="output">ערך הפרמטר יופיע כאן.</p>
-        <div id="apiResponse">
-            <!-- API response table -->
-            <table id="apiResponseTable" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Field</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Table rows will be dynamically generated here -->
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <h1>API Data Table</h1>
+    <table id="data-table">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Modified</th>
+            <th>Assign To</th>
+        </tr>
+    </table>
 
-    <!-- Bootstrap JavaScript ותלויות (אופציונלי, אם נדרש) -->
-    <script src="https://cdn.rtlcss.com/bootstrap/v4.5.2/js/bootstrap.min.js"></script>
-
-  <script>
-        // Example array containing mappings
-        const elementMappings = [
-            {
-                "locale": "he",
-                "questionId": "",
-                "elementKey": "localename",
-                "elementValue": "עברית",
-                "flags": 0
-            },
-            // ... (other mapping objects)
-        ];
-
-        // Function to get URL parameter by name
-        function getParameterByName(name, url = window.location.href) {
-            name = name.replace(/[\[\]]/g, '\\$&');
-            const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
-            const results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
-        }
-
-        // Function to make a POST request to the API
-        function postToApi(paramValue) {
-            const apiUrl = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with your API endpoint
-            const data = { id: paramValue };
-
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                document.getElementById('output').innerText = `API Response: See below`;
-                displayApiResponse(data); // Call function to display API response
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                document.getElementById('output').innerText = 'Error making API request.';
-            });
-        }
-
-        // Function to display API response in a table
-        function displayApiResponse(responseData) {
-            const tableBody = document.getElementById('apiResponseTable').getElementsByTagName('tbody')[0];
-            tableBody.innerHTML = ''; // Clear previous table rows
-
-            // Handle the case when the response is a single object
-            displayListItemInTable(responseData, tableBody);
-        }
-
-        function displayListItemInTable(listItem, tableBody) {
-            const desiredFields = ['ID', 'Title', 'Description', 'Status', 'Created', 'Modified', 'Assign To'];
-
-            for (const key in listItem) {
-                const value = listItem[key];
-
-                if (desiredFields.includes(key)) {
-                    // Create a new table row
-                    const row = document.createElement('tr');
-
-                    // Create cells for the field name and value
-                    const fieldCell = document.createElement('td');
-                    fieldCell.textContent = key;
-                    const valueCell = document.createElement('td');
-
-                    // Check if value is an object (for nested objects)
-                    if (typeof value === 'object' && value !== null) {
-                        valueCell.textContent = JSON.stringify(value);
-                    } else {
-                        valueCell.textContent = value;
-                    }
-
-                    // Append the cells to the row
-                    row.appendChild(fieldCell);
-                    row.appendChild(valueCell);
-
-                    // Append the row to the table body
-                    tableBody.appendChild(row);
-                } else if (key === 'Status') {
-                    // Handle nested objects specifically for Status
-                    const nestedObject = value;
-                    for (const nestedKey in
-                          const nestedObject = value;
-                    for (const nestedKey in nestedObject) {
-                        const nestedValue = nestedObject[nestedKey];
-                        if (typeof nestedValue !== 'object') {
-                            // Create a new table row
-                            const row = document.createElement('tr');
-
-                            // Create cells for the field name and value
-                            const fieldCell = document.createElement('td');
-                            fieldCell.textContent = `${key}.${nestedKey}`;
-                            const valueCell = document.createElement('td');
-                            valueCell.textContent = nestedValue;
-
-                            // Append the cells to the row
-                            row.appendChild(fieldCell);
-                            row.appendChild(valueCell);
-
-                            // Append the row to the table body
-                            tableBody.appendChild(row);
-                        }
-                    }
-                }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to get query parameter by name
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
             }
-        }
 
-        // Function to replace values in a string based on response object keys
-        function replaceValuesInString(string, responseObject) {
-            // Replace each key in the string with its corresponding value from responseObject
-            Object.keys(responseObject).forEach(key => {
-                const regex = new RegExp(`{{${key}}}`, 'g');
-                string = string.replace(regex, responseObject[key]);
-            });
-            return string;
-        }
+            // Get the 'id' parameter from the URL
+            const id = getQueryParam('id');
 
-        // Function to get specific response value based on key
-        function getResponseValue(key, responseData) {
-            // Iterate over the responseData array
-            for (let i = 0; i < responseData.length; i++) {
-                const obj = responseData[i];
-                // Check if the object has the provided key
-                if (obj.hasOwnProperty(key)) {
-                    return obj[key];
-                }
-            }
-            // If the key is not found, return an empty string
-            return '';
-        }
+            // Check if 'id' is found in the URL
+            if (id) {
+                // Define the API endpoint
+                const apiEndpoint = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with actual API endpoint
 
-        // Run this function when the page loads
-        window.onload = function() {
-            const paramValue = getParameterByName('id'); // Replace 'id' with your parameter name
-            if (paramValue) {
-                document.getElementById('output').innerText = `Parameter value: ${paramValue}`;
-                postToApi(paramValue);
+                // Prepare the POST request
+                fetch(apiEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Populate the table with the response data
+                    const table = document.getElementById('data-table');
+                    const row = table.insertRow();
+                    row.insertCell(0).textContent = data.ID;
+                    row.insertCell(1).textContent = data.Title;
+                    row.insertCell(2).textContent = data.Description;
+                    row.insertCell(3).textContent = data.Status.Value;
+                    row.insertCell(4).textContent = new Date(data.Created).toLocaleString();
+                    row.insertCell(5).textContent = new Date(data.Modified).toLocaleString();
+                    row.insertCell(6).textContent = data["Assign To"];
+                })
+                .catch(error => console.error('Error:', error));
             } else {
-                document.getElementById('output').innerText = 'No parameter found.';
+                console.error('ID parameter not found in the URL');
             }
-        };
+        });
     </script>
 </body>
 </html>
