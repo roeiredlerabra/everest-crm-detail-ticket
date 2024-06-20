@@ -34,116 +34,18 @@
     <script src="https://cdn.rtlcss.com/bootstrap/v4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        // Example array containing mappings
-        const elementMappings = [
-            {
-                "locale": "he",
-                "questionId": "",
-                "elementKey": "localename",
-                "elementValue": "עברית",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "",
-                "elementKey": "thankyoumessage",
-                "elementValue": "<span>הטופס נשלח בהצלחה</span>",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "r2009d51e83ae4c348d6a7de065e03d08",
-                "elementKey": "option",
-                "elementValue": "{\"choicesV1\":[{\"Description\":\"1\",\"FormsProDisplayRTText\":\"1\"},{\"Description\":\"2\",\"FormsProDisplayRTText\":\"2\"},{\"Description\":\"3\",\"FormsProDisplayRTText\":\"3\"},{\"Description\":\"4\",\"FormsProDisplayRTText\":\"4\"}]}",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "r2009d51e83ae4c348d6a7de065e03d08",
-                "elementKey": "formsprortlocaletitle",
-                "elementValue": "חומרת הבאג (1-מאוד חמור,4-לא חמור)<br>",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "r2009d51e83ae4c348d6a7de065e03d08",
-                "elementKey": "title",
-                "elementValue": "חומרת הבאג (1-מאוד חמור,4-לא חמור)\n",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "r24483c22b143498fa4daa705c64e4321",
-                "elementKey": "option",
-                "elementValue": "{\"choicesV1\":[{\"Description\":\"סביבת ייצור\",\"FormsProDisplayRTText\":\"<span>סביבת ייצור</span>\"},{\"Description\":\"סביבת טסט\",\"FormsProDisplayRTText\":\"<span>סביבת טסט</span>\"},{\"Description\":\"סביבת פיתוח\",\"FormsProDisplayRTText\":\"<span>סביבת פיתוח</span>\"}]}",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "r24483c22b143498fa4daa705c64e4321",
-                "elementKey": "formsprortlocaletitle",
-                "elementValue": "<span>הסביבה שבה נמצא הבאג</span><br>",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "r24483c22b143498fa4daa705c64e4321",
-                "elementKey": "title",
-                "elementValue": "הסביבה שבה נמצא הבאג\n",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "rff26b0dffd16401290021e49d7c66758",
-                "elementKey": "title",
-                "elementValue": "כותרת",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "rff26b0dffd16401290021e49d7c66758",
-                "elementKey": "formsprortlocaletitle",
-                "elementValue": "<span><span><span>כותרת</span></span></span>",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "r24d0c90b1ea84cb0b6913ef36e8245c2",
-                "elementKey": "title",
-                "elementValue": "תיאור הבעיה/בקשה\n",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "r24d0c90b1ea84cb0b6913ef36e8245c2",
-                "elementKey": "formsprortlocaletitle",
-                "elementValue": "<span>תיאור הבעיה/בקשה</span><br>",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "r0f9226caf8384ba7b96730d2fba1da38",
-                "elementKey": "title",
-                "elementValue": "תיעדוף הבאג (1-מאוד דחוף,4-לא דחוף)",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "r0f9226caf8384ba7b96730d2fba1da38",
-                "elementKey": "formsprortlocaletitle",
-                "elementValue": "<span>תיעדוף הבאג (1-מאוד דחוף,4-לא דחוף)</span>",
-                "flags": 0
-            },
-            {
-                "locale": "he",
-                "questionId": "r0f9226caf8384ba7b96730d2fba1da38",
-                "elementKey": "option",
-                "elementValue": "{\"choicesV1\":[{\"Description\":\"1\",\"FormsProDisplayRTText\":\"1\"},{\"Description\":\"2\",\"FormsProDisplayRTText\":\"2\"},{\"Description\":\"3\",\"FormsProDisplayRTText\":\"3\"},{\"Description\":\"4\",\"FormsProDisplayRTText\":\"4\"}]}",
-                "flags": 0
-            }
-        ];
+     // Example array containing mappings
+const elementMappings = [
+    {
+        "locale": "he",
+        "questionId": "",
+        "elementKey": "localename",
+        "elementValue": "עברית",
+        "flags": 0
+    },
+    // ... (other mapping objects)
+];
 
-        
 // Function to get URL parameter by name
 function getParameterByName(name, url = window.location.href) {
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -178,41 +80,47 @@ function postToApi(paramValue) {
     });
 }
 
-// Function to display API response in HTML
+// Function to display API response in a table
 function displayApiResponse(responseData) {
-    const container = document.getElementById('apiResponse');
-    container.innerHTML = ''; // Clear previous content
+    const tableBody = document.getElementById('apiResponseTable').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = ''; // Clear previous table rows
 
-    // Create elements to display the data
-    const responderElement = document.createElement('p');
-    responderElement.textContent = `Responder: ${getResponseValue('responder', responseData)}`;
-    container.appendChild(responderElement);
+    // Check if the response is an array
+    if (Array.isArray(responseData)) {
+        // Handle the case when the response is an array
+        responseData.forEach(item => {
+            displayListItemInTable(item, tableBody);
+        });
+    } else {
+        // Handle the case when the response is a single object
+        displayListItemInTable(responseData, tableBody);
+    }
+}
 
-    const submitDateElement = document.createElement('p');
-    submitDateElement.textContent = `Submit Date: ${getResponseValue('submitDate', responseData)}`;
-    container.appendChild(submitDateElement);
+function displayListItemInTable(listItem, tableBody) {
+    // Iterate over the properties of the list item
+    for (const key in listItem) {
+        const value = listItem[key];
 
-    // Iterate over each response object and display relevant elements
-    responseData.forEach(responseObj => {
-        const questionId = responseObj.questionId;
-        const elementKey = responseObj.elementKey;
-        const elementValue = responseObj.elementValue;
+        // Skip properties that start with "@" or are objects
+        if (key.startsWith('@') || typeof value === 'object') continue;
 
-        // Find the corresponding mapping from elementMappings array
-        const mapping = elementMappings.find(mapping => mapping.questionId === questionId && mapping.elementKey === elementKey);
+        // Create a new table row
+        const row = document.createElement('tr');
 
-        if (mapping) {
-            const displayText = replaceValuesInString(mapping.elementValue, responseObj);
-            const element = document.createElement('p');
-            element.innerHTML = `${mapping.elementKey}: ${displayText}`;
-            container.appendChild(element);
-        } else {
-            // Handle if no mapping is found
-            const element = document.createElement('p');
-            element.textContent = `${elementKey}: ${elementValue}`;
-            container.appendChild(element);
-        }
-    });
+        // Create cells for the field name and value
+        const fieldCell = document.createElement('td');
+        fieldCell.textContent = key;
+        const valueCell = document.createElement('td');
+        valueCell.textContent = value;
+
+        // Append the cells to the row
+        row.appendChild(fieldCell);
+        row.appendChild(valueCell);
+
+        // Append the row to the table body
+        tableBody.appendChild(row);
+    }
 }
 
 // Function to replace values in a string based on response object keys
