@@ -60,7 +60,7 @@
     <!-- Bootstrap JavaScript ותלויות (אופציונלי, אם נדרש) -->
     <script src="https://cdn.rtlcss.com/bootstrap/v4.5.2/js/bootstrap.min.js"></script>
 
-    <script>
+<script>
 // Example array containing mappings
 const elementMappings = [
     {
@@ -112,20 +112,12 @@ function displayApiResponse(responseData) {
     const tableBody = document.getElementById('apiResponseTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = ''; // Clear previous table rows
 
-    // Check if the response is an array
-    if (Array.isArray(responseData)) {
-        // Handle the case when the response is an array
-        responseData.forEach(item => {
-            displayListItemInTable(item, tableBody);
-        });
-    } else {
-        // Handle the case when the response is a single object
-        displayListItemInTable(responseData, tableBody);
-    }
+    // Handle the case when the response is a single object
+    displayListItemInTable(responseData, tableBody);
 }
 
 function displayListItemInTable(listItem, tableBody) {
-    const desiredFields = ['ItemInternalId', 'ID', 'Title', 'Description', 'Status#Id', 'DateReported', 'Created', 'Modified', '{Link}'];
+    const desiredFields = ['ID', 'Title', 'Description', 'Status', 'Created', 'Modified', 'Assign To'];
 
     for (const key in listItem) {
         const value = listItem[key];
@@ -138,7 +130,13 @@ function displayListItemInTable(listItem, tableBody) {
             const fieldCell = document.createElement('td');
             fieldCell.textContent = key;
             const valueCell = document.createElement('td');
-            valueCell.textContent = value;
+            
+            // Check if value is an object (for nested objects)
+            if (typeof value === 'object' && value !== null) {
+                valueCell.textContent = JSON.stringify(value);
+            } else {
+                valueCell.textContent = value;
+            }
 
             // Append the cells to the row
             row.appendChild(fieldCell);
@@ -146,28 +144,28 @@ function displayListItemInTable(listItem, tableBody) {
 
             // Append the row to the table body
             tableBody.appendChild(row);
-        } else if (key === 'Assignedto0' || key === 'Issueloggedby' || key === 'Author' || key === 'Editor') {
-            // Handle nested objects
+        } else if (key === 'Status') {
+            // Handle nested objects specifically for Status
             const nestedObject = value;
             for (const nestedKey in nestedObject) {
+                if (nestedKey === '@odata.type') continue; // Skip type metadata
                 const nestedValue = nestedObject[nestedKey];
-                if (typeof nestedValue !== 'object') {
-                    // Create a new table row
-                    const row = document.createElement('tr');
+                
+                // Create a new table row
+                const row = document.createElement('tr');
 
-                    // Create cells for the field name and value
-                    const fieldCell = document.createElement('td');
-                    fieldCell.textContent = `${key}.${nestedKey}`;
-                    const valueCell = document.createElement('td');
-                    valueCell.textContent = nestedValue;
+                // Create cells for the field name and value
+                const fieldCell = document.createElement('td');
+                fieldCell.textContent = `${key}.${nestedKey}`;
+                const valueCell = document.createElement('td');
+                valueCell.textContent = nestedValue;
 
-                    // Append the cells to the row
-                    row.appendChild(fieldCell);
-                    row.appendChild(valueCell);
+                // Append the cells to the row
+                row.appendChild(fieldCell);
+                row.appendChild(valueCell);
 
-                    // Append the row to the table body
-                    tableBody.appendChild(row);
-                }
+                // Append the row to the table body
+                tableBody.appendChild(row);
             }
         }
     }
@@ -175,38 +173,6 @@ function displayListItemInTable(listItem, tableBody) {
 
 // Function to replace values in a string based on response object keys
 function replaceValuesInString(string, responseObject) {
-    // Replace each key in the string with its corresponding value from responseObject
-    Object.keys(responseObject).forEach(key => {
-        const regex = new RegExp(`{{${key}}}`, 'g');
-        string = string.replace(regex, responseObject[key]);
-    });
-    return string;
-}
-
-// Function to get specific response value based on key
-function getResponseValue(key, responseData) {
-    // Iterate over the responseData array
-    for (let i = 0; i < responseData.length; i++) {
-        const obj = responseData[i];
-        // Check if the object has the provided key
-        if (obj.hasOwnProperty(key)) {
-            return obj[key];
-        }
-    }
-    // If the key is not found, return an empty string
-    return '';
-}
-
-// Run this function when the page loads
-window.onload = function() {
-    const paramValue = getParameterByName('id'); // Replace 'id' with your parameter name
-    if (paramValue) {
-        document.getElementById('output').innerText = `Parameter value: ${paramValue}`;
-        postToApi(paramValue);
-    } else {
-        document.getElementById('output').innerText = 'No parameter found.';
-    }
-};
-    </script>
+    // Replace each key in the string with its corresponding value
 </body>
 </html>
