@@ -240,8 +240,13 @@
                 document.getElementById('assign-to').textContent = data["Assign To"];
 
                 // Update the progress steps based on the status
-                const status = data.Status.Value.toLowerCase();
-                const steps = ['new', 'in progress', 'completed'];
+            const status = data.Status.Value.toLowerCase();
+            const steps = ['new', 'in progress', 'completed'];
+            const progressContainer = document.querySelector('.progress-container');
+
+            if (!steps.includes(status)) {
+                progressContainer.style.display = 'none';
+            } else {
                 steps.forEach((step, index) => {
                     const stepElement = document.getElementById(`step-${step.replace(' ', '-')}`);
                     if (status === step) {
@@ -250,12 +255,13 @@
                         stepElement.classList.add('completed');
                     }
                 });
-            })
-            .catch(error => console.error('Error:', error));
-        } else {
-            console.error('ID parameter not found in the URL');
-        }
-    });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        console.error('ID parameter not found in the URL');
+    }
+});
 </script>
 </body>
 </html>
