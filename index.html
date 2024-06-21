@@ -133,7 +133,7 @@
         .step.completed .circle {
             background-color: #06a31b;
         }
-.container {
+        .container {
   max-width: 600px; /* Adjust width as needed */
   margin: 0 auto; /* Center the container horizontally */
   padding: 20px;
@@ -177,7 +177,11 @@
 #upload-button:hover {
   background-color: #218838;
 }
-
+.remove-file {
+  cursor: pointer;
+  color: red;
+  margin-left: 10px;
+}
     </style>
 </head>
 <body>
@@ -251,7 +255,7 @@
   <input type="file" id="file-input" multiple>
   <label for="file-input" id="select-files-button">Select Files</label>
   <div id="file-list"></div>
-  <button id="upload-button">Upload Files</button>
+  <button id="upload-button" disabled>Upload Files</button>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -314,33 +318,103 @@
     }
 });
 $(document).ready(function() {
-        let selectedFiles = [];
+    const $fileInput = $('#file-input');
+    const $fileList = $('#file-list');
+    const $uploadButton = $('#upload-button');
 
-        $('#file-input').on('change', function(e) {
-            selectedFiles = Array.from(e.target.files);
-            updateFileList();
+    let selectedFiles = [];
+
+    $fileInput.on('change', function(e) {
+        selectedFiles = Array.from(e.target.files);
+        updateFileList();
+        toggleUploadButton();
+    });
+
+    $fileList.on('click', '.remove-file', function() {
+        const index = $(this).data('index');
+        selectedFiles.splice(index, 1);
+        updateFileList();
+        toggleUploadButton();
+    });
+
+    $uploadButton.on('click', function() {
+        if (selectedFiles.length === 0) {
+            alert('Please select files to upload.');
+            return;
+        }
+
+        const id = $('#id').text(); // Assuming 'id' is a text content of an element with id 'id'
+
+        const filesData = selectedFiles.map(file => ({
+            id: id,
+            filename: file.name,
+            content_type: file.type,
+            content: null // Will be populated with FileReader
+        }));
+
+        const promises = selectedFiles.map(file => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const fileData = filesData.find(data => data.filename === file.name);
+                    fileData.content = e.target.result.split(',')[1]; // base64 content
+                    resolve();
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
         });
 
-        function updateFileList() {
-            let fileList = $("#file-list");
-            fileList.empty();
-            selectedFiles.forEach(function(file) {
-                fileList.append(`
-                    <div class="file-item">
-                        <span class="file-name">${file.name}</span>
-                        <span class="file-size">${formatFileSize(file.size)}</span>
-                    </div>
-                `);
+        Promise.all(promises)
+            .then(() => {
+                return $.ajax({
+                    url: 'https://prod-143.westeurope.logic.azure.com:443/workflows/11a2ac0deff64db4b75603186f03ae3e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TrCX0Kf9npoAeP2Gf66JFOsJ3DJhFkdozo9oPxet5EE',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ files: filesData }),
+                });
+            })
+            .then(response => {
+                console.log('Files uploaded successfully:', response);
+                selectedFiles = [];
+                $fileInput.val('');
+                updateFileList();
+                alert('Files uploaded successfully!');
+            })
+            .catch(error => {
+                console.error('Error uploading files:', error);
+                alert('Error uploading files. Please try again.');
             });
-        }
+    });
 
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
+    function updateFileList() {
+        $fileList.empty();
+        selectedFiles.forEach((file, index) => {
+            const fileSize = formatFileSize(file.size);
+            const $fileItem = $(`
+                <div class="file-item">
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-size">${fileSize}</span>
+                    <span class="remove-file" data-index="${index}">x</span>
+                </div>
+            `);
+            $fileList.append($fileItem);
+        });
+    }
+
+    function toggleUploadButton() {
+        $uploadButton.prop('disabled', selectedFiles.length === 0);
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+
 
         $("#upload-button").click(function() {
             if (selectedFiles.length === 0) {
