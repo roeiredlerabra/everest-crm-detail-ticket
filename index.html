@@ -169,7 +169,7 @@
                     // Populate the table with the response data
                     document.getElementById('id').textContent = data.ID;
                     document.getElementById('title').textContent = data.Title;
-                    document.getElementById('description').textContent = data.Description;
+                    document.getElementById('description').innerHTML = data.Description.replace(/\n/g, '<br>');
                     document.getElementById('status').textContent = data.Status.Value;
                     document.getElementById('Priority').textContent = data.Priority;
                     document.getElementById('created').textContent = new Date(data.Created).toLocaleString();
