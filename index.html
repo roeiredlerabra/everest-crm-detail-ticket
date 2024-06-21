@@ -252,10 +252,19 @@
     
 </div>
 <div class="container">
+  <div id="existing-files-section" style="display: none;">
+    <h3>הקבצים שהעלת כבר קיימים:</h3>
+    <table id="existing-files-table">
+        <!-- Existing files will be displayed here dynamically -->
+    </table>
+    <p id="try-another-message" style="display: none;">נסו שמות קבצים אחרים בבקשה</p>
+</div>
   <input type="file" id="file-input" multiple>
   <label for="file-input" id="select-files-button">Select Files</label>
   <div id="file-list"></div>
   <button id="upload-button" disabled>Upload Files</button>
+
+
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -318,9 +327,12 @@
     }
 });
 $(document).ready(function() {
-    const $fileInput = $('#file-input');
+  const $fileInput = $('#file-input');
     const $fileList = $('#file-list');
     const $uploadButton = $('#upload-button');
+    const $existingFilesSection = $('#existing-files-section');
+    const $existingFilesTable = $('#existing-files-table');
+    const $tryAnotherMessage = $('#try-another-message');
 
     let selectedFiles = [];
 
@@ -380,6 +392,7 @@ $(document).ready(function() {
                 $fileInput.val('');
                 updateFileList();
                 alert('Files uploaded successfully!');
+                handleUploadResponse(response);
             })
             .catch(error => {
                 console.error('Error uploading files:', error);
@@ -413,59 +426,21 @@ $(document).ready(function() {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
+    function handleUploadResponse(response) {
+    if (Array.isArray(response) && response.length > 0) {
+        const existingFiles = response.map(file => `<tr><td>${file}</td></tr>`).join('');
+        $existingFilesTable.html(existingFiles);
+        $tryAnotherMessage.show();
+        $existingFilesSection.show();
+    } else {
+        $existingFilesTable.empty();
+        $tryAnotherMessage.hide();
+        $existingFilesSection.hide();
+    }
+};
 
 
-
-        $("#upload-button").click(function() {
-            if (selectedFiles.length === 0) {
-                alert("Please select files to upload.");
-                return;
-            }
-            const id = document.getElementById('id').textContent;
-            let filesData = [];
-            let promises = selectedFiles.map(file => {
-                return new Promise((resolve, reject) => {
-                    let reader = new FileReader();
-                    reader.onload = function(e) {
-                        filesData.push({      
-                            id: id,                      
-                            filename: file.name,
-                            content_type: file.type,
-                            content: e.target.result.split(',')[1]  // This is the base64 encoded content
-                        });
-                        resolve();
-                    };
-                    reader.onerror = reject;
-                    reader.readAsDataURL(file);  // This encodes the file as a data URL, which includes the base64 content
-                });
-            });
-
-            Promise.all(promises)
-                .then(() => {
-                    $.ajax({
-                        url: 'https://prod-143.westeurope.logic.azure.com:443/workflows/11a2ac0deff64db4b75603186f03ae3e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TrCX0Kf9npoAeP2Gf66JFOsJ3DJhFkdozo9oPxet5EE',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({ files: filesData }),
-                        success: function(response) {
-                            console.log('Files uploaded successfully:', response);
-                            selectedFiles = [];
-                            $('#file-input').val('');
-                            updateFileList();
-                            alert('Files uploaded successfully!');
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error uploading files:', error);
-                            alert('Error uploading files. Please try again.');
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Error reading files:', error);
-                    alert('Error reading files. Please try again.');
-                });
-        });
-    });
+});
 </script>
 </body>
 </html>
