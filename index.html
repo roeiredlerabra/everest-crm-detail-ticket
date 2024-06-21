@@ -5,10 +5,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel='stylesheet' href='https://docs-ds.estaleiro.serpro.gov.br/docs/ds/dist/core.min.css'>
     <link rel='stylesheet' href='https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css'>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     <title>פרטי קריאה עבור מערכת Everest</title>
     <style>
             /* Adjusted styles for header icons */
@@ -86,6 +88,80 @@
         tr:hover td {
             background-color: rgba(255, 255, 255, 0.7);
         }
+        
+#steps {
+  width: 505px;
+  margin: 50px auto;
+}
+
+.step {
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  display: inline-block;
+  border: 4px solid;
+  border-color: transparent;
+  border-radius: 50%;
+  color: #cdd0da;
+  font-weight: 600;
+  text-align: center;
+  line-height: 35px;
+}
+
+.step:first-child {
+  line-height: 40px;
+}
+
+.step:nth-child(n+2) {
+  margin: 0 0 0 100px;
+  transform: translate(0, -4px);
+}
+
+.step:nth-child(n+2):before {
+  width: 75px;
+  height: 3px;
+  display: block;
+  background-color: white;
+  transform: translate(-95px, 21px);
+  content: "";
+}
+
+.step:after {
+  width: 150px;
+  display: block;
+  transform: translate(-55px, 3px);
+  color: #818698;
+  content: attr(data-desc);
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.step:first-child:after {
+  transform: translate(-55px, -1px);
+}
+
+.step.active {
+  border-color: #73b5e8;
+  color: #73b5e8;
+}
+
+.step.active:before {
+  background: linear-gradient(to right, #58bb58 0%, #73b5e8 100%);
+}
+
+.step.active:after {
+  color: #73b5e8;
+}
+
+.step.done {
+  background-color: #58bb58;
+  border-color: #58bb58;
+  color: white;
+}
+
+.step.done:before {
+  background-color: #58bb58;
+}
     </style>
 </head>
 <body>
@@ -140,7 +216,24 @@
         </tr>
     </table>
    </div>
+    <div id="steps">
+  <div class="step" data-desc="Listing information">1</div>
+  <div class="step" data-desc="Photos & Details">2</div>
+  <div class="step active" data-desc="Review & Post">3</div>
+  <div class="step" data-desc="Your order">4</div>
+</div>
+
     <script>
+        $(document).ready( function() {
+  $('.step').each(function(index, element) {
+    // element == this
+    $(element).not('.active').addClass('done');
+    $('.done').html('<i class="icon-ok"></i>');
+    if($(this).is('.active')) {
+      return false;
+    }
+  });    
+});
         document.addEventListener('DOMContentLoaded', function() {
             // Function to get query parameter by name
             function getQueryParam(param) {
