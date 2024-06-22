@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel='stylesheet' href='https://docs-ds.estaleiro.serpro.gov.br/docs/ds/dist/core.min.css'>
     <link rel='stylesheet' href='https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css'>
+    <link rel='stylesheet' href=style.css>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css'>
     <title>פרטי קריאה עבור מערכת Everest</title>
     <style>
@@ -16,31 +17,33 @@
           text-align: right !important;
           direction: rtl; 
         }      
-        /* Adjusted styles for header icons */
-        .header-icons {
+         /* Adjusted styles for header icons */
+         .header-icons {
             position: absolute;
             top: 50%;
             right: 20px;
             transform: translateY(-50%);
         }
+
         .header-icons i {
             font-size: 20px;
             cursor: pointer;
         }
         .header-info {
-            text-align: center; /* Ensures text is centered horizontally */
-            position: relative; /* Required for centering using transform */
-            left: 30%; /* Shifts the element horizontally by 50% */
-            transform: translateX(-50%); /* Centers the element */
-        }
-        @media (max-width: 768px) {
-            .header-info {
-                text-align: center; /* Ensures text is centered horizontally */
-                position: relative; /* Required for centering using transform */
-                left: 38%; /* Shifts the element horizontally by 50% */
-                transform: translateX(-50%); /* Centers the element */
-            }
-        }
+    text-align: center; /* Ensures text is centered horizontally */
+    position: relative; /* Required for centering using transform */
+    left: 30%; /* Shifts the element horizontally by 50% */
+    transform: translateX(-50%); /* Centers the element */
+}
+
+@media (max-width: 768px) {
+    .header-info {
+        text-align: center; /* Ensures text is centered horizontally */
+    position: relative; /* Required for centering using transform */
+    left: 38%; /* Shifts the element horizontally by 50% */
+    transform: translateX(-50%); /* Centers the element */
+    }
+}
         body1 {
             font-family: Arial, sans-serif;
             background: url('https://source.unsplash.com/random/1600x900') no-repeat center center fixed;
