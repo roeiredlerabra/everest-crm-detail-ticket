@@ -10,7 +10,7 @@
     <link rel='stylesheet' href='https://docs-ds.estaleiro.serpro.gov.br/docs/ds/dist/core.min.css'>
     <link rel='stylesheet' href='https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css'>
     <link rel='stylesheet' href=style.css>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
     <title>פרטי קריאה עבור מערכת Everest</title>
     <style>
         .title4{
@@ -290,6 +290,7 @@
           <div class="label">Completed</div>
       </div>
   </div>
+
     <table id="data-table">
         <tr>
             <th>ID</th>
@@ -424,7 +425,7 @@
             updateFileList();
             toggleUploadButton();
         });
-
+        const uploadButton = document.getElementById('upload-button');
         $uploadButton.on('click', function() {
             if (selectedFiles.length === 0) {
                 alert('Please select files to upload.');
@@ -432,7 +433,12 @@
             }
 
             const id = $('#id').text(); // Assuming 'id' is a text content of an element with id 'id'
+            const spinIcon = document.createElement('i');
+            spinIcon.className = 'fas fa-sync fa-spin';
 
+  // Replace the button text with the spin icon
+  uploadButton.innerHTML = '';
+  uploadButton.appendChild(spinIcon);
             const filesData = selectedFiles.map(file => ({
                 id: id,
                 filename: file.name,
@@ -465,10 +471,12 @@
                 .then(response => {
                     console.log('Files uploaded successfully:', response);
                     handleUploadResponse(response);
+                    uploadButton.innerHTML = 'Upload Files';
                 })
                 .catch(error => {
                     console.error('Error uploading files:', error);
                     alert('Error uploading files. Please try again.');
+                    uploadButton.innerHTML = 'Upload Files';
                 });
         });
 
