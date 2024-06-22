@@ -388,6 +388,10 @@
             <th>Assign To</th>
             <td id="assign-to"></td>
         </tr>
+        <tr>
+            <th>Number of Attachments</th>
+            <td id="attachments-Num"></td>
+        </tr>
     </table>
     
 </div>
@@ -458,6 +462,7 @@
                 document.getElementById('created').textContent = new Date(data.Created).toLocaleString();
                 document.getElementById('modified').textContent = new Date(data.Modified).toLocaleString();
                 document.getElementById('assign-to').textContent = data["Assign To"];
+                document.getElementById('attachments-Num').textContent = data["attachments Num"];
 
                 // Update the progress steps based on the status
                 const status = data.Status.Value.toLowerCase();
@@ -549,6 +554,7 @@
                     console.log('Files uploaded successfully:', response);
                     handleUploadResponse(response);
                     uploadButton.innerHTML = 'Upload Files';
+                    fetchDataAndUpdateTable();
                 })
                 .catch(error => {
                     console.error('Error uploading files:', error);
@@ -625,6 +631,41 @@
             toggleUploadButton();
         }
     });
+    // Function to fetch data from the API and update the table
+async function fetchDataAndUpdateTable() {
+    const url = 'https://prod-57.westeurope.logic.azure.com:443/workflows/1176d781fb374d3c9fd95c886d652169/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=PEi_-DatvPaGpzI6eam-oTnl5U7DRF_POstYNcd3oVQ'; // Replace with your API endpoint
+    const id = $('#id').text();
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: id })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        const data = await response.json(); // Parse JSON response
+        console.log(data); // Log the response for debugging
+
+        // Update the table cell with id "attachments-Num" with the fetched data
+        const attachmentsNumCell = document.getElementById('attachments-Num');
+        if (attachmentsNumCell) {
+            attachmentsNumCell.textContent = data['attachments Num'];
+        } else {
+            console.error('Element with id "attachments-Num" not found in the table.');
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+
+
+
 </script>
 
 </body>
