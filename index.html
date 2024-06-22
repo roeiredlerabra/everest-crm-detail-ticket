@@ -259,7 +259,68 @@
 .files-table .error-icon {
     color: red;
 }
+  /* Your existing CSS styles for the file upload label */
+  .file-upload-label {
+    display: none; /* Initially hide the file upload label */
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    z-index: 1000; /* Ensure it's above other content */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional: add a shadow */
+    left: 50%; /* Center horizontally */
+  }
 
+  .file-upload-label h3 {
+    margin-top: 0;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .file-upload-label ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+
+  .file-upload-label li {
+    margin-bottom: 5px;
+  }
+
+  .file-upload-label .file-types {
+    font-style: italic;
+  }
+
+  /* Show the label when hovering over the parent */
+  .info-icon:hover + .file-upload-label {
+    display: block;
+  }
+
+  /* Hide the label when not hovering over it or its parent */
+  .file-upload-label:hover {
+    display: block;
+  }
+
+  .file-upload-label:hover ~ .info-icon {
+    display: inline-block;
+  }
+
+  .file-upload-label input[type="file"] {
+    display: block;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  .info-icon {
+
+    top: 10px; /* adjust as needed */
+    right: 10px; /* adjust as needed */
+    font-size: 20px; /* adjust size as needed */
+    color: #555; /* adjust color as needed */
+    cursor: pointer; /* optional: add pointer cursor */
+}
     </style>
 </head>
 <body>
