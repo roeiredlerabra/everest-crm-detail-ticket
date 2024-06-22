@@ -329,7 +329,21 @@
     
 </div>
 <div class="container">
-    <input type="file" id="file-input" multiple>
+    <a class="info-icon">&#9432;</a>
+    <label for="file-upload" class="file-upload-label">
+        <h3>העלאת קובץ</h3>
+        <ul>
+          <li>גודל קובץ מרבי: 10 מ"ב</li>
+          <li>סוגי קבצים מותרים:
+            <ul class="file-types">
+              <li>קבצי תמונה: .png, .jpeg, .gif, .bmp, .tiff, .svg, .ico, .jpg</li>
+              <li>קבצי מסמך: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .txt, .xml</li>
+              <li>קבצי וידאו: .mp4, .avi, .mov, .wmv, .mkv, .flv</li>
+            </ul>
+          </li>
+        </ul>
+      </label>
+    <input type="file" id="file-input" multiple accept="image/png, image/jpeg, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .gif, .bmp, .tiff, .svg, .ico, .jpg, .mp4, .avi, .mov, .wmv, .mkv, .flv, .txt, .xml">
     <label for="file-input" id="select-files-button">Select Files</label>
     <button id="upload-button" disabled>Upload Files</button>
     <table class="files-table">
