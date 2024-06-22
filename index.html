@@ -185,6 +185,78 @@
   color: red;
   margin-left: 10px;
 }
+#file-list-table {
+            width: 100%;
+        }
+        .remove-file {
+            cursor: pointer;
+            color: red;
+        }
+        .status {
+            text-align: center;
+        }
+        .checkmark-icon {
+            color: green;
+        }
+        .alert-icon {
+            color: orange;
+        }
+        .error-icon {
+            color: red;
+        }
+        .files-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    direction: rtl; /* Ensure the table is RTL for Hebrew */
+}
+
+.files-table th, .files-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center; /* Align text to the right for RTL */
+}
+
+.files-table th {
+
+    font-weight: bold;
+}
+
+.files-table td {
+    vertical-align: top;
+}
+
+.files-table .file-name {
+    font-weight: bold;
+}
+
+.files-table .file-size {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.files-table .remove-file {
+    cursor: pointer;
+    color: red;
+    text-align: center;
+}
+
+.files-table .status {
+    text-align: center;
+}
+
+.files-table .checkmark-icon {
+    color: green;
+}
+
+.files-table .alert-icon {
+    color: orange;
+}
+
+.files-table .error-icon {
+    color: red;
+}
 
     </style>
 </head>
@@ -256,19 +328,21 @@
     
 </div>
 <div class="container">
-  <div id="existing-files-section" style="display: none;">
-    <h3>הקבצים שהעלת כבר קיימים:</h3>
-    <table id="existing-files-table">
-        <!-- Existing files will be displayed here dynamically -->
+    <input type="file" id="file-input" multiple>
+    <label for="file-input" id="select-files-button">Select Files</label>
+    <button id="upload-button" disabled>Upload Files</button>
+    <table class="files-table">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Size</th>
+                <th>Action</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="file-list-table"></tbody>
     </table>
     <p id="try-another-message" style="display: none;">נסו שמות קבצים אחרים בבקשה</p>
-</div>
-  <input type="file" id="file-input" multiple>
-  <label for="file-input" id="select-files-button">Select Files</label>
-  <div id="file-list"></div>
-  <button id="upload-button" disabled>Upload Files</button>
-
-
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -308,143 +382,165 @@
                 document.getElementById('assign-to').textContent = data["Assign To"];
 
                 // Update the progress steps based on the status
-            const status = data.Status.Value.toLowerCase();
-            const steps = ['new', 'in progress', 'completed'];
-            const progressContainer = document.querySelector('.progress-container');
+                const status = data.Status.Value.toLowerCase();
+                const steps = ['new', 'in progress', 'completed'];
+                const progressContainer = document.querySelector('.progress-container');
 
-            if (!steps.includes(status)) {
-                progressContainer.style.display = 'none';
-            } else {
-                steps.forEach((step, index) => {
-                    const stepElement = document.getElementById(`step-${step.replace(' ', '-')}`);
-                    if (status === step) {
-                        stepElement.classList.add('active');
-                    } else if (steps.indexOf(status) > index) {
-                        stepElement.classList.add('completed');
-                    }
-                });
+                if (!steps.includes(status)) {
+                    progressContainer.style.display = 'none';
+                } else {
+                    steps.forEach((step, index) => {
+                        const stepElement = document.getElementById(`step-${step.replace(' ', '-')}`);
+                        if (status === step) {
+                            stepElement.classList.add('active');
+                        } else if (steps.indexOf(status) > index) {
+                            stepElement.classList.add('completed');
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        } else {
+            console.error('ID parameter not found in the URL');
+        }
+    });
+
+    $(document).ready(function() {
+        const $fileInput = $('#file-input');
+        const $fileListTable = $('#file-list-table');
+        const $uploadButton = $('#upload-button');
+        const $tryAnotherMessage = $('#try-another-message');
+        let selectedFiles = [];
+
+        $fileInput.on('change', function(e) {
+            selectedFiles = Array.from(e.target.files);
+            updateFileList();
+            toggleUploadButton();
+        });
+
+        $fileListTable.on('click', '.remove-file', function() {
+            const index = $(this).data('index');
+            selectedFiles.splice(index, 1);
+            updateFileList();
+            toggleUploadButton();
+        });
+
+        $uploadButton.on('click', function() {
+            if (selectedFiles.length === 0) {
+                alert('Please select files to upload.');
+                return;
             }
-        })
-        .catch(error => console.error('Error:', error));
-    } else {
-        console.error('ID parameter not found in the URL');
-    }
-});
-$(document).ready(function() {
-  const $fileInput = $('#file-input');
-    const $fileList = $('#file-list');
-    const $uploadButton = $('#upload-button');
-    const $existingFilesSection = $('#existing-files-section');
-    const $existingFilesTable = $('#existing-files-table');
-    const $tryAnotherMessage = $('#try-another-message');
 
-    let selectedFiles = [];
+            const id = $('#id').text(); // Assuming 'id' is a text content of an element with id 'id'
 
-    $fileInput.on('change', function(e) {
-        selectedFiles = Array.from(e.target.files);
-        updateFileList();
-        toggleUploadButton();
-    });
+            const filesData = selectedFiles.map(file => ({
+                id: id,
+                filename: file.name,
+                content_type: file.type,
+                content: null // Will be populated with FileReader
+            }));
 
-    $fileList.on('click', '.remove-file', function() {
-        const index = $(this).data('index');
-        selectedFiles.splice(index, 1);
-        updateFileList();
-        toggleUploadButton();
-    });
+            const promises = selectedFiles.map(file => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const fileData = filesData.find(data => data.filename === file.name);
+                        fileData.content = e.target.result.split(',')[1]; // base64 content
+                        resolve();
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            });
 
-    $uploadButton.on('click', function() {
-        if (selectedFiles.length === 0) {
-            alert('Please select files to upload.');
-            return;
+            Promise.all(promises)
+                .then(() => {
+                    return $.ajax({
+                        url: 'https://prod-143.westeurope.logic.azure.com:443/workflows/11a2ac0deff64db4b75603186f03ae3e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TrCX0Kf9npoAeP2Gf66JFOsJ3DJhFkdozo9oPxet5EE',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ files: filesData }),
+                    });
+                })
+                .then(response => {
+                    console.log('Files uploaded successfully:', response);
+                    handleUploadResponse(response);
+                })
+                .catch(error => {
+                    console.error('Error uploading files:', error);
+                    alert('Error uploading files. Please try again.');
+                });
+        });
+
+        function updateFileList() {
+    $fileListTable.empty();
+    selectedFiles.forEach((file, index) => {
+        const fileSize = formatFileSize(file.size);
+        const fileSizeInMB = file.size / (1024 * 1024);
+        let statusContent = '';
+
+        if (fileSizeInMB > 10) {
+            statusContent = `<img src="img/10-mph-Speed-Limit-Diag-670-10-sign-med.webp" alt="File too large" title="הקובץ גדול יותר מ10 מגה-בייט,אנא הסירו אותו" style="width: 24px; height: auto;">`; // Image for files larger than 10 MB
         }
 
-        const id = $('#id').text(); // Assuming 'id' is a text content of an element with id 'id'
-
-        const filesData = selectedFiles.map(file => ({
-            id: id,
-            filename: file.name,
-            content_type: file.type,
-            content: null // Will be populated with FileReader
-        }));
-
-        const promises = selectedFiles.map(file => {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const fileData = filesData.find(data => data.filename === file.name);
-                    fileData.content = e.target.result.split(',')[1]; // base64 content
-                    resolve();
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        });
-
-        Promise.all(promises)
-            .then(() => {
-                return $.ajax({
-                    url: 'https://prod-143.westeurope.logic.azure.com:443/workflows/11a2ac0deff64db4b75603186f03ae3e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TrCX0Kf9npoAeP2Gf66JFOsJ3DJhFkdozo9oPxet5EE',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ files: filesData }),
-                });
-            })
-            .then(response => {
-                console.log('Files uploaded successfully:', response);
-                selectedFiles = [];
-                $fileInput.val('');
-                updateFileList();
-                alert('Files uploaded successfully!');
-                handleUploadResponse(response);
-            })
-            .catch(error => {
-                console.error('Error uploading files:', error);
-                alert('Error uploading files. Please try again.');
-            });
+        const $fileRow = $(`
+            <tr>
+                <td>${file.name}</td>
+                <td>${fileSize}</td>
+                <td><button class="remove-file" data-index="${index}">Remove</button></td>
+                <td class="status" data-filename="${file.name}">${statusContent}</td>
+            </tr>
+        `);
+        $fileListTable.append($fileRow);
     });
-
-    function updateFileList() {
-        $fileList.empty();
-        selectedFiles.forEach((file, index) => {
-            const fileSize = formatFileSize(file.size);
-            const $fileItem = $(`
-                <div class="file-item">
-                    <span class="file-name">${file.name}</span>
-                    <span class="file-size">${fileSize}</span>
-                    <span class="remove-file" data-index="${index}">x</span>
-                </div>
-            `);
-            $fileList.append($fileItem);
-        });
-    }
-
-    function toggleUploadButton() {
-        $uploadButton.prop('disabled', selectedFiles.length === 0);
-    }
-
-    function formatFileSize(bytes) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
-    function handleUploadResponse(response) {
-    if (Array.isArray(response) && response.length > 0) {
-        const existingFiles = response.map(file => `<tr><td>${file}</td></tr>`).join('');
-        $existingFilesTable.html(existingFiles);
-        $tryAnotherMessage.show();
-        $existingFilesSection.show();
-    } else {
-        $existingFilesTable.empty();
-        $tryAnotherMessage.hide();
-        $existingFilesSection.hide();
-    }
-};
+}
 
 
-});
+        function toggleUploadButton() {
+            const hasLargeFile = selectedFiles.some(file => file.size > 10 * 1024 * 1024); // 10 MB
+            $uploadButton.prop('disabled', selectedFiles.length === 0 || hasLargeFile);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function handleUploadResponse(response) {
+            selectedFiles.forEach(file => {
+                const statusCell = $fileListTable.find(`.status[data-filename="${file.name}"]`);
+                if (response.includes(file.name)) {
+                    statusCell.html('<span class="alert-icon" title="קיים כבר קובץ בשם זה">⚠️</span>'); // File already exists
+                } else {
+                    statusCell.html('<span class="checkmark-icon" title="הקובץ נוסף בהצלחה">✔️</span>'); // File uploaded successfully
+                }
+            });
+
+            response.forEach(file => {
+                const statusCell = $fileListTable.find(`.status[data-filename="${file}"]`);
+                if (!statusCell.length) {
+                    const fileSize = 'Unknown'; // Since we don't have the size info for existing files
+                    const $fileRow = $(`
+                        <tr>
+                            <td>${file}</td>
+                            <td>${fileSize}</td>
+                            <td></td>
+                            <td class="status"><span class="alert-icon" title="קיים כבר קובץ בשם זה">⚠️</span></td> <!-- File already exists -->
+                        </tr>
+                    `);
+                    $fileListTable.append($fileRow);
+                }
+            });
+
+            selectedFiles = [];
+            $fileInput.val('');
+            toggleUploadButton();
+        }
+    });
 </script>
+
 </body>
 </html>
