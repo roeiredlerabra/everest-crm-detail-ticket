@@ -395,7 +395,7 @@
     </table>
     
 </div>
-<div class="container">
+<div class="container glass-card">
     <a class="info-icon">&#9432;</a>
     <label for="file-upload" class="file-upload-label">
         <h3>העלאת קובץ</h3>
@@ -410,7 +410,7 @@
           </li>
         </ul>
       </label>
-    <input type="file" id="file-input" multiple accept="image/png, image/jpeg, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .gif, .bmp, .tiff, .svg, .ico, .jpg, .mp4, .avi, .mov, .wmv, .mkv, .flv, .txt, .xml">
+    <input type="file" id="file-input" multiple accept="image/png, image/jpeg, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .gif, .bmp, .tiff, .svg, .ico, .jpg, .mp4, .avi, .mov, .wmv, .mkv, .flv, .txt, .xml" disabled>
     <label for="file-input" id="select-files-button">Select Files</label>
     <button id="upload-button" disabled>Upload Files</button>
     <table class="files-table">
@@ -480,6 +480,7 @@
                             stepElement.classList.add('completed');
                         }
                     });
+                    document.getElementById("file-input").disabled = false;
                 }
             })
             .catch(error => console.error('Error:', error));
