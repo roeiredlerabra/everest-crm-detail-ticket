@@ -321,6 +321,77 @@
     color: #555; /* adjust color as needed */
     cursor: pointer; /* optional: add pointer cursor */
 }
+.glass-footer {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 30px 0;
+    color: black;
+    font-family: Arial, sans-serif;
+  }
+
+  .footer-content {
+    display: flex;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .footer-section {
+    flex: 1;
+    margin: 0 15px;
+  }
+
+  .footer-section h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .footer-section p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .social-link {
+    display: block;
+    color: black;
+    text-decoration: none;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+
+  .footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+  }
+  .social ul.flex {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 15px;
+}
+
+.social ul.flex li a {
+  color: #0f2792;
+  font-size: 24px;
+  transition: color 0.3s ease;
+}
+
+.social ul.flex li a:hover {
+  color: #ddd;
+}
+.big-logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 6px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
     </style>
 </head>
 <body>
@@ -425,7 +496,57 @@
         <tbody id="file-list-table"></tbody>
     </table>
     <p id="try-another-message" style="display: none;">נסו שמות קבצים אחרים בבקשה</p>
+</div><br>
+<footer class="glass-footer" dir="ltr">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>About Us</h3>
+        <p>תנו לנו לברוא לכם את הפתרון
+            המושלם עבורכם.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Contact</h3>
+        <p>Email: info@example.com</p>
+        <p>Phone: (123) 456-7890</p>
+      </div>
+      <div class="footer-section">
+        <h3>Follow Us</h3>
+        <div class="social">
+            <ul class="flex">
+              <li class="twitter">
+                <a href="https://twitter.com/abra_it_tech" target="_blank" aria-label="Twitter">
+                  <i class="fab fa-twitter"></i>
+                </a>
+              </li>
+              <li class="insta">
+                <a href="https://www.instagram.com/life_at_abra/" target="_blank" aria-label="Instagram">
+                  <i class="fab fa-instagram"></i>
+                </a>
+              </li>
+              <li class="facebook">
+                <a href="https://www.facebook.com/abrainformationtechnology" target="_blank" aria-label="Facebook">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="linkedin">
+                <a href="https://www.linkedin.com/company/abra-it/" target="_blank" aria-label="LinkedIn">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Abra. All rights reserved.</p>
+    </div>
+    <div class="images">
+        <img class="big-logo" width="0" height="0" src="https://www.abra-it.com/wp-content/uploads/2021/12/logo-big.svg" alt="abra logo">   
 </div>
+  </footer>
+
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
