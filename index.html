@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" dir="rtl">
+
 <head>
     <meta name="title" content=">פרטי קריאה עבור מערכת Everest">
-<meta name="description" content="This portal is designed to provide a centralized and efficient way for all employees to submit IT-related issues, requests, and inquiries.">
-<meta name="keywords" content="IT support, IT helpdesk, technical support, IT services, employee IT portal, ticket submission, issue tracking, IT request management, IT policy and procedures">
-<meta name="robots" content="index, follow">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="language" content="English">
-<meta name="author" content="Roei Redler">
+    <meta name="description"
+        content="This portal is designed to provide a centralized and efficient way for all employees to submit IT-related issues, requests, and inquiries.">
+    <meta name="keywords"
+        content="IT support, IT helpdesk, technical support, IT services, employee IT portal, ticket submission, issue tracking, IT request management, IT policy and procedures">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="author" content="Roei Redler">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -15,17 +18,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel='stylesheet' href='https://docs-ds.estaleiro.serpro.gov.br/docs/ds/dist/core.min.css'>
-    <link rel='stylesheet' href='https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css'>
+    <link rel='stylesheet'
+        href='https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css'>
     <link rel='stylesheet' href=style.css>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
     <title>פרטי קריאה עבור מערכת Everest</title>
     <style>
-        .title4{
-          text-align: right !important;
-          direction: rtl; 
-        }      
-         /* Adjusted styles for header icons */
-         .header-icons {
+        .title4 {
+            text-align: right !important;
+            direction: rtl;
+        }
+
+        /* Adjusted styles for header icons */
+        .header-icons {
             position: absolute;
             top: 50%;
             right: 20px;
@@ -36,21 +41,31 @@
             font-size: 20px;
             cursor: pointer;
         }
-        .header-info {
-    text-align: center; /* Ensures text is centered horizontally */
-    position: relative; /* Required for centering using transform */
-    left: 30%; /* Shifts the element horizontally by 50% */
-    transform: translateX(-50%); /* Centers the element */
-}
 
-@media (max-width: 768px) {
-    .header-info {
-        text-align: center; /* Ensures text is centered horizontally */
-    position: relative; /* Required for centering using transform */
-    left: 38%; /* Shifts the element horizontally by 50% */
-    transform: translateX(-50%); /* Centers the element */
-    }
-}
+        .header-info {
+            text-align: center;
+            /* Ensures text is centered horizontally */
+            position: relative;
+            /* Required for centering using transform */
+            left: 30%;
+            /* Shifts the element horizontally by 50% */
+            transform: translateX(-50%);
+            /* Centers the element */
+        }
+
+        @media (max-width: 768px) {
+            .header-info {
+                text-align: center;
+                /* Ensures text is centered horizontally */
+                position: relative;
+                /* Required for centering using transform */
+                left: 38%;
+                /* Shifts the element horizontally by 50% */
+                transform: translateX(-50%);
+                /* Centers the element */
+            }
+        }
+
         body1 {
             font-family: Arial, sans-serif;
             background: url('https://source.unsplash.com/random/1600x900') no-repeat center center fixed;
@@ -63,6 +78,7 @@
             height: 100vh;
             color: #333;
         }
+
         .glass-card {
             background: rgba(255, 255, 255, 0.15);
             border-radius: 10px;
@@ -75,6 +91,7 @@
             max-width: 800px;
             margin: 20px auto;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -82,35 +99,43 @@
             border-radius: 10px;
             overflow: hidden;
         }
-        th, td {
+
+        th,
+        td {
             padding: 12px 15px;
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
+
         th {
             background-color: rgba(0, 123, 255, 0.8);
             color: #fff;
             font-weight: bold;
             text-align: left;
         }
+
         td {
             background-color: rgba(255, 255, 255, 0.5);
             text-align: center !important;
         }
+
         tr:hover td {
             background-color: rgba(255, 255, 255, 0.7);
         }
+
         .progress-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin: 20px 0;
-            direction: ltr; 
+            direction: ltr;
         }
+
         .step {
             text-align: center;
             width: 100%;
             position: relative;
         }
+
         .step::before {
             content: '';
             position: absolute;
@@ -121,15 +146,19 @@
             background-color: #ddd;
             z-index: -1;
         }
+
         .step:last-child::before {
             display: none;
         }
+
         .step.active {
             color: #007bff;
         }
+
         .step.completed::before {
             background-color: #00010296;
         }
+
         .circle {
             width: 30px;
             height: 30px;
@@ -139,585 +168,642 @@
             line-height: 30px;
             color: #fff;
         }
+
         .step.active .circle,
         .step.completed .circle {
             background-color: #06a31b;
         }
+
         .container {
-  max-width: 600px; /* Adjust width as needed */
-  margin: 0 auto; /* Center the container horizontally */
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  text-align: center;
-}
+            max-width: 600px;
+            /* Adjust width as needed */
+            margin: 0 auto;
+            /* Center the container horizontally */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+        }
 
-#file-input {
-  display: none; /* Hide the file input */
-}
+        #file-input {
+            display: none;
+            /* Hide the file input */
+        }
 
-#select-files-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
+        #select-files-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
 
-#select-files-button:hover {
-  background-color: #0056b3;
-}
+        #select-files-button:hover {
+            background-color: #0056b3;
+        }
 
-#file-list {
-  text-align: left;
-  margin-bottom: 10px;
-}
+        #file-list {
+            text-align: left;
+            margin-bottom: 10px;
+        }
 
-#upload-button {
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+        #upload-button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-#upload-button:hover {
-  background-color: #218838;
-}
-.remove-file {
-  cursor: pointer;
-  color: red;
-  margin-left: 10px;
-}
-#file-list-table {
+        #upload-button:hover {
+            background-color: #218838;
+        }
+
+        .remove-file {
+            cursor: pointer;
+            color: red;
+            margin-left: 10px;
+        }
+
+        #file-list-table {
             width: 100%;
         }
+
         .remove-file {
             cursor: pointer;
             color: red;
         }
+
         .status {
             text-align: center;
         }
+
         .checkmark-icon {
             color: green;
         }
+
         .alert-icon {
             color: orange;
         }
+
         .error-icon {
             color: red;
         }
+
         .files-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    font-family: Arial, sans-serif;
-    direction: rtl; /* Ensure the table is RTL for Hebrew */
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            /* Ensure the table is RTL for Hebrew */
+        }
+
+        .files-table th,
+        .files-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            /* Align text to the right for RTL */
+        }
+
+        .files-table th {
+
+            font-weight: bold;
+        }
+
+        .files-table td {
+            vertical-align: top;
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+
+        .files-table .file-name {
+            font-weight: bold;
+        }
+
+        .files-table .file-size {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .files-table .remove-file {
+            cursor: pointer;
+            color: red;
+            text-align: center;
+        }
+
+        .files-table .status {
+            text-align: center;
+        }
+
+        .files-table .checkmark-icon {
+            color: green;
+        }
+
+        .files-table .alert-icon {
+            color: orange;
+        }
+
+        .files-table .error-icon {
+            color: red;
+        }
+
+        /* Your existing CSS styles for the file upload label */
+        .file-upload-label {
+            display: none;
+            /* Initially hide the file upload label */
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            color: #333;
+            z-index: 1000;
+            /* Ensure it's above other content */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Optional: add a shadow */
+            left: 50%;
+            /* Center horizontally */
+        }
+
+        .file-upload-label h3 {
+            margin-top: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .file-upload-label ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .file-upload-label li {
+            margin-bottom: 5px;
+        }
+
+        .file-upload-label .file-types {
+            font-style: italic;
+        }
+
+        /* Show the label when hovering over the parent */
+        .info-icon:hover+.file-upload-label {
+            display: block;
+        }
+
+        /* Hide the label when not hovering over it or its parent */
+        .file-upload-label:hover {
+            display: block;
+        }
+
+        .file-upload-label:hover~.info-icon {
+            display: inline-block;
+        }
+
+        .file-upload-label input[type="file"] {
+            display: block;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .info-icon {
+
+            top: 10px;
+            /* adjust as needed */
+            right: 10px;
+            /* adjust as needed */
+            font-size: 20px;
+            /* adjust size as needed */
+            color: #555;
+            /* adjust color as needed */
+            cursor: pointer;
+            /* optional: add pointer cursor */
+        }
+
+        .glass-footer {
+            background: rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px 0;
+            color: black;
+            font-family: Arial, sans-serif;
+
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-section {
+            flex: 1;
+            margin: 0 15px;
+            align-content: center;
+            text-align: center;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .footer-section p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .social-link {
+            display: block;
+            color: black;
+            text-decoration: none;
+            margin-bottom: 5px;
+            font-size: 14px;
+            align-content: center;
+            text-align: center;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+        }
+
+        .social ul.flex {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        @media screen and (max-width: 767px) {
+            .social ul.flex {
+                display: block;
+            }
+        }
+
+        .social ul.flex li a {
+            color: #0f2792;
+            font-size: 24px;
+            transition: color 0.3s ease;
+        }
+
+        .social ul.flex li a:hover {
+            color: #ddd;
+        }
+
+        .big-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 6px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        textarea {
+            overflow: auto;
+            width: 100%;
+            resize: vertical;
+        }
+        .char-count {
+    font-size: 0.8em;
+    color: #666;
+    text-align: right;
+    margin-top: 5px;
 }
 
-.files-table th, .files-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center; /* Align text to the right for RTL */
-}
-
-.files-table th {
-
-    font-weight: bold;
-}
-
-.files-table td {
-    vertical-align: top;
-    max-width: 300px;
-    word-wrap: break-word;
-}
-
-.files-table .file-name {
-    font-weight: bold;
-}
-
-.files-table .file-size {
-    font-size: 0.9em;
-    color: #555;
-}
-
-.files-table .remove-file {
-    cursor: pointer;
+.char-count.error {
     color: red;
-    text-align: center;
-}
-
-.files-table .status {
-    text-align: center;
-}
-
-.files-table .checkmark-icon {
-    color: green;
-}
-
-.files-table .alert-icon {
-    color: orange;
-}
-
-.files-table .error-icon {
-    color: red;
-}
-  /* Your existing CSS styles for the file upload label */
-  .file-upload-label {
-    display: none; /* Initially hide the file upload label */
-    position: absolute;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    color: #333;
-    z-index: 1000; /* Ensure it's above other content */
-    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional: add a shadow */
-    left: 50%; /* Center horizontally */
-  }
-
-  .file-upload-label h3 {
-    margin-top: 0;
-    font-size: 18px;
-    font-weight: bold;
-  }
-
-  .file-upload-label ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 10px 0;
-  }
-
-  .file-upload-label li {
-    margin-bottom: 5px;
-  }
-
-  .file-upload-label .file-types {
-    font-style: italic;
-  }
-
-  /* Show the label when hovering over the parent */
-  .info-icon:hover + .file-upload-label {
-    display: block;
-  }
-
-  /* Hide the label when not hovering over it or its parent */
-  .file-upload-label:hover {
-    display: block;
-  }
-
-  .file-upload-label:hover ~ .info-icon {
-    display: inline-block;
-  }
-
-  .file-upload-label input[type="file"] {
-    display: block;
-    margin-top: 10px;
-    font-size: 16px;
-  }
-  .info-icon {
-
-    top: 10px; /* adjust as needed */
-    right: 10px; /* adjust as needed */
-    font-size: 20px; /* adjust size as needed */
-    color: #555; /* adjust color as needed */
-    cursor: pointer; /* optional: add pointer cursor */
-}
-.glass-footer {
-    background: rgba(255, 255, 255, 0.1);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 30px 0;
-    color: black;
-    font-family: Arial, sans-serif;
- 
-  }
-
-  .footer-content {
-    display: flex;
-    justify-content: space-around;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  .footer-section {
-    flex: 1;
-    margin: 0 15px;
-    align-content: center;
-    text-align: center;
-  }
-
-  .footer-section h3 {
-    font-size: 18px;
-    margin-bottom: 15px;
-  }
-
-  .footer-section p {
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  .social-link {
-    display: block;
-    color: black;
-    text-decoration: none;
-    margin-bottom: 5px;
-    font-size: 14px;
-    align-content: center;
-    text-align: center;
-  }
-
-  .footer-bottom {
-    text-align: center;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 12px;
-  }
-  .social ul.flex {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
-
-@media screen and (max-width: 767px) {
-  .social ul.flex {
-    display: block;
-  }
-}
-
-.social ul.flex li a {
-  color: #0f2792;
-  font-size: 24px;
-  transition: color 0.3s ease;
-}
-
-.social ul.flex li a:hover {
-  color: #ddd;
-}
-.big-logo {
-    width: 100px;
-    height: auto;
-    margin-bottom: 6px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
 }
     </style>
 </head>
+
 <body>
-<header class="br-header small">
-    <div class="container-lg">
-        <div class="header-top">
-            <div class="header-logo">
-                <img src="https://www.abra-it.com/wp-content/uploads/2022/01/Abra-logo-FullColor-blue.png" alt="Logo Image"><!-- Replace with your actual logo image -->
-                <span class="br-divider vertical"></span>
-                <div class="header-sign" hidden>Dynamics 365</div>
-                <img src="https://ellipsesolutions.com/wp-content/uploads/2019/03/Microsoft-Dynamics-365-Logo.png" alt="Logo Image"><!-- Replace with your actual logo image -->
-                <span class="br-divider vertical"></span>
-                <img src="img/new_Everest (1).png" alt="Logo Image"><!-- Replace with your actual logo image -->
+    <header class="br-header small">
+        <div class="container-lg">
+            <div class="header-top">
+                <div class="header-logo">
+                    <img src="https://www.abra-it.com/wp-content/uploads/2022/01/Abra-logo-FullColor-blue.png"
+                        alt="Logo Image"><!-- Replace with your actual logo image -->
+                    <span class="br-divider vertical"></span>
+                    <div class="header-sign" hidden>Dynamics 365</div>
+                    <img src="https://ellipsesolutions.com/wp-content/uploads/2019/03/Microsoft-Dynamics-365-Logo.png"
+                        alt="Logo Image"><!-- Replace with your actual logo image -->
+                    <span class="br-divider vertical"></span>
+                    <img src="img/new_Everest (1).png" alt="Logo Image"><!-- Replace with your actual logo image -->
+                </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
 
-<div class="glass-card">
-  
-    <h1 class="title4">פרטי קריאה עבור מערכת Everest</h1>
-    <div class="progress-container">
-      <div class="step" id="step-new">
-          <div class="circle">1</div>
-          <div class="label">New</div>
-      </div>
-      <div class="step" id="step-in-progress">
-          <div class="circle">2</div>
-          <div class="label">In Progress</div>
-      </div>
-      <div class="step" id="step-completed">
-          <div class="circle">3</div>
-          <div class="label">Completed</div>
-      </div>
-  </div>
+    <div class="glass-card">
 
-    <table id="data-table">
-        <tr>
-            <th>ID</th>
-            <td id="id"></td>
-        </tr>
-        <tr>
-            <th>Title</th>
-            <td id="title"></td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td id="description"></td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td id="status"></td>
-
-        </tr>
-        <tr>
-            <th>Priority</th>
-            <td id="Priority"></td>
-        </tr>
-        <tr>
-            <th>Created</th>
-            <td id="created"></td>
-        </tr>
-        <tr>
-            <th>Modified</th>
-            <td id="modified"></td>
-        </tr>
-        <tr>
-            <th>Assign To</th>
-            <td id="assign-to"></td>
-        </tr>
-        <tr>
-            <th>Number of Attachments <img src="img\documents-icon-5.png" alt="Attachment Icon" width="30" height="30"></th>
-            <td id="attachments-Num"></td>
-        </tr>
-    </table>
-    
-</div>
-<div class="container glass-card">
-    <a class="info-icon">&#9432;</a>
-    <label for="file-upload" class="file-upload-label">
-        <h3>העלאת קובץ</h3>
-        <ul>
-          <li>גודל קובץ מרבי: 10 מ"ב</li>
-          <li>סוגי קבצים מותרים:
-            <ul class="file-types">
-              <li>קבצי תמונה: .png, .jpeg, .gif, .bmp, .tiff, .svg, .ico, .jpg</li>
-              <li>קבצי מסמך: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .txt, .xml</li>
-              <li>קבצי וידאו: .mp4, .avi, .mov, .wmv, .mkv, .flv</li>
-            </ul>
-          </li>
-        </ul>
-      </label>
-    <input type="file" id="file-input" multiple accept="image/png, image/jpeg, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .gif, .bmp, .tiff, .svg, .ico, .jpg, .mp4, .avi, .mov, .wmv, .mkv, .flv, .txt, .xml" disabled>
-    <label for="file-input" id="select-files-button">Select Files</label>
-    <button id="upload-button" disabled>Upload Files</button>
-    <table class="files-table">
-        <thead>
+        <h1 class="title4">פרטי קריאה עבור מערכת Everest</h1>
+        <div class="progress-container">
+            <div class="step" id="step-new">
+                <div class="circle">1</div>
+                <div class="label">New</div>
+            </div>
+            <div class="step" id="step-in-progress">
+                <div class="circle">2</div>
+                <div class="label">In Progress</div>
+            </div>
+            <div class="step" id="step-completed">
+                <div class="circle">3</div>
+                <div class="label">Completed</div>
+            </div>
+        </div>
+        <div>
+            <button id="edit-button" class="edit-icon" title="Edit">
+                <i class="fas fa-edit"></i>
+        </div>
+        <table id="data-table">
             <tr>
-                <th>File Name</th>
-                <th>Size</th>
-                <th>Action</th>
-                <th>Status</th>
+                <th>ID</th>
+                <td id="id"></td>
             </tr>
-        </thead>
-        <tbody id="file-list-table"></tbody>
-    </table>
-    <p id="try-another-message" style="display: none;">נסו שמות קבצים אחרים בבקשה</p>
-</div><br>
-<footer class="glass-footer" dir="ltr">
-    <div class="footer-content">
-      <div class="footer-section">
-        <h3>About Us</h3>
-        <p>תנו לנו לברוא לכם את הפתרון
-            המושלם עבורכם.</p>
-      </div>
-      <div class="footer-section">
-        <h3>Contact</h3>
-        <p>Email: info@example.com</p>
-        <p>Phone: (123) 456-7890</p>
-      </div>
-      <div class="footer-section">
-        <h3>Follow Us</h3>
-        <div class="social">
-            <ul class="flex">
-              <li class="twitter">
-                <a href="https://twitter.com/abra_it_tech" target="_blank" aria-label="Twitter">
-                  <i class="fab fa-twitter"></i>
-                </a>
-              </li>
-              <li class="insta">
-                <a href="https://www.instagram.com/life_at_abra/" target="_blank" aria-label="Instagram">
-                  <i class="fab fa-instagram"></i>
-                </a>
-              </li>
-              <li class="facebook">
-                <a href="https://www.facebook.com/abrainformationtechnology" target="_blank" aria-label="Facebook">
-                  <i class="fab fa-facebook-f"></i>
-                </a>
-              </li>
-              <li class="linkedin">
-                <a href="https://www.linkedin.com/company/abra-it/" target="_blank" aria-label="LinkedIn">
-                  <i class="fab fa-linkedin-in"></i>
-                </a>
-              </li>
+            <tr>
+                <th>Title</th>
+                <td id="title"></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td id="description"></td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td id="status"></td>
+
+            </tr>
+            <tr>
+                <th>Priority</th>
+                <td id="Priority"></td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td id="created"></td>
+            </tr>
+            <tr>
+                <th>Modified</th>
+                <td id="modified"></td>
+            </tr>
+            <tr>
+                <th>Assign To</th>
+                <td id="assign-to"></td>
+            </tr>
+            <tr>
+                <th>Number of Attachments <img src="img\documents-icon-5.png" alt="Attachment Icon" width="30"
+                        height="30"></th>
+                <td id="attachments-Num"></td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="container glass-card">
+        <a class="info-icon">&#9432;</a>
+        <label for="file-upload" class="file-upload-label">
+            <h3>העלאת קובץ</h3>
+            <ul>
+                <li>גודל קובץ מרבי: 10 מ"ב</li>
+                <li>סוגי קבצים מותרים:
+                    <ul class="file-types">
+                        <li>קבצי תמונה: .png, .jpeg, .gif, .bmp, .tiff, .svg, .ico, .jpg</li>
+                        <li>קבצי מסמך: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .txt, .xml</li>
+                        <li>קבצי וידאו: .mp4, .avi, .mov, .wmv, .mkv, .flv</li>
+                    </ul>
+                </li>
             </ul>
-          </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2024 Roei Redler. All rights reserved.</p>
-    </div>
-    <div class="images">
-        <img class="big-logo" width="0" height="0" src="https://www.abra-it.com/wp-content/uploads/2021/12/logo-big.svg" alt="abra logo">   
-</div>
-  </footer>
+        </label>
+        <input type="file" id="file-input" multiple
+            accept="image/png, image/jpeg, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .gif, .bmp, .tiff, .svg, .ico, .jpg, .mp4, .avi, .mov, .wmv, .mkv, .flv, .txt, .xml"
+            disabled>
+        <label for="file-input" id="select-files-button">Select Files</label>
+        <button id="upload-button" disabled>Upload Files</button>
+        <table class="files-table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Size</th>
+                    <th>Action</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="file-list-table"></tbody>
+        </table>
+        <p id="try-another-message" style="display: none;">נסו שמות קבצים אחרים בבקשה</p>
+    </div><br>
+    <footer class="glass-footer" dir="ltr">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>תנו לנו לברוא לכם את הפתרון
+                    המושלם עבורכם.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: info@example.com</p>
+                <p>Phone: (123) 456-7890</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social">
+                    <ul class="flex">
+                        <li class="twitter">
+                            <a href="https://twitter.com/abra_it_tech" target="_blank" aria-label="Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="insta">
+                            <a href="https://www.instagram.com/life_at_abra/" target="_blank" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </li>
+                        <li class="facebook">
+                            <a href="https://www.facebook.com/abrainformationtechnology" target="_blank"
+                                aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                        <li class="linkedin">
+                            <a href="https://www.linkedin.com/company/abra-it/" target="_blank" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Roei Redler. All rights reserved.</p>
+        </div>
+        <div class="images">
+            <img class="big-logo" width="0" height="0"
+                src="https://www.abra-it.com/wp-content/uploads/2021/12/logo-big.svg" alt="abra logo">
+        </div>
+    </footer>
 
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Function to get query parameter by name
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-
-        // Get the 'id' parameter from the URL
-        const id = getQueryParam('id');
-
-        // Check if 'id' is found in the URL
-        if (id) {
-            // Define the API endpoint
-            const apiEndpoint = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with actual API endpoint
-
-            // Prepare the POST request
-            fetch(apiEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: id })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Populate the table with the response data
-                document.getElementById('id').textContent = data.ID;
-                document.getElementById('title').textContent = data.Title;
-                document.getElementById('description').innerHTML = data.Description.replace(/\n/g, '<br>');
-                document.getElementById('status').textContent = data.Status.Value;
-                document.getElementById('Priority').textContent = data.Priority;
-                document.getElementById('created').textContent = new Date(data.Created).toLocaleString();
-                document.getElementById('modified').textContent = new Date(data.Modified).toLocaleString();
-                document.getElementById('assign-to').textContent = data["Assign To"];
-                document.getElementById('attachments-Num').textContent = data["attachments Num"];
-
-                // Update the progress steps based on the status
-                const status = data.Status.Value.toLowerCase();
-                const steps = ['new', 'in progress', 'completed'];
-                const progressContainer = document.querySelector('.progress-container');
-
-                if (!steps.includes(status)) {
-                    progressContainer.style.display = 'none';
-                } else {
-                    steps.forEach((step, index) => {
-                        const stepElement = document.getElementById(`step-${step.replace(' ', '-')}`);
-                        if (status === step) {
-                            stepElement.classList.add('active');
-                        } else if (steps.indexOf(status) > index) {
-                            stepElement.classList.add('completed');
-                        }
-                    });
-                    document.getElementById("file-input").disabled = false;
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        } else {
-            console.error('ID parameter not found in the URL');
-        }
-    });
-
-    $(document).ready(function() {
-        const $fileInput = $('#file-input');
-        const $fileListTable = $('#file-list-table');
-        const $uploadButton = $('#upload-button');
-        const $tryAnotherMessage = $('#try-another-message');
-        let selectedFiles = [];
-
-        $fileInput.on('change', function(e) {
-            selectedFiles = Array.from(e.target.files);
-            updateFileList();
-            toggleUploadButton();
-        });
-
-        $fileListTable.on('click', '.remove-file', function() {
-            const index = $(this).data('index');
-            selectedFiles.splice(index, 1);
-            updateFileList();
-            toggleUploadButton();
-        });
-        const uploadButton = document.getElementById('upload-button');
-        $uploadButton.on('click', function() {
-            if (selectedFiles.length === 0) {
-                alert('Please select files to upload.');
-                return;
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to get query parameter by name
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
             }
 
-            const id = $('#id').text(); // Assuming 'id' is a text content of an element with id 'id'
-            const spinIcon = document.createElement('i');
-            spinIcon.className = 'fas fa-sync fa-spin';
+            // Get the 'id' parameter from the URL
+            const id = getQueryParam('id');
 
-  // Replace the button text with the spin icon
-  uploadButton.innerHTML = '';
-  uploadButton.appendChild(spinIcon);
-            const filesData = selectedFiles.map(file => ({
-                id: id,
-                filename: file.name,
-                content_type: file.type,
-                content: null // Will be populated with FileReader
-            }));
+            // Check if 'id' is found in the URL
+            if (id) {
+                // Define the API endpoint
+                const apiEndpoint = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with actual API endpoint
 
-            const promises = selectedFiles.map(file => {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const fileData = filesData.find(data => data.filename === file.name);
-                        fileData.content = e.target.result.split(',')[1]; // base64 content
-                        resolve();
-                    };
-                    reader.onerror = reject;
-                    reader.readAsDataURL(file);
-                });
-            });
-
-            Promise.all(promises)
-                .then(() => {
-                    return $.ajax({
-                        url: 'https://prod-143.westeurope.logic.azure.com:443/workflows/11a2ac0deff64db4b75603186f03ae3e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TrCX0Kf9npoAeP2Gf66JFOsJ3DJhFkdozo9oPxet5EE',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({ files: filesData }),
-                    });
+                // Prepare the POST request
+                fetch(apiEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id })
                 })
-                .then(response => {
-                    console.log('Files uploaded successfully:', response);
-                    handleUploadResponse(response);
-                    uploadButton.innerHTML = 'Upload Files';
-                    fetchDataAndUpdateTable();
-                })
-                .catch(error => {
-                    console.error('Error uploading files:', error);
-                    alert('Error uploading files. Please try again.');
-                    uploadButton.innerHTML = 'Upload Files';
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        // Populate the table with the response data
+                        document.getElementById('id').textContent = data.ID || '';
+                        document.getElementById('title').textContent = data.Title || '';
+                        document.getElementById('description').innerHTML = (data.Description || '').replace(/\n/g, '<br>');
+                        document.getElementById('status').textContent = data.Status.Value || '';
+                        document.getElementById('Priority').textContent = data.Priority || '';
+                        document.getElementById('created').textContent = new Date(data.Created).toLocaleString() || '';
+                        document.getElementById('modified').textContent = new Date(data.Modified).toLocaleString() || '';
+                        document.getElementById('assign-to').textContent = data["Assign To"] || '';
+                        document.getElementById('attachments-Num').textContent = data["attachments Num"] || '';
+
+                        // Update the progress steps based on the status
+                        const status = data.Status.Value.toLowerCase();
+                        const steps = ['new', 'in progress', 'completed'];
+                        const progressContainer = document.querySelector('.progress-container');
+
+                        if (!steps.includes(status)) {
+                            progressContainer.style.display = 'none';
+                        } else {
+                            steps.forEach((step, index) => {
+                                const stepElement = document.getElementById(`step-${step.replace(' ', '-')}`);
+                                if (status === step) {
+                                    stepElement.classList.add('active');
+                                } else if (steps.indexOf(status) > index) {
+                                    stepElement.classList.add('completed');
+                                }
+                            });
+                            document.getElementById("file-input").disabled = false;
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                console.error('ID parameter not found in the URL');
+            }
         });
 
-        function updateFileList() {
-    $fileListTable.empty();
-    selectedFiles.forEach((file, index) => {
-        const fileSize = formatFileSize(file.size);
-        const fileSizeInMB = file.size / (1024 * 1024);
-        let statusContent = '';
+        $(document).ready(function () {
+            const $fileInput = $('#file-input');
+            const $fileListTable = $('#file-list-table');
+            const $uploadButton = $('#upload-button');
+            const $tryAnotherMessage = $('#try-another-message');
+            let selectedFiles = [];
 
-        if (fileSizeInMB > 10) {
-            statusContent = `<img src="img/10-mph-Speed-Limit-Diag-670-10-sign-med.webp" alt="File too large" title="הקובץ גדול יותר מ10 מגה-בייט,אנא הסירו אותו" style="width: 24px; height: auto;">`; // Image for files larger than 10 MB
-        }
+            $fileInput.on('change', function (e) {
+                selectedFiles = Array.from(e.target.files);
+                updateFileList();
+                toggleUploadButton();
+            });
 
-        const $fileRow = $(`
+            $fileListTable.on('click', '.remove-file', function () {
+                const index = $(this).data('index');
+                selectedFiles.splice(index, 1);
+                updateFileList();
+                toggleUploadButton();
+            });
+            const uploadButton = document.getElementById('upload-button');
+            $uploadButton.on('click', function () {
+                if (selectedFiles.length === 0) {
+                    alert('Please select files to upload.');
+                    return;
+                }
+
+                const id = $('#id').text(); // Assuming 'id' is a text content of an element with id 'id'
+                const spinIcon = document.createElement('i');
+                spinIcon.className = 'fas fa-sync fa-spin';
+
+                // Replace the button text with the spin icon
+                uploadButton.innerHTML = '';
+                uploadButton.appendChild(spinIcon);
+                const filesData = selectedFiles.map(file => ({
+                    id: id,
+                    filename: file.name,
+                    content_type: file.type,
+                    content: null // Will be populated with FileReader
+                }));
+
+                const promises = selectedFiles.map(file => {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const fileData = filesData.find(data => data.filename === file.name);
+                            fileData.content = e.target.result.split(',')[1]; // base64 content
+                            resolve();
+                        };
+                        reader.onerror = reject;
+                        reader.readAsDataURL(file);
+                    });
+                });
+
+                Promise.all(promises)
+                    .then(() => {
+                        return $.ajax({
+                            url: 'https://prod-143.westeurope.logic.azure.com:443/workflows/11a2ac0deff64db4b75603186f03ae3e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TrCX0Kf9npoAeP2Gf66JFOsJ3DJhFkdozo9oPxet5EE',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({ files: filesData }),
+                        });
+                    })
+                    .then(response => {
+                        console.log('Files uploaded successfully:', response);
+                        handleUploadResponse(response);
+                        uploadButton.innerHTML = 'Upload Files';
+                        fetchDataAndUpdateTable();
+                    })
+                    .catch(error => {
+                        console.error('Error uploading files:', error);
+                        alert('Error uploading files. Please try again.');
+                        uploadButton.innerHTML = 'Upload Files';
+                    });
+            });
+
+            function updateFileList() {
+                $fileListTable.empty();
+                selectedFiles.forEach((file, index) => {
+                    const fileSize = formatFileSize(file.size);
+                    const fileSizeInMB = file.size / (1024 * 1024);
+                    let statusContent = '';
+
+                    if (fileSizeInMB > 10) {
+                        statusContent = `<img src="img/10-mph-Speed-Limit-Diag-670-10-sign-med.webp" alt="File too large" title="הקובץ גדול יותר מ10 מגה-בייט,אנא הסירו אותו" style="width: 24px; height: auto;">`; // Image for files larger than 10 MB
+                    }
+
+                    const $fileRow = $(`
             <tr>
                 <td>${file.name}</td>
                 <td>${fileSize}</td>
@@ -725,39 +811,39 @@
                 <td class="status" data-filename="${file.name}">${statusContent}</td>
             </tr>
         `);
-        $fileListTable.append($fileRow);
-    });
-}
+                    $fileListTable.append($fileRow);
+                });
+            }
 
 
-        function toggleUploadButton() {
-            const hasLargeFile = selectedFiles.some(file => file.size > 10 * 1024 * 1024); // 10 MB
-            $uploadButton.prop('disabled', selectedFiles.length === 0 || hasLargeFile);
-        }
+            function toggleUploadButton() {
+                const hasLargeFile = selectedFiles.some(file => file.size > 10 * 1024 * 1024); // 10 MB
+                $uploadButton.prop('disabled', selectedFiles.length === 0 || hasLargeFile);
+            }
 
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
 
-        function handleUploadResponse(response) {
-            selectedFiles.forEach(file => {
-                const statusCell = $fileListTable.find(`.status[data-filename="${file.name}"]`);
-                if (response.includes(file.name)) {
-                    statusCell.html('<span class="alert-icon" title="קיים כבר קובץ בשם זה">⚠️</span>'); // File already exists
-                } else {
-                    statusCell.html('<span class="checkmark-icon" title="הקובץ נוסף בהצלחה">✔️</span>'); // File uploaded successfully
-                }
-            });
+            function handleUploadResponse(response) {
+                selectedFiles.forEach(file => {
+                    const statusCell = $fileListTable.find(`.status[data-filename="${file.name}"]`);
+                    if (response.includes(file.name)) {
+                        statusCell.html('<span class="alert-icon" title="קיים כבר קובץ בשם זה">⚠️</span>'); // File already exists
+                    } else {
+                        statusCell.html('<span class="checkmark-icon" title="הקובץ נוסף בהצלחה">✔️</span>'); // File uploaded successfully
+                    }
+                });
 
-            response.forEach(file => {
-                const statusCell = $fileListTable.find(`.status[data-filename="${file}"]`);
-                if (!statusCell.length) {
-                    const fileSize = 'Unknown'; // Since we don't have the size info for existing files
-                    const $fileRow = $(`
+                response.forEach(file => {
+                    const statusCell = $fileListTable.find(`.status[data-filename="${file}"]`);
+                    if (!statusCell.length) {
+                        const fileSize = 'Unknown'; // Since we don't have the size info for existing files
+                        const $fileRow = $(`
                         <tr>
                             <td>${file}</td>
                             <td>${fileSize}</td>
@@ -765,51 +851,216 @@
                             <td class="status"><span class="alert-icon" title="קיים כבר קובץ בשם זה">⚠️</span></td> <!-- File already exists -->
                         </tr>
                     `);
-                    $fileListTable.append($fileRow);
-                }
-            });
+                        $fileListTable.append($fileRow);
+                    }
+                });
 
-            selectedFiles = [];
-            $fileInput.val('');
-            toggleUploadButton();
+                selectedFiles = [];
+                $fileInput.val('');
+                toggleUploadButton();
+            }
+        });
+        // Function to fetch data from the API and update the table
+        async function fetchDataAndUpdateTable() {
+            const url = 'https://prod-57.westeurope.logic.azure.com:443/workflows/1176d781fb374d3c9fd95c886d652169/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=PEi_-DatvPaGpzI6eam-oTnl5U7DRF_POstYNcd3oVQ'; // Replace with your API endpoint
+            const id = $('#id').text();
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+
+                const data = await response.json(); // Parse JSON response
+                console.log(data); // Log the response for debugging
+
+                // Update the table cell with id "attachments-Num" with the fetched data
+                const attachmentsNumCell = document.getElementById('attachments-Num');
+                if (attachmentsNumCell) {
+                    attachmentsNumCell.textContent = data['attachments Num'];
+                } else {
+                    console.error('Element with id "attachments-Num" not found in the table.');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         }
-    });
-    // Function to fetch data from the API and update the table
-async function fetchDataAndUpdateTable() {
-    const url = 'https://prod-57.westeurope.logic.azure.com:443/workflows/1176d781fb374d3c9fd95c886d652169/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=PEi_-DatvPaGpzI6eam-oTnl5U7DRF_POstYNcd3oVQ'; // Replace with your API endpoint
-    const id = $('#id').text();
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ id: id })
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+    const editButton = document.getElementById('edit-button');
+    const dataTable = document.getElementById('data-table');
+    const editableFields = ['Priority', 'Description', 'Title'];
+    let isEditing = false;
+    let originalData = {};
+
+    const priorityOptions = [
+        'Critical',
+        'High',
+        'Normal',
+        'Low'
+    ];
+
+    function toggleEditMode() {
+        isEditing = !isEditing;
+        editButton.innerHTML = isEditing ? '<i class="fas fa-save"></i>' : '<i class="fas fa-edit"></i>';
+        editButton.title = isEditing ? 'Save' : 'Edit';
+        
+        editableFields.forEach(field => {
+            const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+            if (cell) {
+                if (isEditing) {
+                    makeEditable(cell, field);
+                } else {
+                    saveChanges(cell, field);
+                }
+            }
         });
 
-        if (!response.ok) {
-            throw new Error('Failed to fetch data');
+        if (!isEditing) {
+            sendUpdatesToServer();
         }
-
-        const data = await response.json(); // Parse JSON response
-        console.log(data); // Log the response for debugging
-
-        // Update the table cell with id "attachments-Num" with the fetched data
-        const attachmentsNumCell = document.getElementById('attachments-Num');
-        if (attachmentsNumCell) {
-            attachmentsNumCell.textContent = data['attachments Num'];
-        } else {
-            console.error('Element with id "attachments-Num" not found in the table.');
-        }
-    } catch (error) {
-        console.error('Error fetching data:', error);
     }
-}
 
+    function makeEditable(cell, field) {
+        originalData[field] = cell.textContent.trim();
+        
+        if (field === 'Priority') {
+            const select = document.createElement('select');
+            select.classList.add('editable');
+            priorityOptions.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.textContent = option;
+                if (option === originalData[field]) {
+                    optionElement.selected = true;
+                }
+                select.appendChild(optionElement);
+            });
+            cell.innerHTML = '';
+            cell.appendChild(select);
+        } else {
+            const textarea = document.createElement('textarea');
+            textarea.value = originalData[field];
+            textarea.classList.add('editable');
+            cell.innerHTML = '';
+            cell.appendChild(textarea);
 
+            if (field === 'Title') {
+                textarea.maxLength = 255;
+                const charCount = document.createElement('div');
+                charCount.classList.add('char-count');
+                charCount.textContent = `${textarea.value.length}/255`;
+                cell.appendChild(charCount);
 
+                textarea.addEventListener('input', function() {
+                    charCount.textContent = `${this.value.length}/255`;
+                    if (this.value.length > 255) {
+                        charCount.classList.add('error');
+                    } else {
+                        charCount.classList.remove('error');
+                    }
+                });
+            }
 
-</script>
+            function adjustTextareaHeight() {
+                textarea.style.height = 'auto';
+                textarea.style.height = textarea.scrollHeight + 'px';
+            }
+
+            adjustTextareaHeight();
+            textarea.addEventListener('input', adjustTextareaHeight);
+        }
+    }
+
+    function saveChanges(cell, field) {
+        if (field === 'Priority') {
+            const select = cell.querySelector('select');
+            if (select) {
+                const newValue = select.value;
+                cell.textContent = newValue;
+                if (newValue !== originalData[field]) {
+                    cell.classList.add('modified');
+                } else {
+                    cell.classList.remove('modified');
+                }
+            }
+        } else {
+            const textarea = cell.querySelector('textarea');
+            if (textarea) {
+                let newValue = textarea.value.trim();
+                if (field === 'Title' && newValue.length > 255) {
+                    newValue = newValue.substring(0, 255);
+                    alert('Title has been truncated to 255 characters.');
+                }
+                cell.textContent = newValue;
+                if (newValue !== originalData[field]) {
+                    cell.classList.add('modified');
+                } else {
+                    cell.classList.remove('modified');
+                }
+            }
+        }
+    }
+
+    function sendUpdatesToServer() {
+        const updatedData = {};
+        let hasChanges = false;
+
+        editableFields.forEach(field => {
+            const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+            if (cell && cell.classList.contains('modified')) {
+                updatedData[field] = cell.textContent.trim();
+                hasChanges = true;
+            }
+        });
+
+        if (hasChanges) {
+            updatedData.ID = document.getElementById('id').textContent;
+
+            fetch('https://prod-173.westeurope.logic.azure.com:443/workflows/be708d1528c141a68b8e133b5f268d85/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=UHPHVD-AXhiU2uZqih3rSXMtoGPFzUcebrFnjxWquFM', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                editableFields.forEach(field => {
+                    const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+                    if (cell) cell.classList.remove('modified');
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Failed to save changes. Please try again.');
+                revertChanges();
+            });
+        }
+    }
+
+    function revertChanges() {
+        editableFields.forEach(field => {
+            const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+            if (cell && originalData[field]) {
+                cell.textContent = originalData[field];
+                cell.classList.remove('modified');
+            }
+        });
+    }
+
+    editButton.addEventListener('click', toggleEditMode);
+});
+    </script>
 
 </body>
+
 </html>
