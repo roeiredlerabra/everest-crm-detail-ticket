@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue Tracker Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .chart-container, .issue-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        .chart-container:hover, .issue-card:hover {
+            transform: translateY(-5px);
+        }
+        .chart-container {
+            height: 300px;
+        }
+        .issue-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #3498db;
+        }
+        .issue-details {
+            font-size: 14px;
+        }
+        .priority-high { color: #e74c3c; }
+        .priority-critical { color: #c0392b; font-weight: bold; }
+        .status-new { color: #3498db; }
+        .status-completed { color: #2ecc71; }
+        #loading, #error {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #error {
+            color: #e74c3c;
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            .chart-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Issue Tracker Dashboard</h1>
+        <div id="loading">Loading...</div>
+        <div id="error"></div>
+        
+        <h2>Charts</h2>
+        <div class="dashboard">
+            <div class="chart-container">
+                <canvas id="priorityChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="statusChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="issuesOverTimeChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="assigneeWorkloadChart"></canvas>
+            </div>
+        </div>
+
+        <h2>Issue List</h2>
+        <div id="dashboard" class="dashboard"></div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_URL = 'https://prod-107.westeurope.logic.azure.com:443/workflows/cb9d7554d3c841f0983f363221c50413/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zK-nPFwO6OpBFhbTsiptapo79_ZSgw4dOPQNAkYy2ks';
+
+        // Utility functions
+        const $ = selector => document.querySelector(selector);
+        const $$ = selector => document.querySelectorAll(selector);
+
+        const setVisibility = (element, isVisible) => {
+            element.style.display = isVisible ? 'block' : 'none';
+        };
+
+        const createElementWithClass = (tag, className) => {
+            const element = document.createElement(tag);
+            element.className = className;
+            return element;
+        };
+
+        // DOM elements
+        const elements = {
+            loading: $('#loading'),
+            error: $('#error'),
+            dashboard: $('#dashboard')
+        };
+
+        // Main functions
+        async function fetchIssueData() {
+            try {
+                setVisibility(elements.loading, true);
+                setVisibility(elements.error, false);
+
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add any other headers your API requires
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('API Response:', data);
+                return data;
+            } catch (error) {
+                console.error('Error fetching issue data:', error);
+                throw error;
+            } finally {
+                setVisibility(elements.loading, false);
+            }
+        }
+
+        function createIssueCard(issue) {
+            const card = createElementWithClass('div', 'issue-card');
+            card.innerHTML = `
+                <div class="issue-title">${issue.Title}</div>
+                <div class="issue-details">
+                    <p><strong>ID:</strong> ${issue.ID}</p>
+                    <p><strong>Description:</strong> ${issue.Description.substring(0, 100)}...</p>
+                    <p><strong>Priority:</strong> <span class="priority-${issue.Priority.Value.toLowerCase()}">${issue.Priority.Value}</span></p>
+                    <p><strong>Status:</strong> <span class="status-${issue.Status.Value.toLowerCase()}">${issue.Status.Value}</span></p>
+                    <p><strong>Assigned to:</strong> ${issue.Assignedto0.DisplayName}</p>
+                    <p><strong>Date Reported:</strong> ${issue.DateReported}</p>
+                    <p><strong>Logged by:</strong> ${issue.Issueloggedby.DisplayName}</p>
+                </div>
+            `;
+            return card;
+        }
+
+        function populateDashboard(issueData) {
+            elements.dashboard.innerHTML = '';
+            issueData.forEach(issue => {
+                elements.dashboard.appendChild(createIssueCard(issue));
+            });
+            createCharts(issueData);
+        }
+
+        function createCharts(issueData) {
+            createPriorityChart(issueData);
+            createStatusChart(issueData);
+            createIssuesOverTimeChart(issueData);
+            createAssigneeWorkloadChart(issueData);
+        }
+
+        function createPriorityChart(issueData) {
+            const ctx = document.getElementById('priorityChart').getContext('2d');
+            const priorityData = issueData.reduce((acc, issue) => {
+                const priority = issue.Priority.Value;
+                acc[priority] = (acc[priority] || 0) + 1;
+                return acc;
+            }, {});
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(priorityData),
+                    datasets: [{
+                        label: 'Priority',
+                        data: Object.values(priorityData),
+                        backgroundColor: ['#3498db', '#e74c3c', '#c0392b', '#f1c40f', '#2ecc71'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function createStatusChart(issueData) {
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            const statusData = issueData.reduce((acc, issue) => {
+                const status = issue.Status.Value;
+                acc[status] = (acc[status] || 0) + 1;
+                return acc;
+            }, {});
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(statusData),
+                    datasets: [{
+                        label: 'Status',
+                        data: Object.values(statusData),
+                        backgroundColor: ['#3498db', '#2ecc71', '#f1c40f', '#e74c3c'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function createIssuesOverTimeChart(issueData) {
+            const ctx = document.getElementById('issuesOverTimeChart').getContext('2d');
+            const issuesOverTime = issueData.reduce((acc, issue) => {
+                const date = issue.DateReported.split('T')[0];
+                acc[date] = (acc[date] || 0) + 1;
+                return acc;
+            }, {});
+
+            const sortedDates = Object.keys(issuesOverTime).sort();
+            const issueCounts = sortedDates.map(date => issuesOverTime[date]);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: sortedDates,
+                    datasets: [{
+                        label: 'Issues Over Time',
+                        data: issueCounts,
+                        borderColor: '#3498db',
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function createAssigneeWorkloadChart(issueData) {
+            const ctx = document.getElementById('assigneeWorkloadChart').getContext('2d');
+            const assigneeData = issueData.reduce((acc, issue) => {
+                const assignee = issue.Assignedto0.DisplayName;
+                acc[assignee] = (acc[assignee] || 0) + 1;
+                return acc;
+            }, {});
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(assigneeData),
+                    datasets: [{
+                        label: 'Assignee Workload',
+                        data: Object.values(assigneeData),
+                        backgroundColor: '#3498db',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function showError(message) {
+            elements.error.textContent = message;
+            setVisibility(elements.error, true);
+        }
+
+        async function initDashboard() {
+            try {
+                const issueData = await fetchIssueData();
+                populateDashboard(issueData);
+            } catch (error) {
+                showError('Failed to load issue data. Please try again later.');
+            }
+        }
+
+        // Initialize the dashboard
+        initDashboard();
+    </script>
+</body>
+</html>
