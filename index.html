@@ -705,11 +705,17 @@
                                 const stepElement = document.getElementById(`step-${step.replace(' ', '-')}`);
                                 if (status === step) {
                                     stepElement.classList.add('active');
+                                    document.getElementById("file-input").disabled = false;
                                 } else if (steps.indexOf(status) > index) {
                                     stepElement.classList.add('completed');
+                                    document.getElementById("edit-button").disabled = true;
+                                    document.getElementById("file-input").disabled = true;
+                                    document.getElementById("select-files-button").hidden = true;
                                 }
                             });
-                            document.getElementById("file-input").disabled = false;
+                            
+                            
+
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -1011,42 +1017,50 @@
     }
 
     function sendUpdatesToServer() {
-        const updatedData = {};
-        let hasChanges = false;
+    const updatedData = {};
+    let hasChanges = false;
 
-        editableFields.forEach(field => {
-            const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
-            if (cell && cell.classList.contains('modified')) {
-                updatedData[field] = cell.textContent.trim();
-                hasChanges = true;
-            }
-        });
+    editableFields.forEach(field => {
+        const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+        if (cell && cell.classList.contains('modified')) {
+            updatedData[field] = cell.textContent.trim();
+            hasChanges = true;
+        }
+    });
 
-        if (hasChanges) {
-            updatedData.ID = document.getElementById('id').textContent;
+    if (hasChanges) {
+        updatedData.ID = document.getElementById('id').textContent;
 
-            fetch('https://prod-173.westeurope.logic.azure.com:443/workflows/be708d1528c141a68b8e133b5f268d85/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=UHPHVD-AXhiU2uZqih3rSXMtoGPFzUcebrFnjxWquFM', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
+        fetch('https://prod-173.westeurope.logic.azure.com:443/workflows/be708d1528c141a68b8e133b5f268d85/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=UHPHVD-AXhiU2uZqih3rSXMtoGPFzUcebrFnjxWquFM', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 200) {
+                console.log('Success:', data.message);
+                //location.reload(true);
                 editableFields.forEach(field => {
                     const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
                     if (cell) cell.classList.remove('modified');
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+            } else {
+                console.error('Unexpected response:', data);
                 alert('Failed to save changes. Please try again.');
                 revertChanges();
-            });
-        }
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Failed to save changes. Please try again.');
+            revertChanges();
+        });
     }
+}
+
 
     function revertChanges() {
         editableFields.forEach(field => {
