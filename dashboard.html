@@ -82,11 +82,41 @@
                 height: 250px;
             }
         }
+        .login-form {
+    display: none;
+    max-width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Issue Tracker Dashboard</h1>
+        <div id="loginForm" class="login-form">
+            <h2>Enter the password sent to your phone:</h2>
+            <input type="password" id="passwordInput">
+            <button onclick="checkPassword()">Login</button>
+        </div>
         <div id="loading">Loading...</div>
         <div id="error"></div>
         
@@ -119,52 +149,92 @@
         </div>
 
         <h2>Issue List</h2>
-        <div id="dashboard" class="dashboard" dir="rtl"></div>
+        <div id="dashboard" class="dashboard"></div>
     </div>
 
     <script>
         // Configuration
         const API_URL = 'https://prod-107.westeurope.logic.azure.com:443/workflows/cb9d7554d3c841f0983f363221c50413/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zK-nPFwO6OpBFhbTsiptapo79_ZSgw4dOPQNAkYy2ks';
-
+    
         // Utility functions
         const $ = selector => document.querySelector(selector);
         const $$ = selector => document.querySelectorAll(selector);
-
+    
         const setVisibility = (element, isVisible) => {
             element.style.display = isVisible ? 'block' : 'none';
         };
-
+    
         const createElementWithClass = (tag, className) => {
             const element = document.createElement(tag);
             element.className = className;
             return element;
         };
-
+    
         // DOM elements
         const elements = {
             loading: $('#loading'),
             error: $('#error'),
             dashboard: $('#dashboard')
         };
-
+    
+        let generatedPassword = '';
+    
+        function generatePassword() {
+            return Math.random().toString(36).slice(-8);
+        }
+    
+        async function sendPasswordToAPI(password) {
+            const response = await fetch('https://prod-252.westeurope.logic.azure.com:443/workflows/dcd0516fec6a40ca8289a5f11fccd3f7/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hpZrNM5fFjoeL1YsVegwNPzwLMaLMLJnNHWmzObnPmE', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password: password }),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to send password');
+            }
+        }
+    
+        async function initializeLogin() {
+            generatedPassword = generatePassword();
+            try {
+                await sendPasswordToAPI(generatedPassword);
+                document.getElementById('loginForm').style.display = 'block';
+            } catch (error) {
+                console.error('Failed to initialize login:', error);
+                showError('Failed to initialize login. Please try again later.');
+            }
+        }
+    
+        function checkPassword() {
+            const enteredPassword = document.getElementById('passwordInput').value;
+            if (enteredPassword === generatedPassword) {
+                document.getElementById('loginForm').style.display = 'none';
+                initDashboard();
+            } else {
+                alert('Incorrect password. Please try again.');
+            }
+        }
+    
         // Main functions
         async function fetchIssueData() {
             try {
                 setVisibility(elements.loading, true);
                 setVisibility(elements.error, false);
-
+    
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        // Add any other headers your API requires
                     }
                 });
-
+    
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
+    
                 const data = await response.json();
                 console.log('API Response:', data);
                 return data;
@@ -175,25 +245,25 @@
                 setVisibility(elements.loading, false);
             }
         }
-
+    
         function createIssueCard(issue) {
-    const card = createElementWithClass('div', 'issue-card');
-    card.setAttribute('dir', 'rtl'); // Set RTL direction
-    card.innerHTML = `
-        <div class="issue-title">${issue.Title}</div>
-        <div class="issue-details">
-            <p><strong>מזהה:</strong> ${issue.ID}</p>
-            <p><strong>תיאור:</strong> ${issue.Description.substring(0, 100)}...</p>
-            <p><strong>עדיפות:</strong> <span class="priority-${issue.Priority.Value.toLowerCase()}">${issue.Priority.Value}</span></p>
-            <p><strong>סטטוס:</strong> <span class="status-${issue.Status.Value.toLowerCase()}">${issue.Status.Value}</span></p>
-            <p><strong>הוקצה ל:</strong> ${issue.Assignedto0.DisplayName}</p>
-            <p><strong>תאריך דיווח:</strong> ${issue.DateReported}</p>
-            <p><strong>נרשם על ידי:</strong> ${issue.Issueloggedby.DisplayName}</p>
-        </div>
-    `;
-    return card;
-}
-
+            const card = createElementWithClass('div', 'issue-card');
+            card.setAttribute('dir', 'rtl'); // Set RTL direction
+            card.innerHTML = `
+                <div class="issue-title">${issue.Title}</div>
+                <div class="issue-details">
+                    <p><strong>מזהה:</strong> ${issue.ID}</p>
+                    <p><strong>תיאור:</strong> ${issue.Description.substring(0, 100)}...</p>
+                    <p><strong>עדיפות:</strong> <span class="priority-${issue.Priority.Value.toLowerCase()}">${issue.Priority.Value}</span></p>
+                    <p><strong>סטטוס:</strong> <span class="status-${issue.Status.Value.toLowerCase()}">${issue.Status.Value}</span></p>
+                    <p><strong>הוקצה ל:</strong> ${issue.Assignedto0.DisplayName}</p>
+                    <p><strong>תאריך דיווח:</strong> ${issue.DateReported}</p>
+                    <p><strong>נרשם על ידי:</strong> ${issue.Issueloggedby.DisplayName}</p>
+                </div>
+            `;
+            return card;
+        }
+    
         function populateDashboard(issueData) {
             elements.dashboard.innerHTML = '';
             issueData.forEach(issue => {
@@ -201,325 +271,163 @@
             });
             createCharts(issueData);
         }
-
-        function createCharts(issueData) {
-    createPriorityChart(issueData);
-    createStatusChart(issueData);
-    createIssuesOverTimeChart(issueData);
-    createAssigneeWorkloadChart(issueData);
-    createAvgResolutionTimeChart(issueData);
-    createAssigneeDistributionChart(issueData);
-    createMonthlyTrendChart(issueData);
-    createLoggedByPriorityChart(issueData);
-}
-function createLoggedByPriorityChart(issueData) {
-    const ctx = document.getElementById('loggedByPriorityChart').getContext('2d');
     
-    // Aggregate data
-    const aggregatedData = issueData.reduce((acc, issue) => {
-        const loggedBy = issue.Issueloggedby.DisplayName;
-        const priority = issue.Priority.Value;
-        
-        if (!acc[loggedBy]) {
-            acc[loggedBy] = {
-                Critical: 0,
-                High: 0,
-                Normal: 0,
-                Low: 0
-            };
+        function createCharts(issueData) {
+            createPriorityChart(issueData);
+            createStatusChart(issueData);
+            createIssuesOverTimeChart(issueData);
+            createAssigneeWorkloadChart(issueData);
+            createAvgResolutionTimeChart(issueData);
+            createAssigneeDistributionChart(issueData);
+            createMonthlyTrendChart(issueData);
+            createLoggedByPriorityChart(issueData);
         }
-        
-        acc[loggedBy][priority]++;
-        return acc;
-    }, {});
-
-    // Prepare data for Chart.js
-    const labels = Object.keys(aggregatedData);
-    const datasets = ['Critical', 'High', 'Normal', 'Low'].map(priority => ({
-        label: priority,
-        data: labels.map(user => aggregatedData[user][priority]),
-        backgroundColor: getColorForPriority(priority)
-    }));
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: datasets
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    stacked: true,
-                    title: {
-                        display: true,
-                        text: 'Logged By'
-                    }
+    
+        function createLoggedByPriorityChart(issueData) {
+            const ctx = document.getElementById('loggedByPriorityChart').getContext('2d');
+    
+            // Aggregate data
+            const aggregatedData = issueData.reduce((acc, issue) => {
+                const loggedBy = issue.Issueloggedby.DisplayName;
+                const priority = issue.Priority.Value;
+    
+                if (!acc[loggedBy]) {
+                    acc[loggedBy] = {
+                        Critical: 0,
+                        High: 0,
+                        Normal: 0,
+                        Low: 0
+                    };
+                }
+    
+                acc[loggedBy][priority]++;
+                return acc;
+            }, {});
+    
+            // Prepare data for Chart.js
+            const labels = Object.keys(aggregatedData);
+            const datasets = ['Critical', 'High', 'Normal', 'Low'].map(priority => ({
+                label: priority,
+                data: labels.map(user => aggregatedData[user][priority]),
+                backgroundColor: getColorForPriority(priority)
+            }));
+    
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
                 },
-                y: {
-                    stacked: true,
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Number of Issues'
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Logged By'
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Issues'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Issues by Logger and Priority'
+                        }
                     }
                 }
-            },
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Issues by Logger and Priority'
-                }
+            });
+        }
+    
+        // Helper function to get color for priority
+        function getColorForPriority(priority) {
+            switch (priority) {
+                case 'Critical': return '#e74c3c';
+                case 'High': return '#e67e22';
+                case 'Normal': return '#f1c40f';
+                case 'Low': return '#2ecc71';
+                default: return '#95a5a6';
             }
         }
-    });
-}
-
-// Helper function to get color for priority
-function getColorForPriority(priority) {
-    switch (priority) {
-        case 'Critical': return '#e74c3c';
-        case 'High': return '#e67e22';
-        case 'Normal': return '#f1c40f';
-        case 'Low': return '#2ecc71';
-        default: return '#95a5a6';
-    }
-}
-function createAssigneeDistributionChart(issueData) {
-    const ctx = document.getElementById('assigneeDistributionChart').getContext('2d');
-    const assigneeData = issueData.reduce((acc, issue) => {
-        const assignee = issue.Assignedto0.DisplayName;
-        acc[assignee] = (acc[assignee] || 0) + 1;
-        return acc;
-    }, {});
-
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: Object.keys(assigneeData),
-            datasets: [{
-                label: 'Issues by Assignee',
-                data: Object.values(assigneeData),
-                backgroundColor: [
-                    '#3498db', '#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6',
-                    '#34495e', '#1abc9c', '#d35400', '#7f8c8d', '#27ae60'
-                ],
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'right',
-                }
-            }
-        }
-    });
-}
-function createCategoryDistributionChart(issueData) {
-    const ctx = document.getElementById('categoryDistributionChart').getContext('2d');
-    const categoryData = issueData.reduce((acc, issue) => {
-        const category = issue.Category || 'Uncategorized';
-        acc[category] = (acc[category] || 0) + 1;
-        return acc;
-    }, {});
-
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: Object.keys(categoryData),
-            datasets: [{
-                label: 'Issues by Category',
-                data: Object.values(categoryData),
-                backgroundColor: [
-                    '#3498db', '#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6',
-                    '#34495e', '#1abc9c', '#d35400', '#7f8c8d', '#27ae60'
-                ],
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'right',
-                }
-            }
-        }
-    });
-}
-function createMonthlyTrendChart(issueData) {
-    const ctx = document.getElementById('monthlyTrendChart').getContext('2d');
-    const monthlyData = issueData.reduce((acc, issue) => {
-        const createdDate = new Date(issue.Created);
-        const modifiedDate = new Date(issue.Modified);
-        
-        const createdMonth = `${createdDate.getFullYear()}-${(createdDate.getMonth() + 1).toString().padStart(2, '0')}`;
-        if (!acc[createdMonth]) acc[createdMonth] = { opened: 0, closed: 0 };
-        acc[createdMonth].opened++;
-
-        if (issue.Status.Value === 'Completed') {
-            const closedMonth = `${modifiedDate.getFullYear()}-${(modifiedDate.getMonth() + 1).toString().padStart(2, '0')}`;
-            if (!acc[closedMonth]) acc[closedMonth] = { opened: 0, closed: 0 };
-            acc[closedMonth].closed++;
-        }
-
-        return acc;
-    }, {});
-
-    const sortedMonths = Object.keys(monthlyData).sort();
-    const openedData = sortedMonths.map(month => monthlyData[month].opened);
-    const closedData = sortedMonths.map(month => monthlyData[month].closed);
-
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: sortedMonths,
-            datasets: [
-                {
-                    label: 'Issues Opened',
-                    data: openedData,
-                    borderColor: '#e74c3c',
-                    fill: false,
+    
+        function createAssigneeDistributionChart(issueData) {
+            const ctx = document.getElementById('assigneeDistributionChart').getContext('2d');
+            const assigneeData = issueData.reduce((acc, issue) => {
+                const assignee = issue.Assignedto0.DisplayName;
+                acc[assignee] = (acc[assignee] || 0) + 1;
+                return acc;
+            }, {});
+    
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(assigneeData),
+                    datasets: [{
+                        label: 'Issues by Assignee',
+                        data: Object.values(assigneeData),
+                        backgroundColor: [
+                            '#3498db', '#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6',
+                            '#34495e', '#1abc9c', '#d35400', '#7f8c8d', '#27ae60'
+                        ],
+                    }]
                 },
-                {
-                    label: 'Issues Closed',
-                    data: closedData,
-                    borderColor: '#2ecc71',
-                    fill: false,
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Month'
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
                     }
+                }
+            });
+        }
+    
+        function createCategoryDistributionChart(issueData) {
+            const ctx = document.getElementById('categoryDistributionChart').getContext('2d');
+            const categoryData = issueData.reduce((acc, issue) => {
+                const category = issue.Category || 'Uncategorized';
+                acc[category] = (acc[category] || 0) + 1;
+                return acc;
+            }, {});
+    
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(categoryData),
+                    datasets: [{
+                        label: 'Issues by Category',
+                        data: Object.values(categoryData),
+                        backgroundColor: [
+                            '#3498db', '#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6',
+                            '#34495e', '#1abc9c', '#d35400', '#7f8c8d', '#27ae60'
+                        ],
+                    }]
                 },
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Number of Issues'
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
                     }
                 }
-            }
+            });
         }
-    });
-}
-function createAvgResolutionTimeChart(issueData) {
-    const ctx = document.getElementById('avgResolutionTimeChart').getContext('2d');
-    const priorityTimes = issueData.reduce((acc, issue) => {
-        if (issue.Status.Value === 'Completed' && issue.Modified) {
-            const priority = issue.Priority.Value;
-            const resolutionTime = new Date(issue.Modified) - new Date(issue.Created);
-            if (!acc[priority]) acc[priority] = [];
-            acc[priority].push(resolutionTime / (1000 * 60 * 60 * 24)); // Convert to days
-        }
-        return acc;
-    }, {});
-
-    const avgTimes = Object.keys(priorityTimes).map(priority => ({
-        priority,
-        avgTime: priorityTimes[priority].reduce((sum, time) => sum + time, 0) / priorityTimes[priority].length
-    }));
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: avgTimes.map(item => item.priority),
-            datasets: [{
-                label: 'Average Resolution Time (Days)',
-                data: avgTimes.map(item => item.avgTime.toFixed(2)),
-                backgroundColor: '#2ecc71',
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Days'
-                    }
-                }
-            }
-        }
-    });
-}
-
-function createPriorityChart(issueData) {
-    const ctx = document.getElementById('priorityChart').getContext('2d');
-    const priorityData = issueData.reduce((acc, issue) => {
-        const priority = issue.Priority.Value;
-        acc[priority] = (acc[priority] || 0) + 1;
-        return acc;
-    }, {});
-
-    const priorityColors = {
-        'Critical': '#e74c3c', // Red
-        'High': '#e67e22',     // Orange
-        'Normal': '#f1c40f',   // Yellow
-        'Low': '#2ecc71'       // Green
-    };
-
-    const priorities = ['Critical', 'High', 'Normal', 'Low'];
-    const data = priorities.map(priority => priorityData[priority] || 0);
-    const backgroundColor = priorities.map(priority => priorityColors[priority]);
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: priorities,
-            datasets: [{
-                label: 'Priority',
-                data: data,
-                backgroundColor: backgroundColor,
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Number of Issues'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Priority'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: false // Hide legend as colors are self-explanatory
-                },
-                title: {
-                    display: true,
-                    text: 'Issues by Priority'
-                }
-            }
-        }
-    });
-}
-
+    
         function createStatusChart(issueData) {
             const ctx = document.getElementById('statusChart').getContext('2d');
             const statusData = issueData.reduce((acc, issue) => {
@@ -527,53 +435,198 @@ function createPriorityChart(issueData) {
                 acc[status] = (acc[status] || 0) + 1;
                 return acc;
             }, {});
-
+    
             new Chart(ctx, {
-                type: 'pie',
+                type: 'doughnut',
                 data: {
                     labels: Object.keys(statusData),
                     datasets: [{
-                        label: 'Status',
+                        label: 'Issue Status',
                         data: Object.values(statusData),
-                        backgroundColor: ['#3498db', '#2ecc71', '#f1c40f', '#e74c3c'],
+                        backgroundColor: [
+                            '#3498db', '#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6',
+                            '#34495e', '#1abc9c', '#d35400', '#7f8c8d', '#27ae60'
+                        ],
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
                 }
             });
         }
-
-        function createIssuesOverTimeChart(issueData) {
-            const ctx = document.getElementById('issuesOverTimeChart').getContext('2d');
-            const issuesOverTime = issueData.reduce((acc, issue) => {
-                const date = issue.DateReported.split('T')[0];
-                acc[date] = (acc[date] || 0) + 1;
+    
+        function createPriorityChart(issueData) {
+            const ctx = document.getElementById('priorityChart').getContext('2d');
+            const priorityData = issueData.reduce((acc, issue) => {
+                const priority = issue.Priority.Value;
+                acc[priority] = (acc[priority] || 0) + 1;
                 return acc;
             }, {});
-
-            const sortedDates = Object.keys(issuesOverTime).sort();
-            const issueCounts = sortedDates.map(date => issuesOverTime[date]);
-
+    
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(priorityData),
+                    datasets: [{
+                        label: 'Issue Priority',
+                        data: Object.values(priorityData),
+                        backgroundColor: [
+                            '#e74c3c', '#e67e22', '#f1c40f', '#2ecc71', '#3498db',
+                            '#9b59b6', '#34495e', '#1abc9c', '#d35400', '#7f8c8d'
+                        ],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+        }
+    
+        function createIssuesOverTimeChart(issueData) {
+            const ctx = document.getElementById('issuesOverTimeChart').getContext('2d');
+            const monthlyData = issueData.reduce((acc, issue) => {
+                const dateReported = new Date(issue.DateReported);
+                const month = dateReported.toLocaleString('default', { month: 'short' }) + ' ' + dateReported.getFullYear();
+                acc[month] = (acc[month] || 0) + 1;
+                return acc;
+            }, {});
+    
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: sortedDates,
+                    labels: Object.keys(monthlyData),
                     datasets: [{
                         label: 'Issues Over Time',
-                        data: issueCounts,
+                        data: Object.values(monthlyData),
                         borderColor: '#3498db',
-                        fill: false,
+                        fill: false
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Issues'
+                            }
+                        }
+                    }
                 }
             });
         }
-
+    
+        function createAvgResolutionTimeChart(issueData) {
+            const ctx = document.getElementById('avgResolutionTimeChart').getContext('2d');
+            const resolutionData = issueData.reduce((acc, issue) => {
+                const assignee = issue.Assignedto0.DisplayName;
+                const resolutionTime = issue.ResolutionTime; // Assuming ResolutionTime is in days
+                if (!acc[assignee]) {
+                    acc[assignee] = { total: 0, count: 0 };
+                }
+                acc[assignee].total += resolutionTime;
+                acc[assignee].count += 1;
+                return acc;
+            }, {});
+    
+            const avgResolutionTime = Object.keys(resolutionData).reduce((acc, assignee) => {
+                acc[assignee] = resolutionData[assignee].total / resolutionData[assignee].count;
+                return acc;
+            }, {});
+    
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(avgResolutionTime),
+                    datasets: [{
+                        label: 'Average Resolution Time (days)',
+                        data: Object.values(avgResolutionTime),
+                        backgroundColor: '#3498db'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Assignee'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Average Resolution Time (days)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    
+        function createMonthlyTrendChart(issueData) {
+            const ctx = document.getElementById('monthlyTrendChart').getContext('2d');
+            const monthlyData = issueData.reduce((acc, issue) => {
+                const dateReported = new Date(issue.DateReported);
+                const month = dateReported.toLocaleString('default', { month: 'short' }) + ' ' + dateReported.getFullYear();
+                acc[month] = (acc[month] || 0) + 1;
+                return acc;
+            }, {});
+    
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(monthlyData),
+                    datasets: [{
+                        label: 'Issues Reported',
+                        data: Object.values(monthlyData),
+                        backgroundColor: '#3498db'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Issues'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    
         function createAssigneeWorkloadChart(issueData) {
             const ctx = document.getElementById('assigneeWorkloadChart').getContext('2d');
             const assigneeData = issueData.reduce((acc, issue) => {
@@ -581,7 +634,7 @@ function createPriorityChart(issueData) {
                 acc[assignee] = (acc[assignee] || 0) + 1;
                 return acc;
             }, {});
-
+    
             new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -589,33 +642,54 @@ function createPriorityChart(issueData) {
                     datasets: [{
                         label: 'Assignee Workload',
                         data: Object.values(assigneeData),
-                        backgroundColor: '#3498db',
+                        backgroundColor: '#3498db'
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Assignee'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Issues'
+                            }
+                        }
+                    }
                 }
             });
         }
-
+    
         function showError(message) {
             elements.error.textContent = message;
             setVisibility(elements.error, true);
         }
-
+    
         async function initDashboard() {
             try {
                 const issueData = await fetchIssueData();
                 populateDashboard(issueData);
             } catch (error) {
-                showError('Failed to load issue data. Please try again later.');
+                showError('Failed to fetch issue data. Please try again later.');
             }
         }
-        
-
-        // Initialize the dashboard
-        initDashboard();
+    
+        // Initialize the login process on page load
+        document.addEventListener('DOMContentLoaded', initializeLogin);
+    
+        // Event listener for login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            checkPassword();
+        });
     </script>
+    
 </body>
 </html>
