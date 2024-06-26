@@ -177,21 +177,22 @@
         }
 
         function createIssueCard(issue) {
-            const card = createElementWithClass('div', 'issue-card');
-            card.innerHTML = `
-                <div class="issue-title">${issue.Title}</div>
-                <div class="issue-details">
-                    <p><strong>ID:</strong> ${issue.ID}</p>
-                    <p><strong>Description:</strong> ${issue.Description.substring(0, 100)}...</p>
-                    <p><strong>Priority:</strong> <span class="priority-${issue.Priority.Value.toLowerCase()}">${issue.Priority.Value}</span></p>
-                    <p><strong>Status:</strong> <span class="status-${issue.Status.Value.toLowerCase()}">${issue.Status.Value}</span></p>
-                    <p><strong>Assigned to:</strong> ${issue.Assignedto0.DisplayName}</p>
-                    <p><strong>Date Reported:</strong> ${issue.DateReported}</p>
-                    <p><strong>Logged by:</strong> ${issue.Issueloggedby.DisplayName}</p>
-                </div>
-            `;
-            return card;
-        }
+    const card = createElementWithClass('div', 'issue-card');
+    card.setAttribute('dir', 'rtl'); // Set RTL direction
+    card.innerHTML = `
+        <div class="issue-title">${issue.Title}</div>
+        <div class="issue-details">
+            <p><strong>מזהה:</strong> ${issue.ID}</p>
+            <p><strong>תיאור:</strong> ${issue.Description.substring(0, 100)}...</p>
+            <p><strong>עדיפות:</strong> <span class="priority-${issue.Priority.Value.toLowerCase()}">${issue.Priority.Value}</span></p>
+            <p><strong>סטטוס:</strong> <span class="status-${issue.Status.Value.toLowerCase()}">${issue.Status.Value}</span></p>
+            <p><strong>הוקצה ל:</strong> ${issue.Assignedto0.DisplayName}</p>
+            <p><strong>תאריך דיווח:</strong> ${issue.DateReported}</p>
+            <p><strong>נרשם על ידי:</strong> ${issue.Issueloggedby.DisplayName}</p>
+        </div>
+    `;
+    return card;
+}
 
         function populateDashboard(issueData) {
             elements.dashboard.innerHTML = '';
