@@ -113,6 +113,9 @@
             <div class="chart-container">
                 <canvas id="monthlyTrendChart"></canvas>
             </div>
+            <div class="chart-container">
+                <canvas id="loggedByPriorityChart"></canvas>
+            </div>
         </div>
 
         <h2>Issue List</h2>
@@ -206,6 +209,85 @@
     createAvgResolutionTimeChart(issueData);
     createAssigneeDistributionChart(issueData);
     createMonthlyTrendChart(issueData);
+    createLoggedByPriorityChart(issueData);
+}
+function createLoggedByPriorityChart(issueData) {
+    const ctx = document.getElementById('loggedByPriorityChart').getContext('2d');
+    
+    // Aggregate data
+    const aggregatedData = issueData.reduce((acc, issue) => {
+        const loggedBy = issue.Issueloggedby.DisplayName;
+        const priority = issue.Priority.Value;
+        
+        if (!acc[loggedBy]) {
+            acc[loggedBy] = {
+                Critical: 0,
+                High: 0,
+                Medium: 0,
+                Low: 0
+            };
+        }
+        
+        acc[loggedBy][priority]++;
+        return acc;
+    }, {});
+
+    // Prepare data for Chart.js
+    const labels = Object.keys(aggregatedData);
+    const datasets = ['Critical', 'High', 'Medium', 'Low'].map(priority => ({
+        label: priority,
+        data: labels.map(user => aggregatedData[user][priority]),
+        backgroundColor: getColorForPriority(priority)
+    }));
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: true,
+                    title: {
+                        display: true,
+                        text: 'Logged By'
+                    }
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Issues'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Issues by Logger and Priority'
+                }
+            }
+        }
+    });
+}
+
+// Helper function to get color for priority
+function getColorForPriority(priority) {
+    switch (priority) {
+        case 'Critical': return '#e74c3c';
+        case 'High': return '#e67e22';
+        case 'Medium': return '#f1c40f';
+        case 'Low': return '#2ecc71';
+        default: return '#95a5a6';
+    }
 }
 function createAssigneeDistributionChart(issueData) {
     const ctx = document.getElementById('assigneeDistributionChart').getContext('2d');
