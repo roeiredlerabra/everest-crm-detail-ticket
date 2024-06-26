@@ -116,6 +116,7 @@
             <h2>Enter the password sent to your phone:</h2>
             <input type="password" id="passwordInput">
             <button onclick="checkPassword()">Login</button>
+            <div id="passwordAlert" class="alert"></div>
         </div>
         <div id="loading">Loading...</div>
         <div id="error"></div>
@@ -209,14 +210,15 @@
         }
     
         function checkPassword() {
-            const enteredPassword = document.getElementById('passwordInput').value;
-            if (enteredPassword === generatedPassword) {
-                document.getElementById('loginForm').style.display = 'none';
-                initDashboard();
-            } else {
-                alert('Incorrect password. Please try again.');
-            }
-        }
+    const enteredPassword = document.getElementById('passwordInput').value;
+    if (enteredPassword === generatedPassword) {
+        document.getElementById('loginForm').style.display = 'none';
+        initDashboard();
+    } else {
+        document.getElementById('passwordAlert').textContent = 'Incorrect password. Please try again.';
+        setVisibility(elements.passwordAlert, true);
+    }
+}
     
         // Main functions
         async function fetchIssueData() {
@@ -462,37 +464,64 @@
         }
     
         function createPriorityChart(issueData) {
-            const ctx = document.getElementById('priorityChart').getContext('2d');
-            const priorityData = issueData.reduce((acc, issue) => {
-                const priority = issue.Priority.Value;
-                acc[priority] = (acc[priority] || 0) + 1;
-                return acc;
-            }, {});
-    
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(priorityData),
-                    datasets: [{
-                        label: 'Issue Priority',
-                        data: Object.values(priorityData),
-                        backgroundColor: [
-                            '#e74c3c', '#e67e22', '#f1c40f', '#2ecc71', '#3498db',
-                            '#9b59b6', '#34495e', '#1abc9c', '#d35400', '#7f8c8d'
-                        ],
-                    }]
+    const ctx = document.getElementById('priorityChart').getContext('2d');
+    const priorityData = issueData.reduce((acc, issue) => {
+        const priority = issue.Priority.Value;
+        acc[priority] = (acc[priority] || 0) + 1;
+        return acc;
+    }, {});
+
+    const priorityColors = {
+        'Critical': '#e74c3c', // Red
+        'High': '#e67e22',     // Orange
+        'Normal': '#f1c40f',   // Yellow
+        'Low': '#2ecc71'       // Green
+    };
+
+    const priorities = ['Critical', 'High', 'Normal', 'Low'];
+    const data = priorities.map(priority => priorityData[priority] || 0);
+    const backgroundColor = priorities.map(priority => priorityColors[priority]);
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: priorities,
+            datasets: [{
+                label: 'Priority',
+                data: data,
+                backgroundColor: backgroundColor,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Issues'
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                        }
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Priority'
                     }
                 }
-            });
+            },
+            plugins: {
+                legend: {
+                    display: false // Hide legend as colors are self-explanatory
+                },
+                title: {
+                    display: true,
+                    text: 'Issues by Priority'
+                }
+            }
         }
+    });
+}
     
         function createIssuesOverTimeChart(issueData) {
             const ctx = document.getElementById('issuesOverTimeChart').getContext('2d');
