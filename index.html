@@ -486,6 +486,31 @@
 .char-count.error {
     color: red;
 }
+#add-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: linear-gradient(45deg, #2c3e50, #3498db); /* Blue gradient */
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#add-button:hover {
+    background: linear-gradient(45deg, #2980b9, #1abc9c); /* Darker blue gradient on hover */
+}
+
+.button-container {
+    position: relative;
+    width: 100%;
+}
     </style>
 </head>
 
@@ -524,10 +549,16 @@
                 <div class="label">Completed</div>
             </div>
         </div>
-        <div>
-            <button id="edit-button" class="edit-icon" title="Edit">
+        <div class="button-container">
+            <button id="edit-button" class="edit-icon" title="עריכה">
                 <i class="fas fa-edit"></i>
-        </div>
+            </button>
+            <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=HPwZQL5ZLECX_mPKmhodmlHM2DyAwINDr1MnN4xdbntUQzhJWDNVMUNRV1JSREYxQlcxQ0VJMUdROC4u&lang=he-il" target="_blank">
+                <button id="add-button" class="add-icon" title="פתיחת פנייה חדשה">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </a>
+        </div>    
         <table id="data-table">
             <tr>
                 <th>ID</th>
