@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Comments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .chat-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse;
+        }
+        .comment {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            display: flex;
+        }
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .comment-content {
+            flex-grow: 1;
+        }
+        .comment-author {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .comment-text {
+            margin-bottom: 5px;
+        }
+        .comment-date {
+            font-size: 0.8em;
+            color: #666;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .new-comment {
+        margin-top: 20px;
+    }
+
+    .chat-input-container {
+        display: flex;
+        align-items: center;
+        background-color: #ffffff;
+        border-radius: 25px;
+        padding: 5px 10px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .chat-input-container textarea {
+        flex-grow: 1;
+        border: none;
+        outline: none;
+        padding: 10px;
+        font-size: 16px;
+        resize: none;
+        background: transparent;
+        max-height: 100px;
+        overflow-y: auto;
+    }
+
+    .emoji-button, .send-button {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .send-button {
+        color: #00a884;
+    }
+
+    /* Placeholder styling */
+    .chat-input-container textarea::placeholder {
+        color: #999;
+    }
+    </style>
+</head>
+<body>
+    <div class="chat-container" id="chatContainer">
+        <div id="spinner" class="spinner"></div>
+    </div>
+
+<div class="new-comment">
+    <div class="chat-input-container">
+        <button class="emoji-button" id="emoji-trigger">😊</button>
+        <textarea id="newCommentText" placeholder="Type a message" rows="1"></textarea>
+        <button class="send-button" onclick="postComment()">⮜</button>
+    </div>
+</div>
+
+    <script>
+        const apiUrl = 'https://prod-23.westeurope.logic.azure.com:443/workflows/45f5307b684a4cc5a579aa96e832309f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bBHlquGX9DBwJWTd7u8fa1U-ySN0ZrtRcf9Q_csvOng';
+
+        function createCommentElement(comment) {
+            const commentDiv = document.createElement('div');
+            commentDiv.className = 'comment';
+
+            const avatarImg = document.createElement('img');
+            avatarImg.className = 'comment-avatar';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'comment-content';
+
+            const authorDiv = document.createElement('div');
+            authorDiv.className = 'comment-author';
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'comment-text';
+
+            const dateDiv = document.createElement('div');
+            dateDiv.className = 'comment-date';
+            dateDiv.textContent = new Date(comment.createdDate).toLocaleString();
+
+            if (comment.text.startsWith('PortalUser&#58;')) {
+                authorDiv.textContent = 'Portal User';
+                textDiv.textContent = comment.text.replace('PortalUser&#58;', '').trim();
+                avatarImg.src = 'https://cdn3d.iconscout.com/3d/premium/thumb/user-6332708-5209354.png?f=webp'; // Replace with actual path
+            } else {
+                authorDiv.textContent = comment.author.name;
+                textDiv.textContent = comment.text;
+                avatarImg.src = 'https://expert-ca.com/storage/media/industries/1674276388industries.png'; // Replace with actual path
+            }
+
+            commentDiv.appendChild(avatarImg);
+            contentDiv.appendChild(authorDiv);
+            contentDiv.appendChild(textDiv);
+            contentDiv.appendChild(dateDiv);
+            commentDiv.appendChild(contentDiv);
+
+            return commentDiv;
+        }
+
+        function setSpinnerVisibility(visible) {
+        const spinner = document.getElementById('spinner');
+        if (spinner) {
+            spinner.style.display = visible ? 'block' : 'none';
+        }
+    }
+
+    async function loadComments(commentsData) {
+        const chatContainer = document.getElementById('chatContainer');
+        if (!chatContainer) return;
+
+        setSpinnerVisibility(true);
+        chatContainer.innerHTML = ''; // Clear previous comments
+        
+        const spinner = document.createElement('div');
+        spinner.id = 'spinner';
+        spinner.className = 'spinner';
+        chatContainer.appendChild(spinner);
+
+        try {
+            let comments;
+            if (commentsData) {
+                comments = commentsData.d.results;
+            } else {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add any other headers your API requires
+                    },
+                    body: JSON.stringify({
+                        // Add any required body parameters here
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                comments = data.d.results;
+            }
+
+            chatContainer.removeChild(spinner);
+            comments.forEach(comment => {
+                const commentElement = createCommentElement(comment);
+                chatContainer.appendChild(commentElement);
+            });
+        } catch (error) {
+            console.error('Error loading comments:', error);
+            chatContainer.innerHTML = 'Error loading comments. Please try again later.';
+        } finally {
+            setSpinnerVisibility(false);
+        }
+    }
+
+    async function postComment() {
+        const newCommentText = document.getElementById('newCommentText').value;
+        if (!newCommentText.trim()) return; // Don't post empty comments
+
+        setSpinnerVisibility(true);
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add any other headers your API requires
+                },
+                body: JSON.stringify({
+                    text: `PortalUser:${newCommentText}`
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // Clear the textarea
+            document.getElementById('newCommentText').value = '';
+
+            // Update comments with the new data
+            await loadComments(data);
+        } catch (error) {
+            console.error('Error posting comment:', error);
+            alert('Error posting comment. Please try again later.');
+        } finally {
+            setSpinnerVisibility(false);
+        }
+    }
+
+    // Load comments when the page loads
+    window.onload = () => loadComments();
+    
+</script>
+<script type="module">
+    import { EmojiButton } from 'https://cdn.skypack.dev/@joeattardi/emoji-button';
+
+    const picker = new EmojiButton();
+    const trigger = document.querySelector('#emoji-trigger');
+    const textarea = document.querySelector('#newCommentText');
+
+    picker.on('emoji', selection => {
+        textarea.value += selection.emoji;
+        autoResize(textarea);
+    });
+
+    trigger.addEventListener('click', () => picker.togglePicker(trigger));
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    textarea.addEventListener('input', function() {
+        autoResize(this);
+    });
+
+    // Existing postComment function remains unchanged
+    function postComment() {
+        // Your existing postComment logic here
+        console.log('Comment posted:', textarea.value);
+        textarea.value = '';
+        autoResize(textarea);
+    }
+</script>
+</body>
+</html>
