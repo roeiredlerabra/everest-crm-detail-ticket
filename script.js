@@ -1,157 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Comments</title>
-    <style>
-       body {
-    font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.chat-container {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 20px;
-    max-height: 400px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column-reverse;
-}
-
-.comment {
-    max-width: 70%;
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 20px;
-    position: relative;
-}
-
-.comment-left {
-    align-self: flex-start;
-    background-color: #a3e3ff;
-    border-bottom-left-radius: 0;
-}
-
-.comment-right {
-    align-self: flex-end;
-    background-color: #e4fdd5;
-    border-bottom-right-radius: 0;
-}
-
-.comment-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    position: absolute;
-    bottom: -5px;
-}
-
-.comment-left .comment-avatar {
-    left: -35px;
-}
-
-.comment-right .comment-avatar {
-    right: -35px;
-}
-
-.comment-content {
-    margin-top: 5px;
-}
-
-.comment-author {
-    font-weight: bold;
-    font-size: 0.9em;
-    margin-bottom: 3px;
-}
-
-.comment-text {
-    margin-bottom: 5px;
-}
-
-.comment-date {
-    font-size: 0.7em;
-    color: #666;
-    text-align: right;
-}
-
-.spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.new-comment {
-    margin-top: 20px;
-}
-
-.chat-input-container {
-    display: flex;
-    align-items: center;
-    background-color: #ffffff;
-    border-radius: 25px;
-    padding: 5px 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.chat-input-container textarea {
-    flex-grow: 1;
-    border: none;
-    outline: none;
-    padding: 10px;
-    font-size: 16px;
-    resize: none;
-    background: transparent;
-    max-height: 100px;
-    overflow-y: auto;
-}
-
-.emoji-button, .send-button {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 5px;
-}
-
-.send-button {
-    color: #00a884;
-}
-
-/* Placeholder styling */
-.chat-input-container textarea::placeholder {
-    color: #999;
-}
-    </style>
-</head>
-<body>
-    <div class="chat-container" id="chatContainer">
-        <div id="spinner" class="spinner"></div>
-    </div>
-
-<div class="new-comment">
-    <div class="chat-input-container">
-        <button class="emoji-button" id="emoji-trigger">😊</button>
-        <textarea id="newCommentText" placeholder="Type a message" rows="1"></textarea>
-        <button class="send-button" onclick="postComment()">⮜</button>
-    </div>
-</div>
-
-    <script>
-        const apiUrl = 'https://prod-23.westeurope.logic.azure.com:443/workflows/45f5307b684a4cc5a579aa96e832309f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bBHlquGX9DBwJWTd7u8fa1U-ySN0ZrtRcf9Q_csvOng';
+const apiUrl = 'https://prod-23.westeurope.logic.azure.com:443/workflows/45f5307b684a4cc5a579aa96e832309f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bBHlquGX9DBwJWTd7u8fa1U-ySN0ZrtRcf9Q_csvOng';
 
 function decodeHtmlEntities(text) {
     const textArea = document.createElement('textarea');
@@ -222,6 +69,7 @@ function createCommentElement(comment) {
         chatContainer.appendChild(spinner);
 
         try {
+            const id = document.getElementById('id').textContent.trim();
             let comments;
             if (commentsData) {
                 comments = commentsData.d.results;
@@ -234,6 +82,7 @@ function createCommentElement(comment) {
                     },
                     body: JSON.stringify({
                         // Add any required body parameters here
+                         id: id 
                     })
                 });
 
@@ -265,6 +114,7 @@ function createCommentElement(comment) {
         setSpinnerVisibility(true);
 
         try {
+            const id = document.getElementById('id').textContent.trim();
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -272,7 +122,8 @@ function createCommentElement(comment) {
                     // Add any other headers your API requires
                 },
                 body: JSON.stringify({
-                    text: `PortalUser:${newCommentText}`
+                    text: `PortalUser:${newCommentText}`,
+                    id: id 
                 })
             });
 
@@ -295,41 +146,5 @@ function createCommentElement(comment) {
         }
     }
 
-    // Load comments when the page loads
-    window.onload = () => loadComments();
+
     
-</script>
-<script type="module">
-    import { EmojiButton } from 'https://cdn.skypack.dev/@joeattardi/emoji-button';
-
-    const picker = new EmojiButton();
-    const trigger = document.querySelector('#emoji-trigger');
-    const textarea = document.querySelector('#newCommentText');
-
-    picker.on('emoji', selection => {
-        textarea.value += selection.emoji;
-        autoResize(textarea);
-    });
-
-    trigger.addEventListener('click', () => picker.togglePicker(trigger));
-
-    function autoResize(textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
-    }
-
-    textarea.addEventListener('input', function() {
-        autoResize(this);
-    });
-
-    // Existing postComment function remains unchanged
-    function postComment() {
-        // Your existing postComment logic here
-        console.log('Comment posted:', textarea.value);
-        textarea.value = '';
-        autoResize(textarea);
-    }
-</script>
-
-</body>
-</html>

@@ -475,6 +475,7 @@
             overflow: auto;
             width: 100%;
             resize: vertical;
+            height: 45px;
         }
         .char-count {
     font-size: 0.8em;
@@ -510,6 +511,131 @@
 .button-container {
     position: relative;
     width: 100%;
+}
+.chat-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.comment {
+    max-width: 70%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.comment-left {
+    align-self: flex-start;
+    background-color: #a3e3ff;
+    border-bottom-left-radius: 0;
+}
+
+.comment-right {
+    align-self: flex-end;
+    background-color: #e4fdd5;
+    border-bottom-right-radius: 0;
+}
+
+.comment-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -5px;
+}
+
+.comment-left .comment-avatar {
+    left: -35px;
+}
+
+.comment-right .comment-avatar {
+    right: -35px;
+}
+
+.comment-content {
+    margin-top: 5px;
+}
+
+.comment-author {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 3px;
+}
+
+.comment-text {
+    margin-bottom: 5px;
+}
+
+.comment-date {
+    font-size: 0.7em;
+    color: #666;
+    text-align: right;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.new-comment {
+    margin-top: 20px;
+}
+
+.chat-input-container {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 25px;
+    padding: 5px 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.chat-input-container textarea {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+    resize: none;
+    background: transparent;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.emoji-button, .send-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.send-button {
+    color: #00a884;
+}
+
+.chat-input-container textarea::placeholder {
+    color: #999;
+}
+.chatsection{
+    display:none;
 }
     </style>
 </head>
@@ -634,6 +760,21 @@
         </table>
         <p id="try-another-message" style="display: none;">נסו שמות קבצים אחרים בבקשה</p>
     </div><br>
+    <div class="container glass-card">
+        <h6 dir="rtl">התכתבות והערות <i class="fas fa-book"></i></h6>
+          <div class="chat-container" id="chatContainer">
+        <div id="spinner" class="spinner"></div>
+    </div>
+    
+    <div class="new-comment chatsection">
+        
+        <div class="chat-input-container">
+            <button class="emoji-button" id="emoji-trigger">😊</button>
+            <textarea id="newCommentText" placeholder="Type a message" rows="1"></textarea>
+            <button class="send-button " onclick="postComment()">⮜</button>
+        </div>
+    </div></div>
+    <br>
     <footer class="glass-footer" dir="ltr">
         <div class="footer-content">
             <div class="footer-section">
@@ -729,17 +870,30 @@
                         const status = data.Status.Value.toLowerCase();
                         const steps = ['new', 'in progress', 'completed'];
                         const progressContainer = document.querySelector('.progress-container');
+                        const chatsection = document.querySelector('.chatsection');
+                        
+                        if(status == "in progress"){
+                            chatsection.style.display = 'block';
+                        }
+                        else{
+                            chatsection.style.display = 'none';
+                        }
 
                         if (!steps.includes(status)) {
-                            progressContainer.style.display = 'none';
+                            
+                            
+                            
                         } else {
+                            loadComments();
                             steps.forEach((step, index) => {
-                                const stepElement = document.getElementById(`step-${step.replace(' ', '-')}`);
+                                const stepElement = document.getElementById(`step-${step.replace(' ', '-')}`);                                
                                 if (status === step) {
                                     stepElement.classList.add('active');
                                     document.getElementById("file-input").disabled = false;
+                                    
                                 } else if (steps.indexOf(status) > index) {
-                                    stepElement.classList.add('completed');
+                                    
+                                    stepElement.classList.add('completed');                                    
                                     document.getElementById("edit-button").disabled = true;
                                     document.getElementById("file-input").disabled = true;
                                     document.getElementById("select-files-button").hidden = true;
@@ -1107,7 +1261,38 @@
     editButton.addEventListener('click', toggleEditMode);
 });
     </script>
+     <script src="script.js"></script>
+<script type="module">
+    import { EmojiButton } from 'https://cdn.skypack.dev/@joeattardi/emoji-button';
 
+    const picker = new EmojiButton();
+    const trigger = document.querySelector('#emoji-trigger');
+    const textarea = document.querySelector('#newCommentText');
+
+    picker.on('emoji', selection => {
+        textarea.value += selection.emoji;
+        autoResize(textarea);
+    });
+
+    trigger.addEventListener('click', () => picker.togglePicker(trigger));
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    textarea.addEventListener('input', function() {
+        autoResize(this);
+    });
+
+    // Existing postComment function remains unchanged
+    function postComment() {
+        // Your existing postComment logic here
+        console.log('Comment posted:', textarea.value);
+        textarea.value = '';
+        autoResize(textarea);
+    }
+</script>
 </body>
 
 </html>
