@@ -5,103 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Comments</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .chat-container {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column-reverse;
-        }
-        .comment {
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: #a3e3ff;
-            border-radius: 5px;
-            display: flex;
-        }
-        .comment-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .comment-content {
-            flex-grow: 1;
-        }
-        .comment-author {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .comment-text {
-            margin-bottom: 5px;
-        }
-        .comment-date {
-            font-size: 0.8em;
-            color: #666;
-        }
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .new-comment {
-        margin-top: 20px;
-    }
+       body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-    .chat-input-container {
-        display: flex;
-        align-items: center;
-        background-color: #ffffff;
-        border-radius: 25px;
-        padding: 5px 10px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
+.chat-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+}
 
-    .chat-input-container textarea {
-        flex-grow: 1;
-        border: none;
-        outline: none;
-        padding: 10px;
-        font-size: 16px;
-        resize: none;
-        background: transparent;
-        max-height: 100px;
-        overflow-y: auto;
-    }
+.comment {
+    max-width: 70%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 20px;
+    position: relative;
+}
 
-    .emoji-button, .send-button {
-        background: none;
-        border: none;
-        font-size: 20px;
-        cursor: pointer;
-        padding: 5px;
-    }
+.comment-left {
+    align-self: flex-start;
+    background-color: #a3e3ff;
+    border-bottom-left-radius: 0;
+}
 
-    .send-button {
-        color: #00a884;
-    }
+.comment-right {
+    align-self: flex-end;
+    background-color: #e4fdd5;
+    border-bottom-right-radius: 0;
+}
 
-    /* Placeholder styling */
-    .chat-input-container textarea::placeholder {
-        color: #999;
-    }
+.comment-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -5px;
+}
+
+.comment-left .comment-avatar {
+    left: -35px;
+}
+
+.comment-right .comment-avatar {
+    right: -35px;
+}
+
+.comment-content {
+    margin-top: 5px;
+}
+
+.comment-author {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 3px;
+}
+
+.comment-text {
+    margin-bottom: 5px;
+}
+
+.comment-date {
+    font-size: 0.7em;
+    color: #666;
+    text-align: right;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.new-comment {
+    margin-top: 20px;
+}
+
+.chat-input-container {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 25px;
+    padding: 5px 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.chat-input-container textarea {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+    resize: none;
+    background: transparent;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.emoji-button, .send-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.send-button {
+    color: #00a884;
+}
+
+/* Placeholder styling */
+.chat-input-container textarea::placeholder {
+    color: #999;
+}
     </style>
 </head>
 <body>
@@ -147,14 +180,15 @@ function createCommentElement(comment) {
     dateDiv.textContent = new Date(comment.createdDate).toLocaleString();
 
     if (comment.text.startsWith('PortalUser&#58;')) {
+        commentDiv.classList.add('comment-right');
         authorDiv.textContent = 'Portal User';
         textDiv.textContent = decodeHtmlEntities(comment.text.replace('PortalUser&#58;', '').trim());
-        avatarImg.src = 'https://cdn3d.iconscout.com/3d/premium/thumb/user-6332708-5209354.png?f=webp'; // Replace with actual path
-        commentDiv.style.backgroundColor = 'rgb(228, 253, 213)';
+        avatarImg.src = 'https://cdn3d.iconscout.com/3d/premium/thumb/user-6332708-5209354.png?f=webp';
     } else {
+        commentDiv.classList.add('comment-left');
         authorDiv.textContent = comment.author.name;
         textDiv.textContent = decodeHtmlEntities(comment.text);
-        avatarImg.src = 'https://expert-ca.com/storage/media/industries/1674276388industries.png'; // Replace with actual path
+        avatarImg.src = 'https://expert-ca.com/storage/media/industries/1674276388industries.png';
     }
 
     commentDiv.appendChild(avatarImg);
