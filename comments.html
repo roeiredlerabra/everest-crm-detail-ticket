@@ -24,7 +24,7 @@
         .comment {
             margin-bottom: 15px;
             padding: 10px;
-            background-color: #f0f0f0;
+            background-color: #a3e3ff;
             border-radius: 5px;
             display: flex;
         }
@@ -150,6 +150,7 @@ function createCommentElement(comment) {
         authorDiv.textContent = 'Portal User';
         textDiv.textContent = decodeHtmlEntities(comment.text.replace('PortalUser&#58;', '').trim());
         avatarImg.src = 'https://cdn3d.iconscout.com/3d/premium/thumb/user-6332708-5209354.png?f=webp'; // Replace with actual path
+        commentDiv.style.backgroundColor = 'rgb(228, 253, 213)';
     } else {
         authorDiv.textContent = comment.author.name;
         textDiv.textContent = decodeHtmlEntities(comment.text);
@@ -164,6 +165,7 @@ function createCommentElement(comment) {
 
     return commentDiv;
 }
+
 
 
         function setSpinnerVisibility(visible) {
