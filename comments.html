@@ -120,44 +120,51 @@
     <script>
         const apiUrl = 'https://prod-23.westeurope.logic.azure.com:443/workflows/45f5307b684a4cc5a579aa96e832309f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bBHlquGX9DBwJWTd7u8fa1U-ySN0ZrtRcf9Q_csvOng';
 
-        function createCommentElement(comment) {
-            const commentDiv = document.createElement('div');
-            commentDiv.className = 'comment';
+function decodeHtmlEntities(text) {
+    const textArea = document.createElement('textarea');
+    textArea.innerHTML = text;
+    return textArea.value;
+}
 
-            const avatarImg = document.createElement('img');
-            avatarImg.className = 'comment-avatar';
-            
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'comment-content';
+function createCommentElement(comment) {
+    const commentDiv = document.createElement('div');
+    commentDiv.className = 'comment';
 
-            const authorDiv = document.createElement('div');
-            authorDiv.className = 'comment-author';
+    const avatarImg = document.createElement('img');
+    avatarImg.className = 'comment-avatar';
 
-            const textDiv = document.createElement('div');
-            textDiv.className = 'comment-text';
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'comment-content';
 
-            const dateDiv = document.createElement('div');
-            dateDiv.className = 'comment-date';
-            dateDiv.textContent = new Date(comment.createdDate).toLocaleString();
+    const authorDiv = document.createElement('div');
+    authorDiv.className = 'comment-author';
 
-            if (comment.text.startsWith('PortalUser&#58;')) {
-                authorDiv.textContent = 'Portal User';
-                textDiv.textContent = comment.text.replace('PortalUser&#58;', '').trim();
-                avatarImg.src = 'https://cdn3d.iconscout.com/3d/premium/thumb/user-6332708-5209354.png?f=webp'; // Replace with actual path
-            } else {
-                authorDiv.textContent = comment.author.name;
-                textDiv.textContent = comment.text;
-                avatarImg.src = 'https://expert-ca.com/storage/media/industries/1674276388industries.png'; // Replace with actual path
-            }
+    const textDiv = document.createElement('div');
+    textDiv.className = 'comment-text';
 
-            commentDiv.appendChild(avatarImg);
-            contentDiv.appendChild(authorDiv);
-            contentDiv.appendChild(textDiv);
-            contentDiv.appendChild(dateDiv);
-            commentDiv.appendChild(contentDiv);
+    const dateDiv = document.createElement('div');
+    dateDiv.className = 'comment-date';
+    dateDiv.textContent = new Date(comment.createdDate).toLocaleString();
 
-            return commentDiv;
-        }
+    if (comment.text.startsWith('PortalUser&#58;')) {
+        authorDiv.textContent = 'Portal User';
+        textDiv.textContent = decodeHtmlEntities(comment.text.replace('PortalUser&#58;', '').trim());
+        avatarImg.src = 'https://cdn3d.iconscout.com/3d/premium/thumb/user-6332708-5209354.png?f=webp'; // Replace with actual path
+    } else {
+        authorDiv.textContent = comment.author.name;
+        textDiv.textContent = decodeHtmlEntities(comment.text);
+        avatarImg.src = 'https://expert-ca.com/storage/media/industries/1674276388industries.png'; // Replace with actual path
+    }
+
+    commentDiv.appendChild(avatarImg);
+    contentDiv.appendChild(authorDiv);
+    contentDiv.appendChild(textDiv);
+    contentDiv.appendChild(dateDiv);
+    commentDiv.appendChild(contentDiv);
+
+    return commentDiv;
+}
+
 
         function setSpinnerVisibility(visible) {
         const spinner = document.getElementById('spinner');
