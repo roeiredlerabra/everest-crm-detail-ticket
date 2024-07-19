@@ -691,6 +691,9 @@
                 background-position: -200% 0;
             }
         }
+        .error404{
+display: none;
+        }
     </style>
 </head>
 
@@ -874,7 +877,7 @@
             </div>
         </div>
     </div>
-    <div class="404" dir="ltr">
+    <div class="error404" id ="404" dir="ltr">
   <div class="container">
     <div class="row">
       <div class="col-md-6 align-self-center">
@@ -1203,6 +1206,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
     const skeletonElement = document.getElementById('skeleton');
+    const error404 = document.getElementById('404');
     const dataTable = document.getElementById('data-table');
     const glassCards = document.querySelectorAll('.glass-card');
         // Function to show or hide all glass cards
@@ -1243,10 +1247,12 @@
                 if (data.error && data.error.code === "NoResponse") {
                     console.error('Server did not receive a response:', data.error.message);
                     toggleGlassCards('none');
+                    error404.style.display = 'block';
                     // Add code to show an error message to the user
                 } else if (data.ID) {  // Check for a property that should exist in valid data
                     skeletonElement.style.display = 'none';
                     dataTable.style.display = 'table';
+                    error404.style.display = 'none';
                     // Populate the table with the response data
                     document.getElementById('id').textContent = data.ID || '';
                     document.getElementById('title').textContent = data.Title || '';
@@ -1289,17 +1295,20 @@
                 } else {
                     console.error('Unexpected data format received:', data);
                     toggleGlassCards('none');
+                    error404.style.display = 'block';
                     // Add code to show an error message to the user
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 toggleGlassCards('none');
+                error404.style.display = 'block';
                 // Add code to show a general error message to the user
             });
     } else {
         console.error('ID parameter not found in the URL');
         toggleGlassCards('none');
+        error404.style.display = 'block';
         // Add code to show an error message to the user about missing ID
     }
 });
