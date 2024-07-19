@@ -24,676 +24,641 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
     <title>פרטי קריאה עבור מערכת Everest</title>
     <style>
-        .title4 {
-            text-align: right !important;
-            direction: rtl;
-        }
-
-        /* Adjusted styles for header icons */
-        .header-icons {
-            position: absolute;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-        }
-
-        .header-icons i {
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .header-info {
-            text-align: center;
-            /* Ensures text is centered horizontally */
-            position: relative;
-            /* Required for centering using transform */
-            left: 30%;
-            /* Shifts the element horizontally by 50% */
-            transform: translateX(-50%);
-            /* Centers the element */
-        }
-
-        @media (max-width: 768px) {
-            .header-info {
-                text-align: center;
-                /* Ensures text is centered horizontally */
-                position: relative;
-                /* Required for centering using transform */
-                left: 38%;
-                /* Shifts the element horizontally by 50% */
-                transform: translateX(-50%);
-                /* Centers the element */
-            }
-        }
-
-        body1 {
-            font-family: Arial, sans-serif;
-            background: url('https://source.unsplash.com/random/1600x900') no-repeat center center fixed;
-            background-size: cover;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            padding: 10px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            width: 90%;
-            max-width: 800px;
-            margin: 20px auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        th,
-        td {
-            padding: 12px 15px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        th {
-            background-color: rgba(0, 123, 255, 0.8);
-            color: #fff;
-            font-weight: bold;
-            text-align: left;
-            max-width: 120px;
-        }
-
-        td {
-            background-color: rgba(255, 255, 255, 0.5);
-            text-align: center !important;
-        }
-
-        tr:hover td {
-            background-color: rgba(255, 255, 255, 0.7);
-        }
-
-        .progress-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-            direction: ltr;
-        }
-
-        .step {
-            text-align: center;
-            width: 100%;
-            position: relative;
-        }
-
-        .step::before {
-            content: '';
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            width: 100%;
-            height: 2px;
-            background-color: #ddd;
-            z-index: -1;
-        }
-
-        .step:last-child::before {
-            display: none;
-        }
-
-        .step.active {
-            color: #007bff;
-        }
-
-        .step.completed::before {
-            background-color: #00010296;
-        }
-
-        .circle {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: #ddd;
-            display: inline-block;
-            line-height: 30px;
-            color: #fff;
-        }
-
-        .step.active .circle,
-        .step.completed .circle {
-            background-color: #06a31b;
-        }
-
-        .container {
-            max-width: 600px;
-            /* Adjust width as needed */
-            margin: 0 auto;
-            /* Center the container horizontally */
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        #file-input {
-            display: none;
-            /* Hide the file input */
-        }
-
-        #select-files-button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        #select-files-button:hover {
-            background-color: #0056b3;
-        }
-
-        #file-list {
-            text-align: left;
-            margin-bottom: 10px;
-        }
-
-        #upload-button {
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #upload-button:hover {
-            background-color: #218838;
-        }
-
-        .remove-file {
-            cursor: pointer;
-            color: red;
-            margin-left: 10px;
-        }
-
-        #file-list-table {
-            width: 100%;
-        }
-
-        .remove-file {
-            cursor: pointer;
-            color: red;
-        }
-
-        .status {
-            text-align: center;
-        }
-
-        .checkmark-icon {
-            color: green;
-        }
-
-        .alert-icon {
-            color: orange;
-        }
-
-        .error-icon {
-            color: red;
-        }
-
-        .files-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            /* Ensure the table is RTL for Hebrew */
-        }
-
-        .files-table th,
-        .files-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-            /* Align text to the right for RTL */
-        }
-
-        .files-table th {
-
-            font-weight: bold;
-        }
-
-        .files-table td {
-            vertical-align: top;
-            max-width: 300px;
-            word-wrap: break-word;
-        }
-
-        .files-table .file-name {
-            font-weight: bold;
-        }
-
-        .files-table .file-size {
-            font-size: 0.9em;
-            color: #555;
-        }
-
-        .files-table .remove-file {
-            cursor: pointer;
-            color: red;
-            text-align: center;
-        }
-
-        .files-table .status {
-            text-align: center;
-        }
-
-        .files-table .checkmark-icon {
-            color: green;
-        }
-
-        .files-table .alert-icon {
-            color: orange;
-        }
-
-        .files-table .error-icon {
-            color: red;
-        }
-
-        /* Your existing CSS styles for the file upload label */
-        .file-upload-label {
-            display: none;
-            /* Initially hide the file upload label */
-            position: absolute;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            color: #333;
-            z-index: 1000;
-            /* Ensure it's above other content */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            /* Optional: add a shadow */
-            left: 50%;
-            /* Center horizontally */
-        }
-
-        .file-upload-label h3 {
-            margin-top: 0;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .file-upload-label ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 10px 0;
-        }
-
-        .file-upload-label li {
-            margin-bottom: 5px;
-        }
-
-        .file-upload-label .file-types {
-            font-style: italic;
-        }
-
-        /* Show the label when hovering over the parent */
-        .info-icon:hover+.file-upload-label {
-            display: block;
-        }
-
-        /* Hide the label when not hovering over it or its parent */
-        .file-upload-label:hover {
-            display: block;
-        }
-
-        .file-upload-label:hover~.info-icon {
-            display: inline-block;
-        }
-
-        .file-upload-label input[type="file"] {
-            display: block;
-            margin-top: 10px;
-            font-size: 16px;
-        }
-
-        .info-icon {
-
-            top: 10px;
-            /* adjust as needed */
-            right: 10px;
-            /* adjust as needed */
-            font-size: 20px;
-            /* adjust size as needed */
-            color: #555;
-            /* adjust color as needed */
-            cursor: pointer;
-            /* optional: add pointer cursor */
-        }
-
-        .glass-footer {
-            background: rgba(255, 255, 255, 0.1);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 30px 0;
-            color: black;
-            font-family: Arial, sans-serif;
-
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-around;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .footer-section {
-            flex: 1;
-            margin: 0 15px;
-            align-content: center;
-            text-align: center;
-        }
-
-        .footer-section h3 {
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
-
-        .footer-section p {
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .social-link {
-            display: block;
-            color: black;
-            text-decoration: none;
-            margin-bottom: 5px;
-            font-size: 14px;
-            align-content: center;
-            text-align: center;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 12px;
-        }
-
-        .social ul.flex {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        @media screen and (max-width: 767px) {
-            .social ul.flex {
-                display: block;
-            }
-        }
-
-        .social ul.flex li a {
-            color: #0f2792;
-            font-size: 24px;
-            transition: color 0.3s ease;
-        }
-
-        .social ul.flex li a:hover {
-            color: #ddd;
-        }
-
-        .big-logo {
-            width: 100px;
-            height: auto;
-            margin-bottom: 6px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        textarea {
-            overflow: auto;
-            width: 100%;
-            resize: vertical;
-            height: 45px;
-        }
-
-        .char-count {
-            font-size: 0.8em;
-            color: #666;
-            text-align: right;
-            margin-top: 5px;
-        }
-
-        .char-count.error {
-            color: red;
-        }
-
-        #add-button {
-            position: absolute;
-            right: 0;
-            top: 0;
-            background: linear-gradient(45deg, #2c3e50, #3498db);
-            /* Blue gradient */
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        #add-button:hover {
-            background: linear-gradient(45deg, #2980b9, #1abc9c);
-            /* Darker blue gradient on hover */
-        }
-
-        .button-container {
-            position: relative;
-            width: 100%;
-        }
-
-        .chat-container {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column-reverse;
-        }
-
-        .comment {
-            max-width: 70%;
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 20px;
-            position: relative;
-        }
-
-        .comment-left {
-            align-self: flex-start;
-            background-color: #a3e3ff;
-            border-bottom-left-radius: 0;
-        }
-
-        .comment-right {
-            align-self: flex-end;
-            background-color: #e4fdd5;
-            border-bottom-right-radius: 0;
-        }
-
-        .comment-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            position: absolute;
-            bottom: -5px;
-        }
-
-        .comment-left .comment-avatar {
-            left: -35px;
-        }
-
-        .comment-right .comment-avatar {
-            right: -35px;
-        }
-
-        .comment-content {
-            margin-top: 5px;
-        }
-
-        .comment-author {
-            font-weight: bold;
-            font-size: 0.9em;
-            margin-bottom: 3px;
-        }
-
-        .comment-text {
-            margin-bottom: 5px;
-        }
-
-        .comment-date {
-            font-size: 0.7em;
-            color: #666;
-            text-align: right;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .new-comment {
-            margin-top: 20px;
-        }
-
-        .chat-input-container {
-            display: flex;
-            align-items: center;
-            background-color: #ffffff;
-            border-radius: 25px;
-            padding: 5px 10px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .chat-input-container textarea {
-            flex-grow: 1;
-            border: none;
-            outline: none;
-            padding: 10px;
-            font-size: 16px;
-            resize: none;
-            background: transparent;
-            max-height: 100px;
-            overflow-y: auto;
-        }
-
-        .emoji-button,
-        .send-button {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 5px;
-        }
-
-        .send-button {
-            color: #00a884;
-        }
-
-        .chat-input-container textarea::placeholder {
-            color: #999;
-        }
-
-        .chatsection {
-            display: none;
-        }
-
-        .skeleton-wrapper {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-        }
-
-        .skeleton-table {
-            width: 100%;
-        }
-
-        .skeleton-row {
-            display: flex;
-            margin-bottom: 10px;
-        }
-
-        .skeleton-cell {
-            height: 30px;
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            border-radius: 4px;
-        }
-
-        .skeleton-cell:first-child {
-            width: 30%;
-            margin-right: 10px;
-        }
-
-        .skeleton-cell:last-child {
-            width: 70%;
-        }
-
-        @keyframes loading {
-            0% {
-                background-position: 200% 0;
-            }
-
-            100% {
-                background-position: -200% 0;
-            }
-        }
-        .error404{
-display: none;
-        }
+      /* Reset and base styles */
+body1 {
+    font-family: Arial, sans-serif;
+    background: url('https://source.unsplash.com/random/1600x900') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+/* Typography */
+.title4 {
+    text-align: right !important;
+    direction: rtl;
+}
+
+/* Layout components */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+/* Header styles */
+.header-icons {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+.header-icons i {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.header-info {
+    text-align: center;
+    position: relative;
+    left: 30%;
+    transform: translateX(-50%);
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+th {
+    background-color: rgba(0, 123, 255, 0.8);
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    max-width: 120px;
+}
+
+td {
+    background-color: rgba(255, 255, 255, 0.5);
+    text-align: center !important;
+}
+
+tr:hover td {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Progress bar */
+.progress-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    direction: ltr;
+}
+
+.step {
+    text-align: center;
+    width: 100%;
+    position: relative;
+}
+
+.step::before {
+    content: '';
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    z-index: -1;
+}
+
+.step:last-child::before {
+    display: none;
+}
+
+.step.active {
+    color: #007bff;
+}
+
+.step.completed::before {
+    background-color: #00010296;
+}
+
+.circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ddd;
+    display: inline-block;
+    line-height: 30px;
+    color: #fff;
+}
+
+.step.active .circle,
+.step.completed .circle {
+    background-color: #06a31b;
+}
+
+/* File upload styles */
+#file-input {
+    display: none;
+}
+
+#select-files-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#select-files-button:hover {
+    background-color: #0056b3;
+}
+
+#file-list {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+#upload-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#upload-button:hover {
+    background-color: #218838;
+}
+
+.remove-file {
+    cursor: pointer;
+    color: red;
+    margin-left: 10px;
+}
+
+/* File list table */
+#file-list-table {
+    width: 100%;
+}
+
+.files-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    direction: rtl;
+}
+
+.files-table th,
+.files-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.files-table th {
+    font-weight: bold;
+}
+
+.files-table td {
+    vertical-align: top;
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.files-table .file-name {
+    font-weight: bold;
+}
+
+.files-table .file-size {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.files-table .remove-file {
+    cursor: pointer;
+    color: red;
+    text-align: center;
+}
+
+.files-table .status {
+    text-align: center;
+}
+
+.files-table .checkmark-icon {
+    color: green;
+}
+
+.files-table .alert-icon {
+    color: orange;
+}
+
+.files-table .error-icon {
+    color: red;
+}
+
+/* File upload label */
+.file-upload-label {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    left: 50%;
+}
+
+.file-upload-label h3 {
+    margin-top: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.file-upload-label ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.file-upload-label li {
+    margin-bottom: 5px;
+}
+
+.file-upload-label .file-types {
+    font-style: italic;
+}
+
+.file-upload-label:hover {
+    display: block;
+}
+
+.file-upload-label:hover ~ .info-icon {
+    display: inline-block;
+}
+
+.file-upload-label input[type="file"] {
+    display: block;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.info-icon {
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    color: #555;
+    cursor: pointer;
+}
+
+.info-icon:hover + .file-upload-label {
+    display: block;
+}
+
+/* Footer styles */
+.glass-footer {
+    background: rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 30px 0;
+    color: black;
+    font-family: Arial, sans-serif;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-section {
+    flex: 1;
+    margin: 0 15px;
+    align-content: center;
+    text-align: center;
+}
+
+.footer-section h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.footer-section p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.social-link {
+    display: block;
+    color: black;
+    text-decoration: none;
+    margin-bottom: 5px;
+    font-size: 14px;
+    align-content: center;
+    text-align: center;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+}
+
+.social ul.flex {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.social ul.flex li a {
+    color: #0f2792;
+    font-size: 24px;
+    transition: color 0.3s ease;
+}
+
+.social ul.flex li a:hover {
+    color: #ddd;
+}
+
+.big-logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 6px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Form elements */
+textarea {
+    overflow: auto;
+    width: 100%;
+    resize: vertical;
+    height: 45px;
+}
+
+.char-count {
+    font-size: 0.8em;
+    color: #666;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.char-count.error {
+    color: red;
+}
+
+/* Buttons */
+#add-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: linear-gradient(45deg, #2c3e50, #3498db);
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#add-button:hover {
+    background: linear-gradient(45deg, #2980b9, #1abc9c);
+}
+
+.button-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Chat styles */
+.chat-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.comment {
+    max-width: 70%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.comment-left {
+    align-self: flex-start;
+    background-color: #a3e3ff;
+    border-bottom-left-radius: 0;
+}
+
+.comment-right {
+    align-self: flex-end;
+    background-color: #e4fdd5;
+    border-bottom-right-radius: 0;
+}
+
+.comment-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -5px;
+}
+
+.comment-left .comment-avatar {
+    left: -35px;
+}
+
+.comment-right .comment-avatar {
+    right: -35px;
+}
+
+.comment-content {
+    margin-top: 5px;
+}
+
+.comment-author {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 3px;
+}
+
+.comment-text {
+    margin-bottom: 5px;
+}
+
+.comment-date {
+    font-size: 0.7em;
+    color: #666;
+    text-align: right;
+}
+
+.new-comment {
+    margin-top: 20px;
+}
+
+.chat-input-container {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 25px;
+    padding: 5px 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chat-input-container textarea {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+    resize: none;
+    background: transparent;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.emoji-button,
+.send-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.send-button {
+    color: #00a884;
+}
+
+.chat-input-container textarea::placeholder {
+    color: #999;
+}
+
+/* Utility classes */
+.chatsection {
+    display: none;
+}
+
+.error404 {
+    display: none;
+}
+
+/* Loading spinner */
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Skeleton loading */
+.skeleton-wrapper {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+}
+
+.skeleton-table {
+    width: 100%;
+}
+
+.skeleton-row {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.skeleton-cell {
+    height: 30px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 4px;
+}
+
+.skeleton-cell:first-child {
+    width: 30%;
+    margin-right: 10px;
+}
+
+.skeleton-cell:last-child {
+    width: 70%;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+
+/* Media queries */
+@media screen and (max-width: 768px) {
+    .header-info {
+        text-align: center;
+        position: relative;
+        left: 38%;
+        transform: translateX(-50%);
+    }
+
+    .social ul.flex {
+        display: block;
+    }
+}
+
+/* Animations */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
     </style>
 </head>
 
@@ -1251,7 +1216,7 @@ display: none;
                     // Add code to show an error message to the user
                 } else if (data.ID) {  // Check for a property that should exist in valid data
                     skeletonElement.style.display = 'none';
-                    dataTable.style.display = 'table';
+                    dataTable.style.display = 'block';
                     error404.style.display = 'none';
                     // Populate the table with the response data
                     document.getElementById('id').textContent = data.ID || '';
