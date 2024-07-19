@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Center - User Requests</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f6f8fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            color: #0d1b2a;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f2f5;
+            color: #5e6c84;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        tr {
+            background-color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        td:first-child, th:first-child {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+        td:last-child, th:last-child {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+        .status, .type {
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+        .status-Open { background-color: #e3fcef; color: #006644; }
+        .status-Closed { background-color: #ebecf0; color: #5e6c84; }
+        .status-In-Progress { background-color: #deebff; color: #0747a6; }
+        .type-Support { background-color: #ffe8d4; color: #8f4700; }
+        .type-Feature { background-color: #e6fcff; color: #008da6; }
+        .type-Bug { background-color: #ffebe6; color: #ae2e24; }
+        .actions a {
+            color: #0052cc;
+            text-decoration: none;
+            margin-right: 10px;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+        .actions a:hover {
+            text-decoration: underline;
+        }
+        .skeleton {
+            animation: skeleton-loading 1s linear infinite alternate;
+        }
+        @keyframes skeleton-loading {
+            0% { background-color: #f0f2f5; }
+            100% { background-color: #e1e4e8; }
+        }
+        .skeleton-text {
+            height: 16px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+
+        /* Responsive styles */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            tr {
+                margin-bottom: 15px;
+                border: 1px solid #ddd;
+            }
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+            }
+            td:before {
+                position: absolute;
+                top: 12px;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                font-weight: bold;
+                content: attr(data-label);
+            }
+            .skeleton td:before {
+                content: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Action Center - Your Requests</h1>
+        
+        <table id="requestsTable">
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Skeleton loader -->
+                <tr class="skeleton">
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                </tr>
+                <tr class="skeleton">
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                </tr>
+                <tr class="skeleton">
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                    <td><div class="skeleton-text"></div></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Simulating data loading
+        setTimeout(() => {
+            const requestsData = [
+                { id: "REQ001", date: "2024-07-15", type: "Support", status: "Open", actions: ["View", "Edit"] },
+                { id: "REQ002", date: "2024-07-14", type: "Feature", status: "In Progress", actions: ["View"] },
+                { id: "REQ003", date: "2024-07-13", type: "Bug", status: "Closed", actions: ["View"] },
+            ];
+
+            const tableBody = document.querySelector("#requestsTable tbody");
+            tableBody.innerHTML = requestsData.map(request => `
+                <tr>
+                    <td data-label="Request ID">${request.id}</td>
+                    <td data-label="Date">${request.date}</td>
+                    <td data-label="Type"><span class="type type-${request.type}">${request.type}</span></td>
+                    <td data-label="Status"><span class="status status-${request.status.replace(' ', '-')}">${request.status}</span></td>
+                    <td data-label="Actions" class="actions">${request.actions.map(action => `<a href="#">${action}</a>`).join('')}</td>
+                </tr>
+            `).join('');
+        }, 2000); // Simulating 2 seconds loading time
+    </script>
+</body>
+</html>
