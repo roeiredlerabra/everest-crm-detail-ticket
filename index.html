@@ -637,6 +637,46 @@
 .chatsection{
     display:none;
 }
+.skeleton-wrapper {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+}
+
+.skeleton-table {
+  width: 100%;
+}
+
+.skeleton-row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.skeleton-cell {
+  height: 30px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeleton-cell:first-child {
+  width: 30%;
+  margin-right: 10px;
+}
+
+.skeleton-cell:last-child {
+  width: 70%;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
     </style>
 </head>
 
@@ -684,8 +724,47 @@
                     <i class="fas fa-plus"></i>
                 </button>
             </a>
-        </div>    
-        <table id="data-table">
+        </div> 
+        <div id="skeleton" class="skeleton-wrapper">
+            <div class="skeleton-table">
+              <div class="skeleton-row">
+                <div class="skeleton-cell"></div>
+                <div class="skeleton-cell"></div>
+              </div>
+              <div class="skeleton-row">
+                <div class="skeleton-cell"></div>
+                <div class="skeleton-cell"></div>
+              </div>
+              <div class="skeleton-row">
+                <div class="skeleton-cell"></div>
+                <div class="skeleton-cell"></div>
+              </div>
+    <div class="skeleton-row">
+      <div class="skeleton-cell"></div>
+      <div class="skeleton-cell"></div>
+    </div>    <div class="skeleton-row">
+      <div class="skeleton-cell"></div>
+      <div class="skeleton-cell"></div>
+    </div>    <div class="skeleton-row">
+      <div class="skeleton-cell"></div>
+      <div class="skeleton-cell"></div>
+    </div>
+        <div class="skeleton-row">
+      <div class="skeleton-cell"></div>
+      <div class="skeleton-cell"></div>
+    </div>
+        <div class="skeleton-row">
+      <div class="skeleton-cell"></div>
+      <div class="skeleton-cell"></div>
+    </div>
+        <div class="skeleton-row">
+      <div class="skeleton-cell"></div>
+      <div class="skeleton-cell"></div>
+    </div>
+            </div>
+          </div>
+          
+          <table id="data-table" style="display: none;">
             <tr>
                 <th>ID</th>
                 <td id="id"></td>
@@ -724,7 +803,7 @@
                         height="30"></th>
                 <td id="attachments-Num"></td>
             </tr>
-        </table>
+          </table>   
 
     </div>
     <div class="container glass-card">
@@ -831,6 +910,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const skeletonElement = document.getElementById('skeleton');
+    const dataTable = document.getElementById('data-table');
+
+    // Show skeleton, hide actual table
+    skeletonElement.style.display = 'block';
+    dataTable.style.display = 'none';
             // Function to get query parameter by name
             function getQueryParam(param) {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -855,6 +940,8 @@
                 })
                     .then(response => response.json())
                     .then(data => {
+                        skeletonElement.style.display = 'none';
+                        dataTable.style.display = 'table';
                         // Populate the table with the response data
                         document.getElementById('id').textContent = data.ID || '';
                         document.getElementById('title').textContent = data.Title || '';
