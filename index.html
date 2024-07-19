@@ -477,206 +477,220 @@
             resize: vertical;
             height: 45px;
         }
+
         .char-count {
-    font-size: 0.8em;
-    color: #666;
-    text-align: right;
-    margin-top: 5px;
-}
+            font-size: 0.8em;
+            color: #666;
+            text-align: right;
+            margin-top: 5px;
+        }
 
-.char-count.error {
-    color: red;
-}
-#add-button {
-    position: absolute;
-    right: 0;
-    top: 0;
-    background: linear-gradient(45deg, #2c3e50, #3498db); /* Blue gradient */
-    color: white;
-    border: none;
-    padding: 5px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    text-transform: uppercase;
-}
+        .char-count.error {
+            color: red;
+        }
 
-#add-button:hover {
-    background: linear-gradient(45deg, #2980b9, #1abc9c); /* Darker blue gradient on hover */
-}
+        #add-button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            /* Blue gradient */
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
 
-.button-container {
-    position: relative;
-    width: 100%;
-}
-.chat-container {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 20px;
-    max-height: 400px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column-reverse;
-}
+        #add-button:hover {
+            background: linear-gradient(45deg, #2980b9, #1abc9c);
+            /* Darker blue gradient on hover */
+        }
 
-.comment {
-    max-width: 70%;
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 20px;
-    position: relative;
-}
+        .button-container {
+            position: relative;
+            width: 100%;
+        }
 
-.comment-left {
-    align-self: flex-start;
-    background-color: #a3e3ff;
-    border-bottom-left-radius: 0;
-}
+        .chat-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse;
+        }
 
-.comment-right {
-    align-self: flex-end;
-    background-color: #e4fdd5;
-    border-bottom-right-radius: 0;
-}
+        .comment {
+            max-width: 70%;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 20px;
+            position: relative;
+        }
 
-.comment-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    position: absolute;
-    bottom: -5px;
-}
+        .comment-left {
+            align-self: flex-start;
+            background-color: #a3e3ff;
+            border-bottom-left-radius: 0;
+        }
 
-.comment-left .comment-avatar {
-    left: -35px;
-}
+        .comment-right {
+            align-self: flex-end;
+            background-color: #e4fdd5;
+            border-bottom-right-radius: 0;
+        }
 
-.comment-right .comment-avatar {
-    right: -35px;
-}
+        .comment-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -5px;
+        }
 
-.comment-content {
-    margin-top: 5px;
-}
+        .comment-left .comment-avatar {
+            left: -35px;
+        }
 
-.comment-author {
-    font-weight: bold;
-    font-size: 0.9em;
-    margin-bottom: 3px;
-}
+        .comment-right .comment-avatar {
+            right: -35px;
+        }
 
-.comment-text {
-    margin-bottom: 5px;
-}
+        .comment-content {
+            margin-top: 5px;
+        }
 
-.comment-date {
-    font-size: 0.7em;
-    color: #666;
-    text-align: right;
-}
+        .comment-author {
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 3px;
+        }
 
-.spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
-}
+        .comment-text {
+            margin-bottom: 5px;
+        }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+        .comment-date {
+            font-size: 0.7em;
+            color: #666;
+            text-align: right;
+        }
 
-.new-comment {
-    margin-top: 20px;
-}
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
 
-.chat-input-container {
-    display: flex;
-    align-items: center;
-    background-color: #ffffff;
-    border-radius: 25px;
-    padding: 5px 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
 
-.chat-input-container textarea {
-    flex-grow: 1;
-    border: none;
-    outline: none;
-    padding: 10px;
-    font-size: 16px;
-    resize: none;
-    background: transparent;
-    max-height: 100px;
-    overflow-y: auto;
-}
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
-.emoji-button, .send-button {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 5px;
-}
+        .new-comment {
+            margin-top: 20px;
+        }
 
-.send-button {
-    color: #00a884;
-}
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-radius: 25px;
+            padding: 5px 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
 
-.chat-input-container textarea::placeholder {
-    color: #999;
-}
-.chatsection{
-    display:none;
-}
-.skeleton-wrapper {
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 10px;
-}
+        .chat-input-container textarea {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+            background: transparent;
+            max-height: 100px;
+            overflow-y: auto;
+        }
 
-.skeleton-table {
-  width: 100%;
-}
+        .emoji-button,
+        .send-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+        }
 
-.skeleton-row {
-  display: flex;
-  margin-bottom: 10px;
-}
+        .send-button {
+            color: #00a884;
+        }
 
-.skeleton-cell {
-  height: 30px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-  border-radius: 4px;
-}
+        .chat-input-container textarea::placeholder {
+            color: #999;
+        }
 
-.skeleton-cell:first-child {
-  width: 30%;
-  margin-right: 10px;
-}
+        .chatsection {
+            display: none;
+        }
 
-.skeleton-cell:last-child {
-  width: 70%;
-}
+        .skeleton-wrapper {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
 
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
+        .skeleton-table {
+            width: 100%;
+        }
+
+        .skeleton-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .skeleton-cell {
+            height: 30px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        .skeleton-cell:first-child {
+            width: 30%;
+            margin-right: 10px;
+        }
+
+        .skeleton-cell:last-child {
+            width: 70%;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
     </style>
 </head>
 
@@ -719,52 +733,55 @@
             <button id="edit-button" class="edit-icon" title="עריכה">
                 <i class="fas fa-edit"></i>
             </button>
-            <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=HPwZQL5ZLECX_mPKmhodmlHM2DyAwINDr1MnN4xdbntUQzhJWDNVMUNRV1JSREYxQlcxQ0VJMUdROC4u&lang=he-il" target="_blank">
+            <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=HPwZQL5ZLECX_mPKmhodmlHM2DyAwINDr1MnN4xdbntUQzhJWDNVMUNRV1JSREYxQlcxQ0VJMUdROC4u&lang=he-il"
+                target="_blank">
                 <button id="add-button" class="add-icon" title="פתיחת פנייה חדשה">
                     <i class="fas fa-plus"></i>
                 </button>
             </a>
-        </div> 
+        </div>
         <div id="skeleton" class="skeleton-wrapper">
             <div class="skeleton-table">
-              <div class="skeleton-row">
-                <div class="skeleton-cell"></div>
-                <div class="skeleton-cell"></div>
-              </div>
-              <div class="skeleton-row">
-                <div class="skeleton-cell"></div>
-                <div class="skeleton-cell"></div>
-              </div>
-              <div class="skeleton-row">
-                <div class="skeleton-cell"></div>
-                <div class="skeleton-cell"></div>
-              </div>
-    <div class="skeleton-row">
-      <div class="skeleton-cell"></div>
-      <div class="skeleton-cell"></div>
-    </div>    <div class="skeleton-row">
-      <div class="skeleton-cell"></div>
-      <div class="skeleton-cell"></div>
-    </div>    <div class="skeleton-row">
-      <div class="skeleton-cell"></div>
-      <div class="skeleton-cell"></div>
-    </div>
-        <div class="skeleton-row">
-      <div class="skeleton-cell"></div>
-      <div class="skeleton-cell"></div>
-    </div>
-        <div class="skeleton-row">
-      <div class="skeleton-cell"></div>
-      <div class="skeleton-cell"></div>
-    </div>
-        <div class="skeleton-row">
-      <div class="skeleton-cell"></div>
-      <div class="skeleton-cell"></div>
-    </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
             </div>
-          </div>
-          
-          <table id="data-table" style="display: none;">
+        </div>
+
+        <table id="data-table" style="display: none;">
             <tr>
                 <th>ID</th>
                 <td id="id"></td>
@@ -803,13 +820,14 @@
                         height="30"></th>
                 <td id="attachments-Num"></td>
             </tr>
-          </table>   
+        </table>
 
     </div>
     <div class="container glass-card">
+        <h6 dir="rtl">העלאת קבצים<i class="fas fa-file-upload"></i></h6>
         <a class="info-icon">&#9432;</a>
         <label for="file-upload" class="file-upload-label">
-            <h3>העלאת קובץ</h3>
+            
             <ul>
                 <li>גודל קובץ מרבי: 10 מ"ב</li>
                 <li>סוגי קבצים מותרים:
@@ -839,20 +857,23 @@
         </table>
         <p id="try-another-message" style="display: none;">נסו שמות קבצים אחרים בבקשה</p>
     </div><br>
-    <div class=" glass-card">
-        <center><h6 dir="rtl">התכתבות והערות <i class="fas fa-book"></i></h6></center>
-          <div class="chat-container" id="chatContainer">
-        <div id="spinner" class="spinner"></div>
-    </div>
-    
-    <div class="new-comment chatsection">
-        
-        <div class="chat-input-container">
-            <button class="emoji-button" id="emoji-trigger">😊</button>
-            <textarea id="newCommentText" placeholder="Type a message" rows="1"></textarea>
-            <button class="send-button " onclick="postComment()">⮜</button>
+    <div class="glass-card">
+        <center>
+            <h6 dir="rtl">התכתבות והערות <i class="fas fa-book"></i></h6>
+        </center>
+        <div class="chat-container" id="chatContainer">
+            <div id="spinner" class="spinner"></div>
         </div>
-    </div></div>
+
+        <div class="new-comment chatsection">
+
+            <div class="chat-input-container">
+                <button class="emoji-button" id="emoji-trigger">😊</button>
+                <textarea id="newCommentText" placeholder="Type a message" rows="1"></textarea>
+                <button class="send-button " onclick="postComment()">⮜</button>
+            </div>
+        </div>
+    </div>
     <br>
     <footer class="glass-footer" dir="ltr">
         <div class="footer-content">
@@ -896,9 +917,10 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 <a href="https://roei-redler.github.io/in-rep/" target="_blank" rel="noopener noreferrer" style="font-weight: bold; color: #336699;">Roei Redler</a>. All rights reserved.</p>
+            <p>&copy; 2024 <a href="https://roei-redler.github.io/in-rep/" target="_blank" rel="noopener noreferrer"
+                    style="font-weight: bold; color: #336699;">Roei Redler</a>. All rights reserved.</p>
         </div>
-        
+
         <div class="images">
             <img class="big-logo" width="0" height="0"
                 src="https://www.abra-it.com/wp-content/uploads/2021/12/logo-big.svg" alt="abra logo">
@@ -910,92 +932,107 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const skeletonElement = document.getElementById('skeleton');
+    const skeletonElement = document.getElementById('skeleton');
     const dataTable = document.getElementById('data-table');
+    const glassCards = document.querySelectorAll('.glass-card');
+        // Function to show or hide all glass cards
+        function toggleGlassCards(display) {
+        glassCards.forEach(card => {
+            card.style.display = display;
+        });
+    }
 
     // Show skeleton, hide actual table
     skeletonElement.style.display = 'block';
     dataTable.style.display = 'none';
-            // Function to get query parameter by name
-            function getQueryParam(param) {
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get(param);
-            }
 
-            // Get the 'id' parameter from the URL
-            const id = getQueryParam('id');
+    // Function to get query parameter by name
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
 
-            // Check if 'id' is found in the URL
-            if (id) {
-                // Define the API endpoint
-                const apiEndpoint = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with actual API endpoint
+    // Get the 'id' parameter from the URL
+    const id = getQueryParam('id');
 
-                // Prepare the POST request
-                fetch(apiEndpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id: id })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        skeletonElement.style.display = 'none';
-                        dataTable.style.display = 'table';
-                        // Populate the table with the response data
-                        document.getElementById('id').textContent = data.ID || '';
-                        document.getElementById('title').textContent = data.Title || '';
-                        document.getElementById('description').innerHTML = (data.Description || '').replace(/\n/g, '<br>');
-                        document.getElementById('status').textContent = data.Status.Value || '';
-                        document.getElementById('Priority').textContent = data.Priority || '';
-                        document.getElementById('created').textContent = new Date(data.Created).toLocaleString() || '';
-                        document.getElementById('modified').textContent = new Date(data.Modified).toLocaleString() || '';
-                        document.getElementById('assign-to').textContent = data["Assign To"] || '';
-                        document.getElementById('attachments-Num').textContent = data["attachments Num"] || '';
+    // Check if 'id' is found in the URL
+    if (id) {
+        // Define the API endpoint
+        const apiEndpoint = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with actual API endpoint
 
-                        // Update the progress steps based on the status
-                        const status = data.Status.Value.toLowerCase();
-                        const steps = ['new', 'in progress', 'completed'];
-                        const progressContainer = document.querySelector('.progress-container');
-                        const chatsection = document.querySelector('.chatsection');
-                        
-                        if(status == "in progress"){
-                            chatsection.style.display = 'block';
-                        }
-                        else{
-                            chatsection.style.display = 'none';
-                        }
+        // Prepare the POST request
+        fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: id })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error && data.error.code === "NoResponse") {
+                    console.error('Server did not receive a response:', data.error.message);
+                    toggleGlassCards('none');
+                    // Add code to show an error message to the user
+                } else if (data.ID) {  // Check for a property that should exist in valid data
+                    skeletonElement.style.display = 'none';
+                    dataTable.style.display = 'table';
+                    // Populate the table with the response data
+                    document.getElementById('id').textContent = data.ID || '';
+                    document.getElementById('title').textContent = data.Title || '';
+                    document.getElementById('description').innerHTML = (data.Description || '').replace(/\n/g, '<br>');
+                    document.getElementById('status').textContent = data.Status.Value || '';
+                    document.getElementById('Priority').textContent = data.Priority || '';
+                    document.getElementById('created').textContent = new Date(data.Created).toLocaleString() || '';
+                    document.getElementById('modified').textContent = new Date(data.Modified).toLocaleString() || '';
+                    document.getElementById('assign-to').textContent = data["Assign To"] || '';
+                    document.getElementById('attachments-Num').textContent = data["attachments Num"] || '';
 
-                        if (!steps.includes(status)) {
-                            
-                            
-                            
-                        } else {
-                            loadComments();
-                            steps.forEach((step, index) => {
-                                const stepElement = document.getElementById(`step-${step.replace(' ', '-')}`);                                
-                                if (status === step) {
-                                    stepElement.classList.add('active');
-                                    document.getElementById("file-input").disabled = false;
-                                    
-                                } else if (steps.indexOf(status) > index) {
-                                    
-                                    stepElement.classList.add('completed');                                    
-                                    document.getElementById("edit-button").disabled = true;
-                                    document.getElementById("file-input").disabled = true;
-                                    document.getElementById("select-files-button").hidden = true;
-                                }
-                            });
-                            
-                            
+                    // Update the progress steps based on the status
+                    const status = data.Status.Value.toLowerCase();
+                    const steps = ['new', 'in progress', 'completed'];
+                    const progressContainer = document.querySelector('.progress-container');
+                    const chatsection = document.querySelector('.chatsection');
 
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            } else {
-                console.error('ID parameter not found in the URL');
-            }
-        });
+                    if (status == "in progress") {
+                        chatsection.style.display = 'block';
+                    }
+                    else {
+                        chatsection.style.display = 'none';
+                    }
+
+                    if (steps.includes(status)) {
+                        loadComments();
+                        steps.forEach((step, index) => {
+                            const stepElement = document.getElementById(`step-${step.replace(' ', '-')}`);
+                            if (status === step) {
+                                stepElement.classList.add('active');
+                                document.getElementById("file-input").disabled = false;
+                            } else if (steps.indexOf(status) > index) {
+                                stepElement.classList.add('completed');
+                                document.getElementById("edit-button").disabled = true;
+                                document.getElementById("file-input").disabled = true;
+                                document.getElementById("select-files-button").hidden = true;
+                            }
+                        });
+                    }
+                } else {
+                    console.error('Unexpected data format received:', data);
+                    toggleGlassCards('none');
+                    // Add code to show an error message to the user
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                toggleGlassCards('none');
+                // Add code to show a general error message to the user
+            });
+    } else {
+        console.error('ID parameter not found in the URL');
+        toggleGlassCards('none');
+        // Add code to show an error message to the user about missing ID
+    }
+});
 
         $(document).ready(function () {
             const $fileInput = $('#file-input');
@@ -1173,213 +1210,213 @@
         }
 
 
-        document.addEventListener('DOMContentLoaded', function() {
-    const editButton = document.getElementById('edit-button');
-    const dataTable = document.getElementById('data-table');
-    const editableFields = ['Priority', 'Description', 'Title'];
-    let isEditing = false;
-    let originalData = {};
+        document.addEventListener('DOMContentLoaded', function () {
+            const editButton = document.getElementById('edit-button');
+            const dataTable = document.getElementById('data-table');
+            const editableFields = ['Priority', 'Description', 'Title'];
+            let isEditing = false;
+            let originalData = {};
 
-    const priorityOptions = [
-        'Critical',
-        'High',
-        'Normal',
-        'Low'
-    ];
+            const priorityOptions = [
+                'Critical',
+                'High',
+                'Normal',
+                'Low'
+            ];
 
-    function toggleEditMode() {
-        isEditing = !isEditing;
-        editButton.innerHTML = isEditing ? '<i class="fas fa-save"></i>' : '<i class="fas fa-edit"></i>';
-        editButton.title = isEditing ? 'Save' : 'Edit';
-        
-        editableFields.forEach(field => {
-            const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
-            if (cell) {
-                if (isEditing) {
-                    makeEditable(cell, field);
-                } else {
-                    saveChanges(cell, field);
+            function toggleEditMode() {
+                isEditing = !isEditing;
+                editButton.innerHTML = isEditing ? '<i class="fas fa-save"></i>' : '<i class="fas fa-edit"></i>';
+                editButton.title = isEditing ? 'Save' : 'Edit';
+
+                editableFields.forEach(field => {
+                    const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+                    if (cell) {
+                        if (isEditing) {
+                            makeEditable(cell, field);
+                        } else {
+                            saveChanges(cell, field);
+                        }
+                    }
+                });
+
+                if (!isEditing) {
+                    sendUpdatesToServer();
                 }
             }
-        });
 
-        if (!isEditing) {
-            sendUpdatesToServer();
-        }
-    }
+            function makeEditable(cell, field) {
+                originalData[field] = cell.textContent.trim();
 
-    function makeEditable(cell, field) {
-        originalData[field] = cell.textContent.trim();
-        
-        if (field === 'Priority') {
-            const select = document.createElement('select');
-            select.classList.add('editable');
-            priorityOptions.forEach(option => {
-                const optionElement = document.createElement('option');
-                optionElement.value = option;
-                optionElement.textContent = option;
-                if (option === originalData[field]) {
-                    optionElement.selected = true;
+                if (field === 'Priority') {
+                    const select = document.createElement('select');
+                    select.classList.add('editable');
+                    priorityOptions.forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option;
+                        optionElement.textContent = option;
+                        if (option === originalData[field]) {
+                            optionElement.selected = true;
+                        }
+                        select.appendChild(optionElement);
+                    });
+                    cell.innerHTML = '';
+                    cell.appendChild(select);
+                } else {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = originalData[field];
+                    textarea.classList.add('editable');
+                    cell.innerHTML = '';
+                    cell.appendChild(textarea);
+
+                    if (field === 'Title') {
+                        textarea.maxLength = 255;
+                        const charCount = document.createElement('div');
+                        charCount.classList.add('char-count');
+                        charCount.textContent = `${textarea.value.length}/255`;
+                        cell.appendChild(charCount);
+
+                        textarea.addEventListener('input', function () {
+                            charCount.textContent = `${this.value.length}/255`;
+                            if (this.value.length > 255) {
+                                charCount.classList.add('error');
+                            } else {
+                                charCount.classList.remove('error');
+                            }
+                        });
+                    }
+
+                    function adjustTextareaHeight() {
+                        textarea.style.height = 'auto';
+                        textarea.style.height = textarea.scrollHeight + 'px';
+                    }
+
+                    adjustTextareaHeight();
+                    textarea.addEventListener('input', adjustTextareaHeight);
                 }
-                select.appendChild(optionElement);
-            });
-            cell.innerHTML = '';
-            cell.appendChild(select);
-        } else {
-            const textarea = document.createElement('textarea');
-            textarea.value = originalData[field];
-            textarea.classList.add('editable');
-            cell.innerHTML = '';
-            cell.appendChild(textarea);
+            }
 
-            if (field === 'Title') {
-                textarea.maxLength = 255;
-                const charCount = document.createElement('div');
-                charCount.classList.add('char-count');
-                charCount.textContent = `${textarea.value.length}/255`;
-                cell.appendChild(charCount);
+            function saveChanges(cell, field) {
+                if (field === 'Priority') {
+                    const select = cell.querySelector('select');
+                    if (select) {
+                        const newValue = select.value;
+                        cell.textContent = newValue;
+                        if (newValue !== originalData[field]) {
+                            cell.classList.add('modified');
+                        } else {
+                            cell.classList.remove('modified');
+                        }
+                    }
+                } else {
+                    const textarea = cell.querySelector('textarea');
+                    if (textarea) {
+                        let newValue = textarea.value.trim();
+                        if (field === 'Title' && newValue.length > 255) {
+                            newValue = newValue.substring(0, 255);
+                            alert('Title has been truncated to 255 characters.');
+                        }
+                        cell.textContent = newValue;
+                        if (newValue !== originalData[field]) {
+                            cell.classList.add('modified');
+                        } else {
+                            cell.classList.remove('modified');
+                        }
+                    }
+                }
+            }
 
-                textarea.addEventListener('input', function() {
-                    charCount.textContent = `${this.value.length}/255`;
-                    if (this.value.length > 255) {
-                        charCount.classList.add('error');
-                    } else {
-                        charCount.classList.remove('error');
+            function sendUpdatesToServer() {
+                const updatedData = {};
+                let hasChanges = false;
+
+                editableFields.forEach(field => {
+                    const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+                    if (cell && cell.classList.contains('modified')) {
+                        updatedData[field] = cell.textContent.trim();
+                        hasChanges = true;
+                    }
+                });
+
+                if (hasChanges) {
+                    updatedData.ID = document.getElementById('id').textContent;
+
+                    fetch('https://prod-173.westeurope.logic.azure.com:443/workflows/be708d1528c141a68b8e133b5f268d85/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=UHPHVD-AXhiU2uZqih3rSXMtoGPFzUcebrFnjxWquFM', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatedData)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 200) {
+                                console.log('Success:', data.message);
+                                //location.reload(true);
+                                editableFields.forEach(field => {
+                                    const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+                                    if (cell) cell.classList.remove('modified');
+                                });
+                            } else {
+                                console.error('Unexpected response:', data);
+                                alert('Failed to save changes. Please try again.');
+                                revertChanges();
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            alert('Failed to save changes. Please try again.');
+                            revertChanges();
+                        });
+                }
+            }
+
+
+            function revertChanges() {
+                editableFields.forEach(field => {
+                    const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+                    if (cell && originalData[field]) {
+                        cell.textContent = originalData[field];
+                        cell.classList.remove('modified');
                     }
                 });
             }
 
-            function adjustTextareaHeight() {
-                textarea.style.height = 'auto';
-                textarea.style.height = textarea.scrollHeight + 'px';
-            }
-
-            adjustTextareaHeight();
-            textarea.addEventListener('input', adjustTextareaHeight);
-        }
-    }
-
-    function saveChanges(cell, field) {
-        if (field === 'Priority') {
-            const select = cell.querySelector('select');
-            if (select) {
-                const newValue = select.value;
-                cell.textContent = newValue;
-                if (newValue !== originalData[field]) {
-                    cell.classList.add('modified');
-                } else {
-                    cell.classList.remove('modified');
-                }
-            }
-        } else {
-            const textarea = cell.querySelector('textarea');
-            if (textarea) {
-                let newValue = textarea.value.trim();
-                if (field === 'Title' && newValue.length > 255) {
-                    newValue = newValue.substring(0, 255);
-                    alert('Title has been truncated to 255 characters.');
-                }
-                cell.textContent = newValue;
-                if (newValue !== originalData[field]) {
-                    cell.classList.add('modified');
-                } else {
-                    cell.classList.remove('modified');
-                }
-            }
-        }
-    }
-
-    function sendUpdatesToServer() {
-    const updatedData = {};
-    let hasChanges = false;
-
-    editableFields.forEach(field => {
-        const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
-        if (cell && cell.classList.contains('modified')) {
-            updatedData[field] = cell.textContent.trim();
-            hasChanges = true;
-        }
-    });
-
-    if (hasChanges) {
-        updatedData.ID = document.getElementById('id').textContent;
-
-        fetch('https://prod-173.westeurope.logic.azure.com:443/workflows/be708d1528c141a68b8e133b5f268d85/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=UHPHVD-AXhiU2uZqih3rSXMtoGPFzUcebrFnjxWquFM', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 200) {
-                console.log('Success:', data.message);
-                //location.reload(true);
-                editableFields.forEach(field => {
-                    const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
-                    if (cell) cell.classList.remove('modified');
-                });
-            } else {
-                console.error('Unexpected response:', data);
-                alert('Failed to save changes. Please try again.');
-                revertChanges();
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Failed to save changes. Please try again.');
-            revertChanges();
+            editButton.addEventListener('click', toggleEditMode);
         });
-    }
-}
-
-
-    function revertChanges() {
-        editableFields.forEach(field => {
-            const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
-            if (cell && originalData[field]) {
-                cell.textContent = originalData[field];
-                cell.classList.remove('modified');
-            }
-        });
-    }
-
-    editButton.addEventListener('click', toggleEditMode);
-});
     </script>
-     <script src="script.js"></script>
-<script type="module">
-    import { EmojiButton } from 'https://cdn.skypack.dev/@joeattardi/emoji-button';
+    <script src="script.js"></script>
+    <script type="module">
+        import { EmojiButton } from 'https://cdn.skypack.dev/@joeattardi/emoji-button';
 
-    const picker = new EmojiButton();
-    const trigger = document.querySelector('#emoji-trigger');
-    const textarea = document.querySelector('#newCommentText');
+        const picker = new EmojiButton();
+        const trigger = document.querySelector('#emoji-trigger');
+        const textarea = document.querySelector('#newCommentText');
 
-    picker.on('emoji', selection => {
-        textarea.value += selection.emoji;
-        autoResize(textarea);
-    });
+        picker.on('emoji', selection => {
+            textarea.value += selection.emoji;
+            autoResize(textarea);
+        });
 
-    trigger.addEventListener('click', () => picker.togglePicker(trigger));
+        trigger.addEventListener('click', () => picker.togglePicker(trigger));
 
-    function autoResize(textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
-    }
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
 
-    textarea.addEventListener('input', function() {
-        autoResize(this);
-    });
+        textarea.addEventListener('input', function () {
+            autoResize(this);
+        });
 
-    // Existing postComment function remains unchanged
-    function postComment() {
-        // Your existing postComment logic here
-        console.log('Comment posted:', textarea.value);
-        textarea.value = '';
-        autoResize(textarea);
-    }
-</script>
+        // Existing postComment function remains unchanged
+        function postComment() {
+            // Your existing postComment logic here
+            console.log('Comment posted:', textarea.value);
+            textarea.value = '';
+            autoResize(textarea);
+        }
+    </script>
 </body>
 
 </html>
