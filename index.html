@@ -94,6 +94,7 @@ table {
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
     overflow: hidden;
+    table-layout: fixed;
 }
 
 th, td {
@@ -1216,7 +1217,7 @@ textarea {
                     // Add code to show an error message to the user
                 } else if (data.ID) {  // Check for a property that should exist in valid data
                     skeletonElement.style.display = 'none';
-                    dataTable.style.display = 'block';
+                    dataTable.style.display = 'table';
                     error404.style.display = 'none';
                     // Populate the table with the response data
                     document.getElementById('id').textContent = data.ID || '';
