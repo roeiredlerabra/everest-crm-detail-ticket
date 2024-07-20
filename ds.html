@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue Tracking Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1, h2 {
+            color: var(--primary-color);
+        }
+
+        #loginForm {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .chart-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .chart-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #loading, #error {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #error {
+            color: #e74c3c;
+        }
+
+        #issueCards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .issue-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .issue-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .issue-card p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 1200px) {
+            #dashboard, .chart-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            #issueCards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+        <h1>Issue Tracking Dashboard</h1>
+        
+        <div id="loginForm">
+            <h2>Login</h2>
+            <input type="password" id="passwordInput" placeholder="Enter password">
+            <button id="loginButton">Login</button>
+            <p id="passwordAlert" style="color: red; display: none;"></p>
+        </div>
+
+        <div id="loading" style="display: none;">Loading...</div>
+        <div id="error" style="display: none;"></div>
+
+        <div id="dashboard" style="display: none;">
+            <div class="chart-row">
+                <div class="chart-container">
+                    <canvas id="priorityChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-row">
+                <div class="chart-container">
+                    <canvas id="assigneeWorkloadChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="issuesOverTimeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="issueCards"></div>
+    </div>
+
+    <script>
+         // Configuration
+        const API_URL = 'https://prod-107.westeurope.logic.azure.com:443/workflows/cb9d7554d3c841f0983f363221c50413/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zK-nPFwO6OpBFhbTsiptapo79_ZSgw4dOPQNAkYy2ks';
+        const PASSWORD_API_URL = 'https://prod-252.westeurope.logic.azure.com:443/workflows/dcd0516fec6a40ca8289a5f11fccd3f7/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hpZrNM5fFjoeL1YsVegwNPzwLMaLMLJnNHWmzObnPmE';
+
+        // Utility functions
+        const $ = selector => document.querySelector(selector);
+        const setVisibility = (element, isVisible) => element.style.display = isVisible ? 'block' : 'none';
+
+        // Logging function
+        function log(message, data = null) {
+            const timestamp = new Date().toISOString();
+            console.log(`[${timestamp}] ${message}`);
+            if (data) console.log(data);
+        }
+
+        // DOM elements
+        const elements = {
+            loading: $('#loading'),
+            error: $('#error'),
+            dashboard: $('#dashboard'),
+            loginForm: $('#loginForm'),
+            passwordInput: $('#passwordInput'),
+            loginButton: $('#loginButton'),
+            passwordAlert: $('#passwordAlert')
+        };
+
+        let generatedPassword = '';
+
+        // Password generation and authentication
+        async function initializeLogin() {
+            log('Initializing login');
+            generatedPassword = Math.random().toString(36).slice(-8);
+            try {
+                const response = await fetch(PASSWORD_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: generatedPassword })
+                });
+                if (!response.ok) throw new Error('Failed to initialize login');
+                log('Login initialized successfully');
+                setVisibility(elements.loginForm, true);
+            } catch (error) {
+                log('Login initialization failed:', error);
+                showError('Failed to initialize login. Please try again later.');
+            }
+        }
+
+        function checkPassword() {
+            log('Checking password');
+            const enteredPassword = elements.passwordInput.value;
+            if (enteredPassword === generatedPassword) {
+                log('Password correct, initializing dashboard');
+                setVisibility(elements.loginForm, false);
+                initDashboard();
+            } else {
+                log('Incorrect password entered');
+                elements.passwordAlert.textContent = 'Incorrect password. Please try again.';
+                setVisibility(elements.passwordAlert, true);
+            }
+        }
+
+        // Data fetching and processing
+        async function fetchIssueData() {
+            log('Fetching issue data');
+            try {
+                setVisibility(elements.loading, true);
+                setVisibility(elements.error, false);
+
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    log(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                log('API Response received:', data);
+                return data;
+            } catch (error) {
+                log('Error fetching issue data:', error);
+                throw error;
+            } finally {
+                setVisibility(elements.loading, false);
+            }
+        }
+
+        function processIssueData(data) {
+            log('Processing issue data');
+            const priorityData = {};
+            const statusData = {};
+            const assigneeData = {};
+            const timeData = {};
+
+            data.forEach((issue, index) => {
+                try {
+                    log(`Processing issue ${index + 1}:`, issue);
+
+                    // Priority data
+                    const priority = issue.Priority?.Value;
+                    if (priority) {
+                        priorityData[priority] = (priorityData[priority] || 0) + 1;
+                    } else {
+                        log(`Warning: Missing Priority for issue ${index + 1}`);
+                    }
+
+                    // Status data
+                    const status = issue.Status?.Value;
+                    if (status) {
+                        statusData[status] = (statusData[status] || 0) + 1;
+                    } else {
+                        log(`Warning: Missing Status for issue ${index + 1}`);
+                    }
+
+                    // Assignee data
+                    const assignee = issue.Assignedto0?.DisplayName;
+                    if (assignee) {
+                        assigneeData[assignee] = (assigneeData[assignee] || 0) + 1;
+                    } else {
+                        log(`Warning: Missing Assignee for issue ${index + 1}`);
+                    }
+
+                    // Time data
+                    if (issue.DateReported) {
+                        const date = new Date(issue.DateReported);
+                        const month = date.toLocaleString('default', { month: 'short' });
+                        timeData[month] = (timeData[month] || 0) + 1;
+                    } else {
+                        log(`Warning: Missing DateReported for issue ${index + 1}`);
+                    }
+                } catch (error) {
+                    log(`Error processing issue ${index + 1}:`, error);
+                }
+            });
+
+            log('Processed data:', { priorityData, statusData, assigneeData, timeData });
+            return { priorityData, statusData, assigneeData, timeData };
+        }
+
+       // Chart creation
+        function createPriorityChart(data) {
+            const ctx = $('#priorityChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        data: Object.values(data),
+                        backgroundColor: ['#e74c3c', '#f39c12', '#3498db', '#2ecc71']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Issues by Priority'
+                        }
+                    }
+                }
+            });
+        }
+
+        function createStatusChart(data) {
+            const ctx = $('#statusChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        data: Object.values(data),
+                        backgroundColor: ['#3498db', '#e74c3c', '#2ecc71', '#f39c12']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Issues by Status'
+                        }
+                    }
+                }
+            });
+        }
+
+        function createAssigneeWorkloadChart(data) {
+            const ctx = $('#assigneeWorkloadChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        label: 'Number of Issues',
+                        data: Object.values(data),
+                        backgroundColor: '#3498db'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Assignee Workload'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createIssuesOverTimeChart(data) {
+            const ctx = $('#issuesOverTimeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        label: 'Number of Issues',
+                        data: Object.values(data),
+                        borderColor: '#3498db',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Issues Over Time'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+  // New function to create issue cards
+        function createIssueCards(data) {
+            const issueCardsContainer = $('#issueCards');
+            const sortedIssues = data.sort((a, b) => new Date(b.DateReported) - new Date(a.DateReported));
+            
+            sortedIssues.forEach(issue => {
+                const card = document.createElement('div');
+                card.className = 'issue-card';
+                card.innerHTML = `
+                    <h3>${issue.Title || 'Untitled Issue'}</h3>
+                    <p><strong>Priority:</strong> ${issue.Priority?.Value || 'N/A'}</p>
+                    <p><strong>Status:</strong> ${issue.Status?.Value || 'N/A'}</p>
+                    <p><strong>Assignee:</strong> ${issue.Assignedto0?.DisplayName || 'Unassigned'}</p>
+                    <p><strong>Reported:</strong> ${new Date(issue.DateReported).toLocaleDateString()}</p>
+                `;
+                issueCardsContainer.appendChild(card);
+            });
+        }
+
+        // Dashboard initialization
+        async function initDashboard() {
+            log('Initializing dashboard');
+            try {
+                const issueData = await fetchIssueData();
+                log('Issue data fetched successfully');
+                const processedData = processIssueData(issueData);
+                log('Data processed successfully');
+                
+                createPriorityChart(processedData.priorityData);
+                createStatusChart(processedData.statusData);
+                createAssigneeWorkloadChart(processedData.assigneeData);
+                createIssuesOverTimeChart(processedData.timeData);
+                
+                setVisibility(elements.dashboard, true);
+                log('Dashboard initialized and displayed');
+            } catch (error) {
+                log('Error initializing dashboard:', error);
+                showError('Failed to fetch or process issue data. Please try again later.');
+            }
+        }
+
+        function showError(message) {
+            log('Showing error:', message);
+            elements.error.textContent = message;
+            setVisibility(elements.error, true);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', initializeLogin);
+        elements.loginButton.addEventListener('click', checkPassword);
+
+        log('Script loaded and event listeners set');
+    </script>
+</body>
+</html>
