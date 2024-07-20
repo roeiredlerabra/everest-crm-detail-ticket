@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,7 +62,7 @@
             border-top-right-radius: 4px;
             border-bottom-right-radius: 4px;
         }
-        .status, .type {
+        .status, .Priority {
             font-weight: 600;
             padding: 4px 8px;
             border-radius: 12px;
@@ -70,12 +70,19 @@
             display: inline-block;
             margin-bottom: 4px;
         }
-        .status-Open { background-color: #e3fcef; color: #006644; }
-        .status-Closed { background-color: #ebecf0; color: #5e6c84; }
+        .status-Blocked { background-color: #fddede; color: #b71c1c; }
         .status-In-Progress { background-color: #deebff; color: #0747a6; }
-        .type-Support { background-color: #ffe8d4; color: #8f4700; }
-        .type-Feature { background-color: #e6fcff; color: #008da6; }
-        .type-Bug { background-color: #ffebe6; color: #ae2e24; }
+        .status-Completed { background-color: #d4edda; color: #155724; }
+        .status-Duplicate { background-color: #f8d7da; color: #721c24; }
+        .status-By-Design { background-color: #fff3cd; color: #856404; }
+        .status-Wont-Fix { background-color: #e2e3e5; color: #6c757d; }
+        .status-New { background-color: #cce5ff; color: #004085; }
+        .priority-Critical { background-color: #f8d7da; color: #721c24; }
+.priority-High { background-color: #fce5c4; color: #d07f00; }
+.priority-Normal { background-color: #d9edf7; color: #31708f; }
+.priority-Low { background-color: #dff0d8; color: #3c763d; }
+.priority-Unknown { background-color: #e0e0e0; color: #9e9e9e; }
+
         .actions a {
             color: #0052cc;
             text-decoration: none;
@@ -135,6 +142,35 @@
                 content: none;
             }
         }
+        .details {
+    display: none;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+
+    overflow-wrap: break-word; /* Break long words to fit the container */
+    word-break: break-all; /* Break long URLs or words */
+    max-width: 100%; /* Ensure the content fits within the container */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    word-break: break-word; /* Break long words */
+    direction: rtl;
+}
+
+.details img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+}
+
+.details pre {
+    white-space: pre-wrap; /* Preserve whitespace and line breaks */
+    word-break: break-all; /* Break long words or URLs */
+    overflow-wrap: break-word; /* Break long words to fit the container */
+}
+.status-header{
+    background-color: #f1f1f1;
+}
     </style>
 </head>
 <body>
@@ -146,7 +182,7 @@
                 <tr>
                     <th>Request ID</th>
                     <th>Date</th>
-                    <th>Type</th>
+                    <th>Priority</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -179,25 +215,131 @@
     </div>
 
     <script>
-        // Simulating data loading
-        setTimeout(() => {
-            const requestsData = [
-                { id: "REQ001", date: "2024-07-15", type: "Support", status: "Open", actions: ["View", "Edit"] },
-                { id: "REQ002", date: "2024-07-14", type: "Feature", status: "In Progress", actions: ["View"] },
-                { id: "REQ003", date: "2024-07-13", type: "Bug", status: "Closed", actions: ["View"] },
-            ];
+document.addEventListener('DOMContentLoaded', () => {
+    function getUserIdFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('user_id');
+    }
+
+    const userId = getUserIdFromUrl();
+
+    if (!userId) {
+        console.error('User ID not found in URL');
+        return;
+    }
+
+    const apiUrl = 'https://prod-107.westeurope.logic.azure.com:443/workflows/cb9d7554d3c841f0983f363221c50413/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zK-nPFwO6OpBFhbTsiptapo79_ZSgw4dOPQNAkYy2ks';
+
+    async function fetchData() {
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: userId }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            
+            if (!Array.isArray(data) || data.length === 0) {
+                throw new Error('No data received');
+            }
 
             const tableBody = document.querySelector("#requestsTable tbody");
-            tableBody.innerHTML = requestsData.map(request => `
-                <tr>
-                    <td data-label="Request ID">${request.id}</td>
-                    <td data-label="Date">${request.date}</td>
-                    <td data-label="Type"><span class="type type-${request.type}">${request.type}</span></td>
-                    <td data-label="Status"><span class="status status-${request.status.replace(' ', '-')}">${request.status}</span></td>
-                    <td data-label="Actions" class="actions">${request.actions.map(action => `<a href="#">${action}</a>`).join('')}</td>
-                </tr>
-            `).join('');
-        }, 2000); // Simulating 2 seconds loading time
+
+            const statusClassMap = {
+                "Blocked": "status-Blocked",
+                "In Progress": "status-In-Progress",
+                "Completed": "status-Completed",
+                "Duplicate": "status-Duplicate",
+                "By Design": "status-By-Design",
+                "Won't Fix": "status-Wont-Fix",
+                "New": "status-New"
+            };
+
+            const priorityClassMap = {
+                "Critical": "priority-Critical",
+                "High": "priority-High",
+                "Normal": "priority-Normal",
+                "Low": "priority-Low",
+                "Unknown": "priority-Unknown"
+            };
+
+            // Group by status
+            const groupedData = data.reduce((acc, request) => {
+                const status = request.Status?.Value || 'Unknown';
+                if (!acc[status]) acc[status] = [];
+                acc[status].push(request);
+                return acc;
+            }, {});
+
+            tableBody.innerHTML = '';
+
+            Object.keys(groupedData).forEach(status => {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td colspan="5" class="status-header">${status}</td>
+                    </tr>
+                `;
+
+                groupedData[status].forEach(request => {
+                    const statusValue = request.Status?.Value || 'Unknown';
+                    const statusClass = statusClassMap[statusValue] || '';
+                    const priorityValue = request.Priority?.Value || 'Unknown';
+                    const priorityClass = priorityClassMap[priorityValue.replace(' ', '-') || 'Unknown'] || 'priority-Unknown';
+
+                    tableBody.innerHTML += `
+                        <tr data-id="${request.ID}">
+                            <td data-label="Request ID">${request.ID}</td>
+                            <td data-label="Date">${new Date(request.Created).toLocaleDateString()}</td>
+                            <td data-label="Priority"><span class="Priority ${priorityClass}">${priorityValue}</span></td>
+                            <td data-label="Status"><span class="status ${statusClass}">${statusValue}</span></td>
+                            <td data-label="Actions" class="actions">
+                                ${statusValue === 'Completed1' ? '' : `<a href="#" class="view-button">View</a>`}
+                            </td>
+                        </tr>
+                        <tr class="details" data-id="${request.ID}">
+                            <td colspan="5">
+                                <div class="details-content">
+                                    <strong>Description:</strong><br>
+                                    <pre>${request.Description || 'N/A'}</pre><br>
+                                    <strong>ID:</strong> ${request.ID || 'N/A'}<br>
+                                    <strong>Logged By:</strong> <img src="${request.Issueloggedby?.Picture || '#'}" alt="${request.Issueloggedby?.DisplayName || 'User'}" /> ${request.Issueloggedby?.DisplayName || 'Unknown'}<br>
+                                    <strong>Email:</strong> ${request.Issueloggedby?.Email || 'N/A'}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+
+            // Handle View button clicks
+            document.querySelectorAll('.view-button').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const row = this.closest('tr');
+                    const detailsRow = document.querySelector(`.details[data-id="${row.dataset.id}"]`);
+
+                    if (detailsRow.style.display === 'table-row') {
+                        detailsRow.style.display = 'none';
+                    } else {
+                        detailsRow.style.display = 'table-row';
+                    }
+                });
+            });
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    fetchData();
+});
     </script>
 </body>
 </html>
