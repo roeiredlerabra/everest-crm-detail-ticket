@@ -661,6 +661,68 @@ textarea {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
 }
+.explanation-section {
+            position: absolute;
+            right: 20px;
+            top: 40px;
+            width: 15%;
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            direction: rtl;
+            text-align: right;
+        }
+        .flex-container {
+            
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            padding: 20px;
+            direction: rtl;
+
+        }
+        .explanation-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .explanation-content {
+            font-size: 14px;
+            direction: rtl;
+        }
+        .explanation-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-family: Arial, sans-serif;
+}
+
+.explanation-content th {
+    background-color: rgb(117 126 135 / 80%);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.explanation-content td {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 8px;
+}
+
+.explanation-content tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.explanation-content tr:hover {
+    background-color: #e6e6e6;
+}
+        @media (max-width: 1170px) {
+  .explanation-section {
+    display: none;
+  }
+}
     </style>
 </head>
 
@@ -681,7 +743,33 @@ textarea {
             </div>
         </div>
     </header>
-
+    <div class="flex-container">
+        <div class="explanation-section" style="top: 232px;">
+            <div class="explanation-title">הסבר על פרטי הקריאה</div>
+            <div class="explanation-content">
+                <table style="border-collapse: collapse; width: 100%;">
+                    <thead>
+                      <tr>
+                        <th style="text-align: center; padding: 8px;">מצב הפניה</th>
+                        <th style="text-align: center; padding: 8px;">פעולות אפשריות</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">New</td>
+                        <td style="text-align: center; padding: 8px;"> ניתן לערוך את הפניה</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">In Progress</td>
+                        <td style="text-align: center; padding: 8px;">לא ניתן לערוך את הפניה</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">Completed</td>
+                        <td style="text-align: center; padding: 8px;">לא ניתן לערוך את הפניה</td>
+                      </tr>
+                    </tbody>
+                  </table> </div>
+        </div>
     <div class="glass-card">
 
         <h1 class="title4">פרטי קריאה עבור מערכת Everest</h1>
@@ -792,7 +880,35 @@ textarea {
             </tr>
         </table>
 
-    </div>
+    </div></div>
+    <div class="flex-container">
+        <div class="explanation-section" style="top: 30px;">
+            <div class="explanation-title">הסבר על העלאת קבצים</div>
+            <div class="explanation-content">
+                <table style="border-collapse: collapse; width: 100%;">
+                    <thead>
+                      <tr>
+                        <th style="text-align: center; padding: 8px;">מצב הפניה</th>
+                        <th style="text-align: center; padding: 8px;">פעולות אפשריות</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">New</td>
+                        <td style="text-align: center; padding: 8px;"> ניתן להוסיף קבצים</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">In Progress</td>
+                        <td style="text-align: center; padding: 8px;">לא ניתן להוסיף קבצים</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">Completed</td>
+                        <td style="text-align: center; padding: 8px;">לא ניתן להוסיף קבצים</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
     <div class="container glass-card">
         <h6 dir="rtl">העלאת קבצים<i class="fas fa-file-upload"></i></h6>
         <a class="info-icon">&#9432;</a>
@@ -826,7 +942,36 @@ textarea {
             <tbody id="file-list-table"></tbody>
         </table>
         <p id="try-another-message" style="display: none;">נסו שמות קבצים אחרים בבקשה</p>
-    </div><br>
+    </div></div><br>
+    <div class="flex-container">
+        <div class="explanation-section">
+            <div class="explanation-title">הסבר על התכתבות והערות</div>
+            <div class="explanation-content">
+                <table style="border-collapse: collapse; width: 100%;">
+                    <thead>
+                      <tr>
+                        <th style="text-align: center; padding: 8px;">מצב הפניה</th>
+                        <th style="text-align: center; padding: 8px;">פעולות אפשריות</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">New</td>
+                        <td style="text-align: center; padding: 8px;">צפייה בלבד</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">In Progress</td>
+                        <td style="text-align: center; padding: 8px;">צפייה והוספת הערות</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">Completed</td>
+                        <td style="text-align: center; padding: 8px;">צפייה בלבד</td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+            </div>
+        </div>
     <div class="glass-card" style="position: relative;">
         <center>
             <h6 dir="rtl">התכתבות והערות <i class="fas fa-book"></i></h6>
@@ -843,7 +988,7 @@ textarea {
                 <button class="send-button " onclick="postComment()">⮜</button>
             </div>
         </div>
-    </div>
+    </div></div>
     <div class="error404" id ="404" dir="ltr">
   <div class="container">
     <div class="row">
@@ -1172,10 +1317,16 @@ textarea {
     const error404 = document.getElementById('404');
     const dataTable = document.getElementById('data-table');
     const glassCards = document.querySelectorAll('.glass-card');
+    const flexcontainer = document.querySelectorAll('.flex-container');
         // Function to show or hide all glass cards
         function toggleGlassCards(display) {
         glassCards.forEach(card => {
             card.style.display = display;
+        });
+    }
+    function toggleflexcontainer(display) {
+        flexcontainer.forEach(flexcontainer => {
+            flexcontainer.style.display = display;
         });
     }
 
@@ -1210,6 +1361,7 @@ textarea {
                 if (data.error && data.error.code === "NoResponse") {
                     console.error('Server did not receive a response:', data.error.message);
                     toggleGlassCards('none');
+                    toggleflexcontainer('none');
                     error404.style.display = 'block';
                     // Add code to show an error message to the user
                 } else if (data.ID) {  // Check for a property that should exist in valid data
@@ -1258,6 +1410,7 @@ textarea {
                 } else {
                     console.error('Unexpected data format received:', data);
                     toggleGlassCards('none');
+                    toggleflexcontainer('none');
                     error404.style.display = 'block';
                     // Add code to show an error message to the user
                 }
@@ -1265,12 +1418,14 @@ textarea {
             .catch(error => {
                 console.error('Error:', error);
                 toggleGlassCards('none');
+                toggleflexcontainer('none');
                 error404.style.display = 'block';
                 // Add code to show a general error message to the user
             });
     } else {
         console.error('ID parameter not found in the URL');
         toggleGlassCards('none');
+        toggleflexcontainer('none');
         error404.style.display = 'block';
         // Add code to show an error message to the user about missing ID
     }
