@@ -723,6 +723,35 @@ textarea {
     display: none;
   }
 }
+.status-pill {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-transform: capitalize;
+        }
+        .status-new { background-color: #0073ea; }
+        .status-in-progress { background-color: #fdab3d; }
+        .status-completed { background-color: #00c875; }
+        .priority-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+        }
+        .priority-critical { background-color: #d21c1c; }
+        .priority-high { background-color: #ff9900; }
+        .priority-normal { background-color: #555; }
+        .priority-low { background-color: #0086c0; }
+        .priority-icon {
+            margin-right: 5px;
+        }
+    </style>
     </style>
 </head>
 
@@ -1329,7 +1358,19 @@ textarea {
             flexcontainer.style.display = display;
         });
     }
-
+    function updateStatus(status) {
+            const statusElement = document.getElementById('status');
+            const statusLower = status.toLowerCase();
+            const statusClass = statusLower.replace(' ', '-');
+            statusElement.innerHTML = `<span class="status-pill status-${statusClass}">${status}</span>`;
+        }
+        function updatePriority(priority) {
+            const priorityElement = document.getElementById('Priority');
+            const priorityLower = priority.toLowerCase();
+            const priorityClass = priorityLower.replace(' ', '-');
+            
+            priorityElement.innerHTML = `<span class="priority-pill priority-${priorityClass}">${priority}</span>`;
+        }
     // Show skeleton, hide actual table
     skeletonElement.style.display = 'block';
     dataTable.style.display = 'none';
@@ -1384,7 +1425,9 @@ textarea {
                     const steps = ['new', 'in progress', 'completed'];
                     const progressContainer = document.querySelector('.progress-container');
                     const chatsection = document.querySelector('.chatsection');
-
+                    updateStatus(status);
+                    const Priority = data.Priority.toLowerCase();
+                    updatePriority(Priority);
                     if (status == "in progress") {
                         chatsection.style.display = 'block';
                     }
@@ -1813,6 +1856,7 @@ textarea {
             textarea.value = '';
             autoResize(textarea);
         }
+
     </script>
 </body>
 
