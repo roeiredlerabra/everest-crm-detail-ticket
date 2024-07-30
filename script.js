@@ -135,6 +135,7 @@ function createCommentElement(comment) {
 
             // Clear the textarea
             document.getElementById('newCommentText').value = '';
+            document.getElementById('newCommentText').style.height = '45px';
 
             // Update comments with the new data
             await loadComments(data);
