@@ -186,6 +186,7 @@ tr:hover td {
     border-radius: 5px;
     cursor: pointer;
     margin-bottom: 10px;
+    visibility: hidden;
 }
 
 #select-files-button:hover {
@@ -1447,6 +1448,7 @@ white-space: pre-wrap;
                             if (status === step) {
                                 stepElement.classList.add('active');
                                 document.getElementById("file-input").disabled = false;
+				document.getElementById("select-files-button").hidden = false;
                             } else if (steps.indexOf(status) > index) {
                                 stepElement.classList.add('completed');
                                 document.getElementById("edit-button").disabled = true;
