@@ -755,6 +755,23 @@ white-space: pre-wrap;
         .priority-icon {
             margin-right: 5px;
         }
+        .dropzone {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .dropzone.dragover {
+            background-color: #f0f0f0;
+        }
+
+        .dropzone-text {
+            font-size: 18px;
+            color: #999;
+        }
     </style>
     </style>
 </head>
@@ -942,40 +959,43 @@ white-space: pre-wrap;
                   </table>
             </div>
         </div>
-    <div class="container glass-card">
-        <h6 dir="rtl">העלאת קבצים<i class="fas fa-file-upload"></i></h6>
-        <a class="info-icon">&#9432;</a>
-        <label for="file-upload" class="file-upload-label">
-            
-            <ul>
-                <li>גודל קובץ מרבי: 10 מ"ב</li>
-                <li>סוגי קבצים מותרים:
-                    <ul class="file-types">
-                        <li>קבצי תמונה: .png, .jpeg, .gif, .bmp, .tiff, .svg, .ico, .jpg</li>
-                        <li>קבצי מסמך: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .txt, .xml</li>
-                        <li>קבצי וידאו: .mp4, .avi, .mov, .wmv, .mkv, .flv</li>
-                    </ul>
-                </li>
-            </ul>
-        </label>
-        <input type="file" id="file-input" multiple
-            accept="image/png, image/jpeg, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .gif, .bmp, .tiff, .svg, .ico, .jpg, .mp4, .avi, .mov, .wmv, .mkv, .flv, .txt, .xml"
-            disabled>
-        <label for="file-input" id="select-files-button">Select Files</label>
-        <button id="upload-button" disabled>Upload Files</button>
-        <table class="files-table">
-            <thead>
-                <tr>
-                    <th>File Name</th>
-                    <th>Size</th>
-                    <th>Action</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="file-list-table"></tbody>
-        </table>
-        <p id="try-another-message" style="display: none;">נסו שמות קבצים אחרים בבקשה</p>
-    </div></div><br>
+        <div class="container glass-card">
+            <h6 dir="rtl">העלאת קבצים<i class="fas fa-file-upload"></i></h6>
+            <a class="info-icon">&#9432;</a>
+            <label for="file-upload" class="file-upload-label">
+                <ul>
+                    <li>גודל קובץ מרבי: 10 מ"ב</li>
+                    <li>סוגי קבצים מותרים:
+                        <ul class="file-types">
+                            <li>קבצי תמונה: .png, .jpeg, .gif, .bmp, .tiff, .svg, .ico, .jpg</li>
+                            <li>קבצי מסמך: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .txt, .xml</li>
+                            <li>קבצי וידאו: .mp4, .avi, .mov, .wmv, .mkv, .flv</li>
+                        </ul>
+                    </li>
+                </ul>
+            </label>
+            <div class="dropzone" id="dropzone">
+                <div class="dropzone-text">גרור ושחרר קבצים לכאן</div>
+            </div>
+            <input type="file" id="file-input" multiple
+                accept="image/png, image/jpeg, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .gif, .bmp, .tiff, .svg, .ico, .jpg, .mp4, .avi, .mov, .wmv, .mkv, .flv, .txt, .xml"
+                style="display: none;">
+            <label for="file-input" id="select-files-button">בחירת קבצים</label>
+            <button id="upload-button" disabled>העלאת קבצים</button>
+            <table class="files-table">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Size</th>
+                        <th>Action</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="file-list-table"></tbody>
+            </table>
+            <p id="try-another-message" style="display: none;">נסו שמות קבצים אחרים בבקשה</p>
+        </div>
+</div><br>
     <div class="flex-container">
         <div class="explanation-section">
             <div class="explanation-title">הסבר על התכתבות והערות</div>
@@ -1486,7 +1506,26 @@ if (status == "in progress") {
             const $uploadButton = $('#upload-button');
             const $tryAnotherMessage = $('#try-another-message');
             let selectedFiles = [];
+            const $dropzone = $('#dropzone');
 
+$dropzone.on('dragover', function (e) {
+    e.preventDefault();
+    $(this).addClass('dragover');
+});
+
+$dropzone.on('dragleave', function (e) {
+    e.preventDefault();
+    $(this).removeClass('dragover');
+});
+
+$dropzone.on('drop', function (e) {
+    e.preventDefault();
+    $(this).removeClass('dragover');
+    const droppedFiles = Array.from(e.originalEvent.dataTransfer.files);
+    selectedFiles = selectedFiles.concat(droppedFiles);
+    updateFileList();
+    toggleUploadButton();
+});
             $fileInput.on('change', function (e) {
                 selectedFiles = Array.from(e.target.files);
                 updateFileList();
