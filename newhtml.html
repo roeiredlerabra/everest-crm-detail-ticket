@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+
+<head>
+    <meta name="title" content=">פרטי קריאה עבור מערכת Everest">
+    <meta name="description"
+        content="This portal is designed to provide a centralized and efficient way for all employees to submit IT-related issues, requests, and inquiries.">
+    <meta name="keywords"
+        content="IT support, IT helpdesk, technical support, IT services, employee IT portal, ticket submission, issue tracking, IT request management, IT policy and procedures">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="author" content="Roei Redler">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel='stylesheet' href='https://docs-ds.estaleiro.serpro.gov.br/docs/ds/dist/core.min.css'>
+    <link rel='stylesheet'
+        href='https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css'>
+    <link rel='stylesheet' href=style.css>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
+    <title>פרטי קריאה עבור מערכת Everest</title>
+    <style>
+      /* Reset and base styles */
+body1 {
+    font-family: Arial, sans-serif;
+    background: url('https://source.unsplash.com/random/1600x900') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+/* Typography */
+.title4 {
+    text-align: right !important;
+    direction: rtl;
+}
+
+/* Layout components */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    z-index: -1;
+}
+
+/* Header styles */
+.header-icons {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+.header-icons i {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.header-info {
+    text-align: center;
+    position: relative;
+    left: 30%;
+    transform: translateX(-50%);
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    overflow: hidden;
+    table-layout: fixed;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+th {
+    background-color: rgba(0, 123, 255, 0.8);
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    max-width: 120px;
+}
+
+td {
+    background-color: rgba(255, 255, 255, 0.5);
+    text-align: center !important;
+}
+
+tr:hover td {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Progress bar */
+.progress-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    direction: ltr;
+}
+
+.step {
+    text-align: center;
+    width: 100%;
+    position: relative;
+}
+
+.step::before {
+    content: '';
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    z-index: -1;
+}
+
+.step:last-child::before {
+    display: none;
+}
+
+.step.active {
+    color: #007bff;
+}
+
+.step.completed::before {
+    background-color: #00010296;
+}
+
+.circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ddd;
+    display: inline-block;
+    line-height: 30px;
+    color: #fff;
+}
+
+.step.active .circle,
+.step.completed .circle {
+    background-color: #06a31b;
+}
+
+/* File upload styles */
+#file-input {
+    display: none;
+}
+
+#select-files-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#select-files-button:hover {
+    background-color: #0056b3;
+}
+
+#file-list {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+#upload-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#upload-button:hover {
+    background-color: #218838;
+}
+
+.remove-file {
+    cursor: pointer;
+    color: red;
+    margin-left: 10px;
+}
+
+/* File list table */
+#file-list-table {
+    width: 100%;
+}
+
+.files-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    direction: rtl;
+}
+
+.files-table th,
+.files-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.files-table th {
+    font-weight: bold;
+}
+
+.files-table td {
+    vertical-align: top;
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.files-table .file-name {
+    font-weight: bold;
+}
+
+.files-table .file-size {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.files-table .remove-file {
+    cursor: pointer;
+    color: red;
+    text-align: center;
+}
+
+.files-table .status {
+    text-align: center;
+}
+
+.files-table .checkmark-icon {
+    color: green;
+}
+
+.files-table .alert-icon {
+    color: orange;
+}
+
+.files-table .error-icon {
+    color: red;
+}
+
+/* File upload label */
+.file-upload-label {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    left: 50%;
+}
+
+.file-upload-label h3 {
+    margin-top: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.file-upload-label ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.file-upload-label li {
+    margin-bottom: 5px;
+}
+
+.file-upload-label .file-types {
+    font-style: italic;
+}
+
+.file-upload-label:hover {
+    display: block;
+}
+
+.file-upload-label:hover ~ .info-icon {
+    display: inline-block;
+}
+
+.file-upload-label input[type="file"] {
+    display: block;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.info-icon {
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    color: #555;
+    cursor: pointer;
+}
+
+.info-icon:hover + .file-upload-label {
+    display: block;
+}
+
+/* Footer styles */
+.glass-footer {
+    background: rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 30px 0;
+    color: black;
+    font-family: Arial, sans-serif;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-section {
+    flex: 1;
+    margin: 0 15px;
+    align-content: center;
+    text-align: center;
+}
+
+.footer-section h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.footer-section p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.social-link {
+    display: block;
+    color: black;
+    text-decoration: none;
+    margin-bottom: 5px;
+    font-size: 14px;
+    align-content: center;
+    text-align: center;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+}
+
+.social ul.flex {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.social ul.flex li a {
+    color: #0f2792;
+    font-size: 24px;
+    transition: color 0.3s ease;
+}
+
+.social ul.flex li a:hover {
+    color: #ddd;
+}
+
+.big-logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 6px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Form elements */
+textarea {
+    overflow: auto;
+    width: 100%;
+    resize: vertical;
+    height: 45px;
+}
+
+.char-count {
+    font-size: 0.8em;
+    color: #666;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.char-count.error {
+    color: red;
+}
+
+/* Buttons */
+#add-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: linear-gradient(45deg, #2c3e50, #3498db);
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#add-button:hover {
+    background: linear-gradient(45deg, #2980b9, #1abc9c);
+}
+
+.button-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Chat styles */
+.chat-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.comment {
+    max-width: 70%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.comment-left {
+    align-self: flex-end;
+    background-color: #a3e3ff;
+    border-bottom-left-radius: 0;
+    left: 25px;
+}
+
+.comment-right {
+    align-self: flex-start;
+    background-color: #e4fdd5;
+    border-bottom-right-radius: 0;
+    right: 25px;
+}
+
+.comment-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -5px;
+}
+
+.comment-left .comment-avatar {
+    left: -35px;
+}
+
+.comment-right .comment-avatar {
+    right: -35px;
+}
+
+.comment-content {
+    margin-top: 5px;
+}
+
+.comment-author {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 3px;
+}
+
+.comment-text {
+    margin-bottom: 5px;
+white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.comment-date {
+    font-size: 0.7em;
+    color: #666;
+    text-align: right;
+}
+
+.new-comment {
+    margin-top: 20px;
+}
+
+.chat-input-container {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 25px;
+    padding: 5px 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chat-input-container textarea {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+    resize: none;
+    background: transparent;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.emoji-button,
+.send-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.send-button {
+    color: #00a884;
+}
+
+.chat-input-container textarea::placeholder {
+    color: #999;
+}
+
+/* Utility classes */
+.chatsection {
+    display: none;
+}
+
+.error404 {
+    display: none;
+}
+
+/* Loading spinner */
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Skeleton loading */
+.skeleton-wrapper {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+}
+
+.skeleton-table {
+    width: 100%;
+}
+
+.skeleton-row {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.skeleton-cell {
+    height: 30px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 4px;
+}
+
+.skeleton-cell:first-child {
+    width: 30%;
+    margin-right: 10px;
+}
+
+.skeleton-cell:last-child {
+    width: 70%;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+
+/* Media queries */
+@media screen and (max-width: 768px) {
+    .header-info {
+        text-align: center;
+        position: relative;
+        left: 38%;
+        transform: translateX(-50%);
+    }
+
+    .social ul.flex {
+        display: block;
+    }
+}
+
+/* Animations */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+.explanation-section {
+            position: absolute;
+            right: 20px;
+            top: 40px;
+            width: 15%;
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            direction: rtl;
+            text-align: right;
+        }
+        .flex-container {
+            
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            padding: 20px;
+            direction: rtl;
+
+        }
+        .explanation-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .explanation-content {
+            font-size: 14px;
+            direction: rtl;
+        }
+        .explanation-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-family: Arial, sans-serif;
+}
+
+.explanation-content th {
+    background-color: rgb(117 126 135 / 80%);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.explanation-content td {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 8px;
+}
+
+.explanation-content tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.explanation-content tr:hover {
+    background-color: #e6e6e6;
+}
+        @media (max-width: 1170px) {
+  .explanation-section {
+    display: none;
+  }
+}
+.status-pill {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-transform: capitalize;
+        }
+        .status-new { background-color: #0073ea; }
+        .status-in-progress { background-color: #fdab3d; }
+        .status-completed { background-color: #00c875; }
+        .priority-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+        }
+        .priority-critical { background-color: #d21c1c; }
+        .priority-high { background-color: #ff9900; }
+        .priority-normal { background-color: #555; }
+        .priority-low { background-color: #0086c0; }
+        .priority-icon {
+            margin-right: 5px;
+        }
+        .dropzone {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .dropzone.dragover {
+            background-color: #f0f0f0;
+        }
+
+        .dropzone-text {
+            font-size: 18px;
+            color: #999;
+        }
+    </style>
+    </style>
+</head>
+
+<body>
+    <header class="br-header small">
+        <div class="container-lg">
+            <div class="header-top">
+                <div class="header-logo">
+                    <img src="https://www.abra-it.com/wp-content/uploads/2022/01/Abra-logo-FullColor-blue.png"
+                        alt="Logo Image"><!-- Replace with your actual logo image -->
+                    <span class="br-divider vertical"></span>
+                    <div class="header-sign" hidden>Dynamics 365</div>
+                    <img src="https://ellipsesolutions.com/wp-content/uploads/2019/03/Microsoft-Dynamics-365-Logo.png"
+                        alt="Logo Image"><!-- Replace with your actual logo image -->
+                    <span class="br-divider vertical"></span>
+                    <img src="img/new_Everest (1).png" alt="Logo Image"><!-- Replace with your actual logo image -->
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="flex-container">
+        <div class="explanation-section" style="top: 232px;">
+            <div class="explanation-title">הסבר על פרטי הקריאה</div>
+            <div class="explanation-content">
+                <table style="border-collapse: collapse; width: 100%;">
+                    <thead>
+                      <tr>
+                        <th style="text-align: center; padding: 8px;">מצב הפניה</th>
+                        <th style="text-align: center; padding: 8px;">פעולות אפשריות</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">New</td>
+                        <td style="text-align: center; padding: 8px;"> ניתן לערוך את הפניה</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">In Progress</td>
+                        <td style="text-align: center; padding: 8px;">לא ניתן לערוך את הפניה</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">Completed</td>
+                        <td style="text-align: center; padding: 8px;">לא ניתן לערוך את הפניה</td>
+                      </tr>
+                    </tbody>
+                  </table> </div>
+        </div>
+    <div class="glass-card">
+
+        <h1 class="title4">פרטי קריאה עבור מערכת Everest</h1>
+        <div class="progress-container">
+            <div class="step" id="step-new">
+                <div class="circle">1</div>
+                <div class="label">New</div>
+            </div>
+            <div class="step" id="step-in-progress">
+                <div class="circle">2</div>
+                <div class="label">In Progress</div>
+            </div>
+            <div class="step" id="step-completed">
+                <div class="circle">3</div>
+                <div class="label">Completed</div>
+            </div>
+        </div>
+        <div class="button-container">
+            <button id="edit-button" class="edit-icon" title="עריכה">
+                <i class="fas fa-edit"></i>
+            </button>
+            <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=HPwZQL5ZLECX_mPKmhodmlHM2DyAwINDr1MnN4xdbntUQzhJWDNVMUNRV1JSREYxQlcxQ0VJMUdROC4u&lang=he-il"
+                target="_blank">
+                <button id="add-button" class="add-icon" title="פתיחת פנייה חדשה">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </a>
+        </div>
+        <div id="skeleton" class="skeleton-wrapper">
+            <div class="skeleton-table">
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+                <div class="skeleton-row">
+                    <div class="skeleton-cell"></div>
+                    <div class="skeleton-cell"></div>
+                </div>
+            </div>
+        </div>
+
+        <table id="data-table" style="display: none;">
+            <tr>
+                <th>ID</th>
+                <td id="id"></td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td id="title"></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td id="description"></td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td id="status"></td>
+
+            </tr>
+            <tr>
+                <th>Priority</th>
+                <td id="Priority"></td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td id="created"></td>
+            </tr>
+            <tr>
+                <th>Modified</th>
+                <td id="modified"></td>
+            </tr>
+            <tr>
+                <th>Assign To</th>
+                <td id="assign-to"></td>
+            </tr>
+            <tr>
+                <th>Number of Attachments <img src="img\documents-icon-5.png" alt="Attachment Icon" width="30"
+                        height="30"></th>
+                <td id="attachments-Num"></td>
+            </tr>
+        </table>
+
+    </div></div>
+    <div class="flex-container">
+        <div class="explanation-section" style="top: 30px;">
+            <div class="explanation-title">הסבר על העלאת קבצים</div>
+            <div class="explanation-content">
+                <table style="border-collapse: collapse; width: 100%;">
+                    <thead>
+                      <tr>
+                        <th style="text-align: center; padding: 8px;">מצב הפניה</th>
+                        <th style="text-align: center; padding: 8px;">פעולות אפשריות</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">New</td>
+                        <td style="text-align: center; padding: 8px;"> ניתן להוסיף קבצים</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">In Progress</td>
+                        <td style="text-align: center; padding: 8px;">ניתן להוסיף קבצים</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">Completed</td>
+                        <td style="text-align: center; padding: 8px;">לא ניתן להוסיף קבצים</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+        <div class="container glass-card">
+            <h6 dir="rtl">העלאת קבצים<i class="fas fa-file-upload"></i></h6>
+            <a class="info-icon">&#9432;</a>
+            <label for="file-upload" class="file-upload-label">
+                <ul>
+                    <li>גודל קובץ מרבי: 10 מ"ב</li>
+                    <li>סוגי קבצים מותרים:
+                        <ul class="file-types">
+                            <li>קבצי תמונה: .png, .jpeg, .gif, .bmp, .tiff, .svg, .ico, .jpg</li>
+                            <li>קבצי מסמך: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .txt, .xml</li>
+                            <li>קבצי וידאו: .mp4, .avi, .mov, .wmv, .mkv, .flv</li>
+                        </ul>
+                    </li>
+                </ul>
+            </label>
+            <div class="dropzone" id="dropzone">
+                <div class="dropzone-text">גרור ושחרר קבצים לכאן</div>
+            </div>
+            <input type="file" id="file-input" multiple
+                accept="image/png, image/jpeg, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .gif, .bmp, .tiff, .svg, .ico, .jpg, .mp4, .avi, .mov, .wmv, .mkv, .flv, .txt, .xml"
+                style="display: none;">
+            <label for="file-input" id="select-files-button">בחירת קבצים</label>
+            <button id="upload-button" disabled>העלאת קבצים</button>
+            <table class="files-table">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Size</th>
+                        <th>Action</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="file-list-table"></tbody>
+            </table>
+            <p id="try-another-message" style="display: none;">נסו שמות קבצים אחרים בבקשה</p>
+        </div>
+</div><br>
+    <div class="flex-container">
+        <div class="explanation-section">
+            <div class="explanation-title">הסבר על התכתבות והערות</div>
+            <div class="explanation-content">
+                <table style="border-collapse: collapse; width: 100%;">
+                    <thead>
+                      <tr>
+                        <th style="text-align: center; padding: 8px;">מצב הפניה</th>
+                        <th style="text-align: center; padding: 8px;">פעולות אפשריות</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">New</td>
+                        <td style="text-align: center; padding: 8px;">צפייה בלבד</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">In Progress</td>
+                        <td style="text-align: center; padding: 8px;">צפייה והוספת הערות</td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center; padding: 8px;">Completed</td>
+                        <td style="text-align: center; padding: 8px;">צפייה בלבד</td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    <div class="glass-card" style="position: flex;">
+        <center>
+            <h6 dir="rtl">התכתבות והערות <i class="fas fa-book"></i></h6>
+        </center>
+        <div class="chat-container" id="chatContainer">
+            <div id="spinner" class="spinner"></div>
+        </div>
+
+        <div class="new-comment chatsection">
+
+            <div class="chat-input-container">
+                <button class="emoji-button" id="emoji-trigger">😊</button>
+                <textarea id="newCommentText" placeholder="Type a message" rows="1"></textarea>
+                <button class="send-button " onclick="postComment()">⮜</button>
+            </div>
+        </div>
+    </div></div>
+    <div class="error404" id ="404" dir="ltr">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 align-self-center">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 800 600">
+          <g>
+            <defs>
+              <clipPath id="GlassClip">
+                <path
+                  d="M380.857,346.164c-1.247,4.651-4.668,8.421-9.196,10.06c-9.332,3.377-26.2,7.817-42.301,3.5
+                s-28.485-16.599-34.877-24.192c-3.101-3.684-4.177-8.66-2.93-13.311l7.453-27.798c0.756-2.82,3.181-4.868,6.088-5.13
+                c6.755-0.61,20.546-0.608,41.785,5.087s33.181,12.591,38.725,16.498c2.387,1.682,3.461,4.668,2.705,7.488L380.857,346.164z" />
+              </clipPath>
+              <clipPath id="cordClip">
+                <rect width="800" height="600" />
+              </clipPath>
+            </defs>
+
+            <g id="planet">
+              <circle fill="none" stroke="#0E0620" stroke-width="3" stroke-miterlimit="10" cx="572.859" cy="108.803"
+                r="90.788" />
+
+              <circle id="craterBig" fill="none" stroke="#0E0620" stroke-width="3" stroke-miterlimit="10" cx="548.891"
+                cy="62.319" r="13.074" />
+
+              <circle id="craterSmall" fill="none" stroke="#0E0620" stroke-width="3" stroke-miterlimit="10" cx="591.743"
+                cy="158.918" r="7.989" />
+              <path id="ring" fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round"
+                stroke-miterlimit="10" d="
+			M476.562,101.461c-30.404,2.164-49.691,4.221-49.691,8.007c0,6.853,63.166,12.408,141.085,12.408s141.085-5.555,141.085-12.408
+			c0-3.378-15.347-4.988-40.243-7.225" />
+
+              <path id="ringShadow" opacity="0.5" fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round"
+                stroke-miterlimit="10" d="
+			M483.985,127.43c23.462,1.531,52.515,2.436,83.972,2.436c36.069,0,68.978-1.19,93.922-3.149" />
+            </g>
+            <g id="stars">
+              <g id="starsBig">
+                <g>
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="518.07" y1="245.375" x2="518.07" y2="266.581" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="508.129" y1="255.978" x2="528.01" y2="255.978" />
+                </g>
+                <g>
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="154.55" y1="231.391" x2="154.55" y2="252.598" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="144.609" y1="241.995" x2="164.49" y2="241.995" />
+                </g>
+                <g>
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="320.135" y1="132.746" x2="320.135" y2="153.952" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="310.194" y1="143.349" x2="330.075" y2="143.349" />
+                </g>
+                <g>
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="200.67" y1="483.11" x2="200.67" y2="504.316" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="210.611" y1="493.713" x2="190.73" y2="493.713" />
+                </g>
+              </g>
+              <g id="starsSmall">
+                <g>
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="432.173" y1="380.52" x2="432.173" y2="391.83" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="426.871" y1="386.175" x2="437.474" y2="386.175" />
+                </g>
+                <g>
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="489.555" y1="299.765" x2="489.555" y2="308.124" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="485.636" y1="303.945" x2="493.473" y2="303.945" />
+                </g>
+                <g>
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="231.468" y1="291.009" x2="231.468" y2="299.369" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="227.55" y1="295.189" x2="235.387" y2="295.189" />
+                </g>
+                <g>
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="244.032" y1="547.539" x2="244.032" y2="555.898" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="247.95" y1="551.719" x2="240.113" y2="551.719" />
+                </g>
+                <g>
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="186.359" y1="406.967" x2="186.359" y2="415.326" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="190.277" y1="411.146" x2="182.44" y2="411.146" />
+                </g>
+                <g>
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="480.296" y1="406.967" x2="480.296" y2="415.326" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                    x1="484.215" y1="411.146" x2="476.378" y2="411.146" />
+                </g>
+              </g>
+              <g id="circlesBig">
+
+                <circle fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                  cx="588.977" cy="255.978" r="7.952" />
+
+                <circle fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                  cx="450.066" cy="320.259" r="7.952" />
+
+                <circle fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                  cx="168.303" cy="353.753" r="7.952" />
+
+                <circle fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                  cx="429.522" cy="201.185" r="7.952" />
+
+                <circle fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                  cx="200.67" cy="176.313" r="7.952" />
+
+                <circle fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                  cx="133.343" cy="477.014" r="7.952" />
+
+                <circle fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                  cx="283.521" cy="568.033" r="7.952" />
+
+                <circle fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10"
+                  cx="413.618" cy="482.387" r="7.952" />
+              </g>
+              <g id="circlesSmall">
+                <circle fill="#0E0620" cx="549.879" cy="296.402" r="2.651" />
+                <circle fill="#0E0620" cx="253.29" cy="229.24" r="2.651" />
+                <circle fill="#0E0620" cx="434.824" cy="263.931" r="2.651" />
+                <circle fill="#0E0620" cx="183.708" cy="544.176" r="2.651" />
+                <circle fill="#0E0620" cx="382.515" cy="530.923" r="2.651" />
+                <circle fill="#0E0620" cx="130.693" cy="305.608" r="2.651" />
+                <circle fill="#0E0620" cx="480.296" cy="477.014" r="2.651" />
+              </g>
+            </g>
+            <g id="spaceman" clip-path="url(cordClip)">
+              <path id="cord" fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round"
+                stroke-linejoin="round" stroke-miterlimit="10"
+                d="
+			M273.813,410.969c0,0-54.527,39.501-115.34,38.218c-2.28-0.048-4.926-0.241-7.841-0.548
+			c-68.038-7.178-134.288-43.963-167.33-103.87c-0.908-1.646-1.793-3.3-2.654-4.964c-18.395-35.511-37.259-83.385-32.075-118.817" />
+
+              <path id="backpack" fill="#FFFFFF" stroke="#0E0620" stroke-width="3" stroke-linecap="round"
+                stroke-linejoin="round" stroke-miterlimit="10" d="
+			M338.164,454.689l-64.726-17.353c-11.086-2.972-17.664-14.369-14.692-25.455l15.694-58.537
+			c3.889-14.504,18.799-23.11,33.303-19.221l52.349,14.035c14.504,3.889,23.11,18.799,19.221,33.303l-15.694,58.537
+			C360.647,451.083,349.251,457.661,338.164,454.689z" />
+              <g id="antenna">
+                <line fill="#FFFFFF" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-miterlimit="10" x1="323.396" y1="236.625" x2="295.285" y2="353.753" />
+                <circle fill="#FFFFFF" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-miterlimit="10" cx="323.666" cy="235.617" r="6.375" />
+              </g>
+              <g id="armR">
+
+                <path fill="#FFFFFF" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-miterlimit="10" d="
+				M360.633,363.039c1.352,1.061,4.91,5.056,5.824,6.634l27.874,47.634c3.855,6.649,1.59,15.164-5.059,19.02l0,0
+				c-6.649,3.855-15.164,1.59-19.02-5.059l-5.603-9.663" />
+
+                <path fill="#FFFFFF" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-miterlimit="10" d="
+				M388.762,434.677c5.234-3.039,7.731-8.966,6.678-14.594c2.344,1.343,4.383,3.289,5.837,5.793
+				c4.411,7.596,1.829,17.33-5.767,21.741c-7.596,4.411-17.33,1.829-21.741-5.767c-1.754-3.021-2.817-5.818-2.484-9.046
+				C375.625,437.355,383.087,437.973,388.762,434.677z" />
+              </g>
+              <g id="armL">
+
+                <path fill="#FFFFFF" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-miterlimit="10" d="
+				M301.301,347.66c-1.702,0.242-5.91,1.627-7.492,2.536l-47.965,27.301c-6.664,3.829-8.963,12.335-5.134,18.999h0
+				c3.829,6.664,12.335,8.963,18.999,5.134l9.685-5.564" />
+
+                <path fill="#FFFFFF" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-miterlimit="10" d="
+				M241.978,395.324c-3.012-5.25-2.209-11.631,1.518-15.977c-2.701-0.009-5.44,0.656-7.952,2.096
+				c-7.619,4.371-10.253,14.09-5.883,21.71c4.371,7.619,14.09,10.253,21.709,5.883c3.03-1.738,5.35-3.628,6.676-6.59
+				C252.013,404.214,245.243,401.017,241.978,395.324z" />
+              </g>
+              <g id="body">
+
+                <path fill="#FFFFFF" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-miterlimit="10" d="
+				M353.351,365.387c-7.948,1.263-16.249,0.929-24.48-1.278c-8.232-2.207-15.586-6.07-21.836-11.14
+				c-17.004,4.207-31.269,17.289-36.128,35.411l-1.374,5.123c-7.112,26.525,8.617,53.791,35.13,60.899l0,0
+				c26.513,7.108,53.771-8.632,60.883-35.158l1.374-5.123C371.778,395.999,365.971,377.536,353.351,365.387z" />
+                <path fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-miterlimit="10" d="
+				M269.678,394.912L269.678,394.912c26.3,20.643,59.654,29.585,93.106,25.724l2.419-0.114" />
+              </g>
+              <g id="legs">
+                <g id="legR">
+
+                  <path fill="#FFFFFF" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-miterlimit="10" d="
+					M312.957,456.734l-14.315,53.395c-1.896,7.07,2.299,14.338,9.37,16.234l0,0c7.07,1.896,14.338-2.299,16.234-9.37l17.838-66.534
+					C333.451,455.886,323.526,457.387,312.957,456.734z" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-miterlimit="10" x1="304.883" y1="486.849" x2="330.487" y2="493.713" />
+                </g>
+                <g id="legL">
+
+                  <path fill="#FFFFFF" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-miterlimit="10" d="
+					M296.315,452.273L282,505.667c-1.896,7.07-9.164,11.265-16.234,9.37l0,0c-7.07-1.896-11.265-9.164-9.37-16.234l17.838-66.534
+					C278.993,441.286,286.836,447.55,296.315,452.273z" />
+
+                  <line fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-miterlimit="10" x1="262.638" y1="475.522" x2="288.241" y2="482.387" />
+                </g>
+              </g>
+              <g id="head">
+
+                <ellipse transform="matrix(0.259 -0.9659 0.9659 0.259 -51.5445 563.2371)" fill="#FFFFFF"
+                  stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-miterlimit="10" cx="341.295" cy="315.211" rx="61.961" ry="60.305" />
+                <path id="headStripe" fill="none" stroke="#0E0620" stroke-width="3" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-miterlimit="10" d="
+				M330.868,261.338c-7.929,1.72-15.381,5.246-21.799,10.246" />
+
+                <path fill="#FFFFFF" stroke="#0E0620" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-miterlimit="10" d="
+				M380.857,346.164c-1.247,4.651-4.668,8.421-9.196,10.06c-9.332,3.377-26.2,7.817-42.301,3.5s-28.485-16.599-34.877-24.192
+				c-3.101-3.684-4.177-8.66-2.93-13.311l7.453-27.798c0.756-2.82,3.181-4.868,6.088-5.13c6.755-0.61,20.546-0.608,41.785,5.087
+				s33.181,12.591,38.725,16.498c2.387,1.682,3.461,4.668,2.705,7.488L380.857,346.164z" />
+                <g clip-path="url(#GlassClip)">
+                  <polygon id="glassShine" fill="none" stroke="#0E0620" stroke-width="3" stroke-miterlimit="10" points="
+					278.436,375.599 383.003,264.076 364.393,251.618 264.807,364.928 				" />
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="col-md-6 align-self-center">
+        <h1>404</h1>
+        <h2>UH OH! You're lost.</h2>
+        <p>The information you were looking for was not found, or there was a general error.</p>
+      </div>
+    </div>
+  </div>
+</div>
+    <br>
+    <footer class="glass-footer" dir="ltr">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>תנו לנו לברוא לכם את הפתרון
+                    המושלם עבורכם.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: info@example.com</p>
+                <p>Phone: (123) 456-7890</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social">
+                    <ul class="flex">
+                        <li class="twitter">
+                            <a href="https://twitter.com/abra_it_tech" target="_blank" aria-label="Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="insta">
+                            <a href="https://www.instagram.com/life_at_abra/" target="_blank" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </li>
+                        <li class="facebook">
+                            <a href="https://www.facebook.com/abrainformationtechnology" target="_blank"
+                                aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                        <li class="linkedin">
+                            <a href="https://www.linkedin.com/company/abra-it/" target="_blank" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 <a href="https://roei-redler.github.io/in-rep/" target="_blank" rel="noopener noreferrer"
+                    style="font-weight: bold; color: #336699;">Roei Redler</a>. All rights reserved.</p>
+        </div>
+
+        <div class="images">
+            <img class="big-logo" width="0" height="0"
+                src="https://www.abra-it.com/wp-content/uploads/2021/12/logo-big.svg" alt="abra logo">
+        </div>
+    </footer>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    const skeletonElement = document.getElementById('skeleton');
+    const error404 = document.getElementById('404');
+    const dataTable = document.getElementById('data-table');
+    const glassCards = document.querySelectorAll('.glass-card');
+    const flexcontainer = document.querySelectorAll('.flex-container');
+        // Function to show or hide all glass cards
+        function toggleGlassCards(display) {
+        glassCards.forEach(card => {
+            card.style.display = display;
+        });
+    }
+    function toggleflexcontainer(display) {
+        flexcontainer.forEach(flexcontainer => {
+            flexcontainer.style.display = display;
+        });
+    }
+    function updateStatus(status) {
+            const statusElement = document.getElementById('status');
+            const statusLower = status.toLowerCase();
+            const statusClass = statusLower.replace(' ', '-');
+            statusElement.innerHTML = `<span class="status-pill status-${statusClass}">${status}</span>`;
+        }
+        function updatePriority(priority) {
+            const priorityElement = document.getElementById('Priority');
+            const priorityLower = priority.toLowerCase();
+            const priorityClass = priorityLower.replace(' ', '-');
+            
+            priorityElement.innerHTML = `<span class="priority-pill priority-${priorityClass}">${priority}</span>`;
+        }
+    // Show skeleton, hide actual table
+    skeletonElement.style.display = 'block';
+    dataTable.style.display = 'none';
+
+    // Function to get query parameter by name
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // Get the 'id' parameter from the URL
+    const id = getQueryParam('id');
+
+    // Check if 'id' is found in the URL
+    if (id) {
+        // Define the API endpoint
+        const apiEndpoint = 'https://prod-95.westeurope.logic.azure.com:443/workflows/c16ad0f21de64da89e86986495d58eb6/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FvOO7txZysFZ3hRiuaqoskyGFW77YV-tkhSZsfdik0A'; // Replace with actual API endpoint
+
+        // Prepare the POST request
+        fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: id })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error && data.error.code === "NoResponse") {
+                    console.error('Server did not receive a response:', data.error.message);
+                    toggleGlassCards('none');
+                    toggleflexcontainer('none');
+                    error404.style.display = 'block';
+                    // Add code to show an error message to the user
+                } else if (data.ID) {  // Check for a property that should exist in valid data
+                    skeletonElement.style.display = 'none';
+                    dataTable.style.display = 'table';
+                    error404.style.display = 'none';
+                    // Populate the table with the response data
+                    document.getElementById('id').textContent = data.ID || '';
+                    document.getElementById('title').textContent = data.Title || '';
+                    document.getElementById('description').innerHTML = (data.Description || '').replace(/\n/g, '<br>');
+                    document.getElementById('status').textContent = data.Status.Value || '';
+                    document.getElementById('Priority').textContent = data.Priority || '';
+                    document.getElementById('created').textContent = new Date(data.Created).toLocaleString() || '';
+                    document.getElementById('modified').textContent = new Date(data.Modified).toLocaleString() || '';
+                    document.getElementById('assign-to').textContent = data["Assign To"] || '';
+                    document.getElementById('attachments-Num').textContent = data["attachments Num"] || '';
+
+                    // Update the progress steps based on the status
+                    const status = data.Status.Value.toLowerCase();
+                    const steps = ['new', 'in progress', 'completed'];
+                    const progressContainer = document.querySelector('.progress-container');
+                    const chatsection = document.querySelector('.chatsection');
+                    updateStatus(status);
+                    const Priority = data.Priority.toLowerCase();
+                    updatePriority(Priority);
+if (status == "in progress") {
+    chatsection.style.display = 'block';
+    document.getElementById("select-files-button").hidden = false;
+} else if (status == "completed") {
+    document.getElementById("select-files-button").hidden = true;
+} else {
+    chatsection.style.display = 'none';
+}
+
+                    if (steps.includes(status)) {
+                        loadComments();
+                        steps.forEach((step, index) => {
+                            const stepElement = document.getElementById(`step-${step.replace(' ', '-')}`);
+                            if (status === step) {
+                                stepElement.classList.add('active');
+                                document.getElementById("file-input").disabled = false;
+				
+                            } else if (steps.indexOf(status) > index) {
+                                stepElement.classList.add('completed');
+                                document.getElementById("edit-button").disabled = true;
+                                document.getElementById("file-input").disabled = true;
+                            }
+                        });
+                    }
+                } else {
+                    console.error('Unexpected data format received:', data);
+                    toggleGlassCards('none');
+                    toggleflexcontainer('none');
+                    error404.style.display = 'block';
+                    // Add code to show an error message to the user
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                toggleGlassCards('none');
+                toggleflexcontainer('none');
+                error404.style.display = 'block';
+                // Add code to show a general error message to the user
+            });
+    } else {
+        console.error('ID parameter not found in the URL');
+        toggleGlassCards('none');
+        toggleflexcontainer('none');
+        error404.style.display = 'block';
+        // Add code to show an error message to the user about missing ID
+    }
+});
+
+        $(document).ready(function () {
+            const $fileInput = $('#file-input');
+            const $fileListTable = $('#file-list-table');
+            const $uploadButton = $('#upload-button');
+            const $tryAnotherMessage = $('#try-another-message');
+            let selectedFiles = [];
+            const $dropzone = $('#dropzone');
+
+$dropzone.on('dragover', function (e) {
+    e.preventDefault();
+    $(this).addClass('dragover');
+});
+
+$dropzone.on('dragleave', function (e) {
+    e.preventDefault();
+    $(this).removeClass('dragover');
+});
+
+$dropzone.on('drop', function (e) {
+    e.preventDefault();
+    $(this).removeClass('dragover');
+    const droppedFiles = Array.from(e.originalEvent.dataTransfer.files);
+    selectedFiles = selectedFiles.concat(droppedFiles);
+    updateFileList();
+    toggleUploadButton();
+});
+            $fileInput.on('change', function (e) {
+                selectedFiles = Array.from(e.target.files);
+                updateFileList();
+                toggleUploadButton();
+            });
+
+            $fileListTable.on('click', '.remove-file', function () {
+                const index = $(this).data('index');
+                selectedFiles.splice(index, 1);
+                updateFileList();
+                toggleUploadButton();
+            });
+            const uploadButton = document.getElementById('upload-button');
+            $uploadButton.on('click', function () {
+                if (selectedFiles.length === 0) {
+                    alert('Please select files to upload.');
+                    return;
+                }
+
+                const id = $('#id').text(); // Assuming 'id' is a text content of an element with id 'id'
+                const spinIcon = document.createElement('i');
+                spinIcon.className = 'fas fa-sync fa-spin';
+
+                // Replace the button text with the spin icon
+                uploadButton.innerHTML = '';
+                uploadButton.appendChild(spinIcon);
+                const filesData = selectedFiles.map(file => ({
+                    id: id,
+                    filename: file.name,
+                    content_type: file.type,
+                    content: null // Will be populated with FileReader
+                }));
+
+                const promises = selectedFiles.map(file => {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const fileData = filesData.find(data => data.filename === file.name);
+                            fileData.content = e.target.result.split(',')[1]; // base64 content
+                            resolve();
+                        };
+                        reader.onerror = reject;
+                        reader.readAsDataURL(file);
+                    });
+                });
+
+                Promise.all(promises)
+                    .then(() => {
+                        return $.ajax({
+                            url: 'https://prod-143.westeurope.logic.azure.com:443/workflows/11a2ac0deff64db4b75603186f03ae3e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TrCX0Kf9npoAeP2Gf66JFOsJ3DJhFkdozo9oPxet5EE',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({ files: filesData }),
+                        });
+                    })
+                    .then(response => {
+                        console.log('Files uploaded successfully:', response);
+                        handleUploadResponse(response);
+                        uploadButton.innerHTML = 'Upload Files';
+                        fetchDataAndUpdateTable();
+                    })
+                    .catch(error => {
+                        console.error('Error uploading files:', error);
+                        alert('Error uploading files. Please try again.');
+                        uploadButton.innerHTML = 'Upload Files';
+                    });
+            });
+
+            function updateFileList() {
+                $fileListTable.empty();
+                selectedFiles.forEach((file, index) => {
+                    const fileSize = formatFileSize(file.size);
+                    const fileSizeInMB = file.size / (1024 * 1024);
+                    let statusContent = '';
+
+                    if (fileSizeInMB > 10) {
+                        statusContent = `<img src="img/10-mph-Speed-Limit-Diag-670-10-sign-med.webp" alt="File too large" title="הקובץ גדול יותר מ10 מגה-בייט,אנא הסירו אותו" style="width: 24px; height: auto;">`; // Image for files larger than 10 MB
+                    }
+
+                    const $fileRow = $(`
+            <tr>
+                <td>${file.name}</td>
+                <td>${fileSize}</td>
+                <td><button class="remove-file" data-index="${index}">Remove</button></td>
+                <td class="status" data-filename="${file.name}">${statusContent}</td>
+            </tr>
+        `);
+                    $fileListTable.append($fileRow);
+                });
+            }
+
+
+            function toggleUploadButton() {
+                const hasLargeFile = selectedFiles.some(file => file.size > 10 * 1024 * 1024); // 10 MB
+                $uploadButton.prop('disabled', selectedFiles.length === 0 || hasLargeFile);
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            function handleUploadResponse(response) {
+                selectedFiles.forEach(file => {
+                    const statusCell = $fileListTable.find(`.status[data-filename="${file.name}"]`);
+                    if (response.includes(file.name)) {
+                        statusCell.html('<span class="alert-icon" title="קיים כבר קובץ בשם זה">⚠️</span>'); // File already exists
+                    } else {
+                        statusCell.html('<span class="checkmark-icon" title="הקובץ נוסף בהצלחה">✔️</span>'); // File uploaded successfully
+                    }
+                });
+
+                response.forEach(file => {
+                    const statusCell = $fileListTable.find(`.status[data-filename="${file}"]`);
+                    if (!statusCell.length) {
+                        const fileSize = 'Unknown'; // Since we don't have the size info for existing files
+                        const $fileRow = $(`
+                        <tr>
+                            <td>${file}</td>
+                            <td>${fileSize}</td>
+                            <td></td>
+                            <td class="status"><span class="alert-icon" title="קיים כבר קובץ בשם זה">⚠️</span></td> <!-- File already exists -->
+                        </tr>
+                    `);
+                        $fileListTable.append($fileRow);
+                    }
+                });
+
+                selectedFiles = [];
+                $fileInput.val('');
+                toggleUploadButton();
+            }
+        });
+        // Function to fetch data from the API and update the table
+        async function fetchDataAndUpdateTable() {
+            const url = 'https://prod-57.westeurope.logic.azure.com:443/workflows/1176d781fb374d3c9fd95c886d652169/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=PEi_-DatvPaGpzI6eam-oTnl5U7DRF_POstYNcd3oVQ'; // Replace with your API endpoint
+            const id = $('#id').text();
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+
+                const data = await response.json(); // Parse JSON response
+                console.log(data); // Log the response for debugging
+
+                // Update the table cell with id "attachments-Num" with the fetched data
+                const attachmentsNumCell = document.getElementById('attachments-Num');
+                if (attachmentsNumCell) {
+                    attachmentsNumCell.textContent = data['attachments Num'];
+                } else {
+                    console.error('Element with id "attachments-Num" not found in the table.');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const editButton = document.getElementById('edit-button');
+            const dataTable = document.getElementById('data-table');
+            const editableFields = ['Priority', 'Description', 'Title'];
+            let isEditing = false;
+            let originalData = {};
+
+            const priorityOptions = [
+                'Critical',
+                'High',
+                'Normal',
+                'Low'
+            ];
+
+            function toggleEditMode() {
+                isEditing = !isEditing;
+                editButton.innerHTML = isEditing ? '<i class="fas fa-save"></i>' : '<i class="fas fa-edit"></i>';
+                editButton.title = isEditing ? 'Save' : 'Edit';
+
+                editableFields.forEach(field => {
+                    const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+                    if (cell) {
+                        if (isEditing) {
+                            makeEditable(cell, field);
+                        } else {
+                            saveChanges(cell, field);
+                        }
+                    }
+                });
+
+                if (!isEditing) {
+                    sendUpdatesToServer();
+                }
+            }
+
+            function makeEditable(cell, field) {
+                originalData[field] = cell.textContent.trim();
+
+                if (field === 'Priority') {
+                    const select = document.createElement('select');
+                    select.classList.add('editable');
+                    priorityOptions.forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option;
+                        optionElement.textContent = option;
+                        if (option === originalData[field]) {
+                            optionElement.selected = true;
+                        }
+                        select.appendChild(optionElement);
+                    });
+                    cell.innerHTML = '';
+                    cell.appendChild(select);
+                } else {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = originalData[field];
+                    textarea.classList.add('editable');
+                    cell.innerHTML = '';
+                    cell.appendChild(textarea);
+
+                    if (field === 'Title') {
+                        textarea.maxLength = 255;
+                        const charCount = document.createElement('div');
+                        charCount.classList.add('char-count');
+                        charCount.textContent = `${textarea.value.length}/255`;
+                        cell.appendChild(charCount);
+
+                        textarea.addEventListener('input', function () {
+                            charCount.textContent = `${this.value.length}/255`;
+                            if (this.value.length > 255) {
+                                charCount.classList.add('error');
+                            } else {
+                                charCount.classList.remove('error');
+                            }
+                        });
+                    }
+
+                    function adjustTextareaHeight() {
+                        textarea.style.height = 'auto';
+                        textarea.style.height = textarea.scrollHeight + 'px';
+                    }
+
+                    adjustTextareaHeight();
+                    textarea.addEventListener('input', adjustTextareaHeight);
+                }
+            }
+
+            function saveChanges(cell, field) {
+                if (field === 'Priority') {
+                    const select = cell.querySelector('select');
+                    if (select) {
+                        const newValue = select.value;
+                        cell.textContent = newValue;
+                        if (newValue !== originalData[field]) {
+                            cell.classList.add('modified');
+                        } else {
+                            cell.classList.remove('modified');
+                        }
+                    }
+                } else {
+                    const textarea = cell.querySelector('textarea');
+                    if (textarea) {
+                        let newValue = textarea.value.trim();
+                        if (field === 'Title' && newValue.length > 255) {
+                            newValue = newValue.substring(0, 255);
+                            alert('Title has been truncated to 255 characters.');
+                        }
+                        cell.textContent = newValue;
+                        if (newValue !== originalData[field]) {
+                            cell.classList.add('modified');
+                        } else {
+                            cell.classList.remove('modified');
+                        }
+                    }
+                }
+            }
+
+            function sendUpdatesToServer() {
+                const updatedData = {};
+                let hasChanges = false;
+
+                editableFields.forEach(field => {
+                    const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+                    if (cell && cell.classList.contains('modified')) {
+                        updatedData[field] = cell.textContent.trim();
+                        hasChanges = true;
+                    }
+                });
+
+                if (hasChanges) {
+                    updatedData.ID = document.getElementById('id').textContent;
+
+                    fetch('https://prod-173.westeurope.logic.azure.com:443/workflows/be708d1528c141a68b8e133b5f268d85/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=UHPHVD-AXhiU2uZqih3rSXMtoGPFzUcebrFnjxWquFM', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatedData)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 200) {
+                                console.log('Success:', data.message);
+                                //location.reload(true);
+                                editableFields.forEach(field => {
+                                    const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+                                    if (cell) cell.classList.remove('modified');
+                                });
+                            } else {
+                                console.error('Unexpected response:', data);
+                                alert('Failed to save changes. Please try again.');
+                                revertChanges();
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            alert('Failed to save changes. Please try again.');
+                            revertChanges();
+                        });
+                }
+            }
+
+
+            function revertChanges() {
+                editableFields.forEach(field => {
+                    const cell = dataTable.querySelector(`#${field.toLowerCase()}`);
+                    if (cell && originalData[field]) {
+                        cell.textContent = originalData[field];
+                        cell.classList.remove('modified');
+                    }
+                });
+            }
+
+            editButton.addEventListener('click', toggleEditMode);
+        });
+    </script>
+    <script src="script.js"></script>
+    <script type="module">
+        import { EmojiButton } from 'https://cdn.skypack.dev/@joeattardi/emoji-button';
+
+        const picker = new EmojiButton();
+        const trigger = document.querySelector('#emoji-trigger');
+        const textarea = document.querySelector('#newCommentText');
+
+        picker.on('emoji', selection => {
+            textarea.value += selection.emoji;
+            autoResize(textarea);
+        });
+
+        trigger.addEventListener('click', () => picker.togglePicker(trigger));
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight+8 + 'px';
+        }
+
+        textarea.addEventListener('input', function () {
+            autoResize(this);
+        });
+
+
+
+    </script>
+</body>
+
+</html>
